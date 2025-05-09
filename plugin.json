@@ -1,0 +1,11 @@
+{
+  "Group": "Widgets",
+  "FriendlyName": "Gift Registry",
+  "SystemName": "i7MEDIA.Registry",
+  "Version": "1.0.1",
+  "SupportedVersions": [ "4.60" ],
+  "Author": "i7MEDIA",
+  "DisplayOrder": 1,
+  "FileName": "i7MEDIA.Plugin.Widgets.Registry.dll",
+  "Description": "Generic gift registry"
+}

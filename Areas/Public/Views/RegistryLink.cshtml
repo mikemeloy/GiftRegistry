@@ -1,0 +1,14 @@
+﻿@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+
+<script type="module">
+    const
+        link = document.querySelector('[data-link]'),
+        clone = link.content.cloneNode(true),
+        nav = document.querySelector('.header .header-links ul');
+
+    nav.prepend(clone);
+</script>
+
+<template data-link>
+    <li><a href="/registry" class="ico-account">@T("Registry.Link")</a></li>
+</template>

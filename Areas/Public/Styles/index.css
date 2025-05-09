@@ -1,0 +1,111 @@
+﻿:root {
+  --white: #fff;
+  --border: #ddd;
+  --gray-dark: #434343;
+}
+
+::backdrop {
+  background-color: var(--gray-dark, #434343);
+  opacity: .8;
+}
+
+body:has(dialog[open]) {
+  overflow: hidden !important;
+}
+
+.registry-wrapper {
+  min-height: 25vh;
+
+  button {
+    border: none;
+    background-color: var(--border);
+    color: var(--white);
+    padding: .7rem 1rem;
+    text-transform: uppercase;
+  }
+
+  input[type="date"] {
+    height: 36px;
+    border: 1px solid #ddd;
+    padding: 8px;
+    vertical-align: middle
+  }
+
+  section[data-result] {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin: 1rem 0;
+    padding: 1rem;
+    color: var(--gray-dark, #434343);
+    border: 1px solid var(--border, #434343);
+    border-radius: .5rem;
+
+    &>span {
+      padding: .5rem;
+      border-bottom: 1px solid var(--border, #434343);
+
+      &:nth-last-child(-n+3) {
+        border: none;
+      }
+    }
+  }
+
+  [data-search] {
+    display: inline-flex;
+    border: 1px solid var(--border);
+
+    input[type="text"] {
+      border: none;
+      outline: none;
+    }
+
+    button[type="submit"] {
+      border: none;
+      background-color: var(--border);
+      color: var(--white);
+      padding: 0 1rem;
+    }
+  }
+
+  [data-modal-add] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    outline: none;
+    border: none;
+    border-radius: 6px;
+    padding: 1rem;
+    overflow: hidden;
+    user-select: none;
+    box-shadow: 3px 3px 15px var(--gray-dark);
+    transform: translate(-50%, -50%);
+
+    header {
+      padding: 0 0 1rem;
+      font-size: 1.5rem;
+    }
+
+    main {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: clamp(250px, 45vw, 650px);
+
+      section {
+        display: flex;
+        flex-direction: column;
+        gap: .2rem;
+      }
+    }
+
+    footer {
+      display: flex;
+      flex-direction: row-reverse;
+      padding: 1rem 0 0;
+    }
+  }
+
+  .registry-list {
+    display: flex;
+  }
+}

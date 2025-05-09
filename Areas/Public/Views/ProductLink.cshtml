@@ -1,0 +1,35 @@
+﻿@using i7MEDIA.Plugin.Widgets.Registry
+@using System.Text.Json
+@model i7MEDIA.Plugin.Widgets.Registry.Models.ProductLinkViewModel
+
+@{
+    var version = Model.PluginVersion;
+    var saveRoute = Url.RouteUrl(RegistryDefaults.Save);
+    var productId = Model.ProductId;
+    var registries = Model.Registries;
+    var listName = "list-registries";
+}
+
+<!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/product.css?v=@version" />
+
+<script type="module">
+    import { init } from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/product.js?v=@version';
+
+    init('@saveRoute', '@productId');
+</script>
+
+<template data-registry-link-add>
+    <div>
+        <button data-registry-button-add class="btn-register" type="button">@T("Registry.Product.Link")</button>
+        <input data-registration-input-id type="text" list="@listName">
+    </div>
+</template>
+
+<datalist id="@listName">
+    @{
+        foreach (var reg in registries)
+        {
+            <option data-registration-id="@reg.Id" data-description="@reg.Description" value="@reg.Name" />
+        }
+    }
+</datalist>

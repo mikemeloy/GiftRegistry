@@ -1,0 +1,10 @@
+﻿@model i7MEDIA.Plugin.Widgets.Registry.Models.RegistryList
+
+@{
+    foreach (var registry in Model.RegistryItems)
+    {
+        <span>@registry.Name</span>
+        <span>@registry.Description</span>
+        <span>@registry.EventDate</span>    
+    }
+}
