@@ -1,4 +1,4 @@
-import { Log, QuerySelector, Get, Post } from './modules/utils.js';
+import { Log, QuerySelector, Post } from './modules/utils.js';
 
 let
   _root = '#product-details-form',
@@ -8,38 +8,26 @@ let
 
 const
   events = {
-    onRegistration_Change: ({ target }) => {
-      const
-        { list, value } = target,
-        val = list.querySelector(`:root [value="${value}"]`);
-
-      _registrationId = val.dataset.registrationId;
-    },
-    onAdd_Click: async () => {
-      const
-        success = await Post(_saveRoute, {
-          productId: _productId,
-          giftRegistryId: _registrationId
-        });
-
-      Log(`Success: ${success}`);
+    onAdd_Click: async ({ target }) => {
+      const { dataset } = target;
+      _registrationId = dataset.registryId;
+      addToRegistry();
     }
   }
 
 const
-  init = (saveRoute, propductId) => {
+  init = (saveRoute, propductId, regCount) => {
     _saveRoute = saveRoute;
     _productId = propductId
     setTemplate();
     setEvents();
+    Log(regCount);
   },
   setEvents = () => {
     const
-      btn = QuerySelector('[data-registry-button-add]', _root),
-      input = QuerySelector('[data-registration-input-id]', _root);
+      btn = QuerySelector('[data-registry-button-add]', _root);
 
     btn.addEventListener('click', events.onAdd_Click);
-    input.addEventListener('change', events.onRegistration_Change);
   },
   setTemplate = () => {
     const
@@ -48,6 +36,15 @@ const
       overview = document.querySelector('.overview .overview-buttons');
 
     overview.prepend(clone);
+  },
+  addToRegistry = async () => {
+    const
+      success = await Post(_saveRoute, {
+        productId: _productId,
+        giftRegistryId: _registrationId
+      });
+
+    Log(`Success: ${success}`);
   };
 
 export { init }

@@ -1,5 +1,6 @@
 ﻿@using i7MEDIA.Plugin.Widgets.Registry
 @using System.Text.Json
+@using i7MEDIA.Plugin.Widgets.Registry.Extensions
 @model i7MEDIA.Plugin.Widgets.Registry.Models.ProductLinkViewModel
 
 @{
@@ -7,29 +8,34 @@
     var saveRoute = Url.RouteUrl(RegistryDefaults.Save);
     var productId = Model.ProductId;
     var registries = Model.Registries;
-    var listName = "list-registries";
+    var registryCount = registries.Count();
+    var firstReg = registries.FirstOrDefault();
 }
+
+@(firstReg is not null){
 
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/product.css?v=@version" />
 
 <script type="module">
     import { init } from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/product.js?v=@version';
 
-    init('@saveRoute', '@productId');
+    init('@saveRoute', '@productId', @registryCount);
 </script>
 
 <template data-registry-link-add>
-    <div>
-        <button data-registry-button-add class="btn-register" type="button">@T("Registry.Product.Link")</button>
-        <input data-registration-input-id type="text" list="@listName">
-    </div>
+    <button data-registry-id="@firstReg.Id" data-registry-button-add class="btn-register" type="button">@T("Registry.Product.Link")</button>
+
+    <dialog data-registry-select>
+        @{
+            foreach (var reg in registries)
+            {
+                <button data-registry-id="@reg.Id" data-registry-button-add class="btn-register" type="button">
+                    @T("Registry.Product.Link")
+                </button>
+            }
+        }
+    </dialog>
+
 </template>
 
-<datalist id="@listName">
-    @{
-        foreach (var reg in registries)
-        {
-            <option data-registration-id="@reg.Id" data-description="@reg.Description" value="@reg.Name" />
-        }
-    }
-</datalist>
+}
