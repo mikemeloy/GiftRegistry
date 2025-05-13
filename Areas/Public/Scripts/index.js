@@ -1,12 +1,16 @@
+import { Get, Post, Delete, Loading, LogError } from './modules/utils.js';
+
 let
   _container,
-  _searchUrl,
-  _insertRoute;
+  _searchRoute,
+  _insertRoute,
+  _deleteRoute;
 
 const
-  init = (searchUrl, insertRoute) => {
-    _searchUrl = searchUrl;
+  init = (searchUrl, insertRoute, deleteRoute) => {
+    _searchRoute = searchUrl;
     _insertRoute = insertRoute;
+    _deleteRoute = deleteRoute;
     setFormEvents();
   },
   setFormEvents = () => {
@@ -47,48 +51,37 @@ const utils = {
     }
 
     return input.value;
-  },
-  get: (url, params) => {
-    return new Promise((resolve, _) => {
-      $.ajax({
-        type: "GET",
-        data: params,
-        url,
-        success: (data) => resolve({ success: true, data }),
-        error: (_, status, errorThrown) => resolve({ success: false, data: null, error: errorThrown })
-      });
-    });
-  },
-  post: (url, params) => {
-    return new Promise((resolve, _) => {
-      $.ajax({
-        type: "POST",
-        dataType: "json",
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify(params),
-        url,
-        success: (data) => resolve({ success: true, data }),
-        error: (_, status, errorThrown) => resolve({ success: false, data: null, error: errorThrown })
-      });
-    });
   }
 }
 
 const events = {
   onSearch_Submit: async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
 
     const
-      query = utils.getInputValue('[data-search] input'),
-      { success, data, error } = await utils.get(_searchUrl, { query }),
-      rsltWindow = utils.querySelector('[data-result]');
+      endLoading = Loading();
 
-    if (!success) {
-      console.error(error);
-      return;
+    try {
+      const
+        query = utils.getInputValue('[data-search] input'),
+        { success, data, error } = await Get(_searchRoute, { query }),
+        rsltWindow = utils.querySelector('[data-result]');
+
+      if (!success) {
+        LogError('Failed to Search', error);
+        return;
+      }
+
+      rsltWindow.replaceChildren();
+      rsltWindow.insertAdjacentHTML('afterbegin', data);
+
+      const btns = rsltWindow.querySelectorAll('[data-registry-id]');
+      btns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
+    } catch (error) {
+      LogError('Failed to Search', error);
+    } finally {
+      endLoading();
     }
-
-    rsltWindow.insertAdjacentHTML('afterbegin', data);
   },
   onAdd_Click: () => {
     const
@@ -98,15 +91,46 @@ const events = {
   },
   onSave_Click: () => {
     const
+      endLoading = Loading(),
       name = utils.getInputValue('[data-add-name]'),
       description = utils.getInputValue('[data-add-description]'),
       eventDate = utils.getInputValue('[data-add-event-date]');
 
-    utils.post(_insertRoute, {
-      name,
-      description,
-      eventDate
-    });
+    try {
+      const
+        success = Post(_insertRoute, {
+          name,
+          description,
+          eventDate
+        });
+
+      if (success) {
+        const dialog = utils.querySelector('[data-modal-add]');
+        dialog.close();
+      }
+    } catch (error) {
+      LogError(error);
+    } finally {
+      endLoading();
+    }
+  },
+  onDelete_Click: async ({ target }) => {
+    const
+      endLoading = Loading(),
+      { dataset: { registryId } } = target;
+
+    try {
+      const
+        success = await Delete(`${_deleteRoute}?id=${registryId}`);
+
+      if (success) {
+        events.onSearch_Submit();
+      }
+    } catch (error) {
+      LogError(error);
+    } finally {
+      endLoading();
+    }
   }
 }
 

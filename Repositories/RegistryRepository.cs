@@ -10,6 +10,7 @@ using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 using LinqToDB;
 using Nop.Core;
+using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Data;
 
@@ -20,11 +21,13 @@ public class RegistryRepository : IRegistryRepository
     private readonly IRepository<GiftRegistry> _registry;
     private readonly IRepository<GiftRegistryItem> _registryItem;
     private readonly IRepository<Customer> _customer;
+    private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer)
+    public RegistryRepository(IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product)
     {
+        _product = product;
         _registry = registry;
         _customer = customer;
         _workContext = workContext;
@@ -82,28 +85,37 @@ public class RegistryRepository : IRegistryRepository
         await _registry.UpdateAsync(entity);
     }
 
-    public Customer GetRegistryOwner(int registryId)
+    public async Task DeleteRegistryItemAsync(int registryItemId)
     {
+        var entity = await _registryItem.GetByIdAsync(registryItemId);
+        entity.Deleted = true;
+        await _registryItem.UpdateAsync(entity);
+    }
+
+    public async Task<bool> GetRegistryOwnerAssociationAsync(int registryId)
+    {
+        var currentCustomer = await _workContext.GetCurrentCustomerAsync();
         var customer = (from reg in _registry.Table
                         join cust in _customer.Table on reg.CustomerId equals cust.Id
                         where reg.Id == registryId
                         select cust).FirstOrDefault();
 
-        if (customer.IsNull())
+        if (customer.IsNull() || currentCustomer.IsNull())
         {
-            return null;
+            return false;
         }
 
-        return customer;
+        return customer.Id == currentCustomer.Id;
     }
 
     public IList<RegistryListItem> Query(string query)
     {
         return (from reg in _registry.Table
                 join cust in _customer.Table on reg.CustomerId equals cust.Id
-                where reg.Name.Contains(query)
+                where reg.Name.Contains(query) && reg.Deleted == false
                 select new RegistryListItem
                 {
+                    Id = reg.Id,
                     Owner = cust.FullName(),
                     Name = reg.Name,
                     Description = reg.Description,
@@ -111,12 +123,22 @@ public class RegistryRepository : IRegistryRepository
                 }).ToList();
     }
 
-    public async Task<IList<RegistryItemDTO>> GetRegistryItemsByIdAsync(int registryId)
+    public async Task<List<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId)
     {
-        var items = await _registryItem.GetAllAsync(x => x.Where(i => i.RegistryId == registryId));
+        var query = from reg in _registryItem.Table
+                    join prod in _product.Table on reg.ProductId equals prod.Id
+                    where reg.RegistryId == registryId && !reg.Deleted
+                    select new RegistryItemViewModel
+                    {
+                        Id = reg.Id,
+                        Name = prod.Name,
+                        Description = prod.ShortDescription,
+                        Price = prod.Price,
+                        ProductId = prod.Id,
+                        CartItemId = reg.CartItemId
+                    };
 
-        return items
-            .Select(ri => new RegistryItemDTO(ri.Id, ri.ProductId, ri.CartItemId, ri.OrderId))
-            .ToList();
+
+        return await query.ToListAsync();
     }
 }

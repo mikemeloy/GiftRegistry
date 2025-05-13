@@ -3,8 +3,13 @@
 @{
     foreach (var registry in Model.RegistryItems)
     {
+        <span>@registry.Owner</span>
         <span>@registry.Name</span>
         <span>@registry.Description</span>
-        <span>@registry.EventDate</span>    
+        <span>@registry.EventDate</span>
+        <span class="row-action">
+            <a data-registry-id="@registry.Id">Delete</a>
+            <a href="/registry/@registry.Id">View</a>
+        </span>
     }
 }

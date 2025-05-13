@@ -1,0 +1,25 @@
+﻿<template data-template-loading>
+    <style>
+        [data-loader] {
+            display: flex;
+            height: 100vh;
+            width: 100vw;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--loading, #434343);
+            z-index: 99999;
+
+            i {
+                animation: spin 2s linear infinite;
+                font-size: 3rem;
+                margin: 0;
+            }
+        }
+    </style>
+    <div data-loader>
+        <i class="fas fa-spinner" aria-hidden="true"></i>
+    </div>
+</template>

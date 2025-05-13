@@ -10,8 +10,10 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 public interface IRegistryService
 {
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
-    public Task<RegistryDTO> GetCustomerRegistryByIdAsync(int registryId);
+    public Task<RegistryViewModel> GetCustomerRegistryByIdAsync(int registryId);
     public Task<bool> InsertCustomerRegistryAsync(string name, string description, DateTime eventDate);
     public Task<bool> InsertRegistryItemAsync(int registryId, int productId);
     public Task<RegistryList> Query(string query);
+    public Task<bool> DeleteRegistryAsync(int registryId);
+    public Task<bool> DeleteRegistryItemAsync(int registryItemId);
 }

@@ -11,26 +11,40 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Areas\Public\Scripts\display.js" />
     <None Remove="Areas\Public\Scripts\index.js" />
+    <None Remove="Areas\Public\Scripts\list.js" />
     <None Remove="Areas\Public\Scripts\modules\utils.js" />
     <None Remove="Areas\Public\Scripts\product.js" />
+    <None Remove="Areas\Public\Styles\display.css" />
     <None Remove="Areas\Public\Styles\index.css" />
     <None Remove="Areas\Public\Styles\product.css" />
     <None Remove="Areas\Public\Views\Index.cshtml" />
     <None Remove="Areas\Public\Views\List.cshtml" />
     <None Remove="Areas\Public\Views\ProductLink.cshtml" />
     <None Remove="Areas\Public\Views\RegistryLink.cshtml" />
+    <None Remove="Areas\Public\Views\_AddDialog.cshtml" />
+    <None Remove="Areas\Public\Views\_loading.cshtml" />
     <None Remove="plugin.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Areas\Public\Scripts\display.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Public\Scripts\index.js">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Public\Scripts\list.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Scripts\modules\utils.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Scripts\product.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Public\Styles\display.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Styles\index.css">
@@ -42,6 +56,9 @@
     <Content Include="Areas\Public\Views\Index.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\Public\Views\Display.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Public\Views\List.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -49,6 +66,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Views\RegistryLink.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Public\Views\_AddDialog.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Public\Views\_Loading.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\_ViewImports.cshtml">

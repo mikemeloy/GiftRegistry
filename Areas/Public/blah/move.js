@@ -4,22 +4,23 @@
 
 var fs = require('fs')
 
-
-console.log('meloy');
-
 const
     sourceRoot = '../',
     destinationRoot = 'C:/Repos/nopCommerce-release-4.60.4/nopCommerce-release-4.60.4/src/Presentation/Nop.Web/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/',
     files = [
         '/Scripts/index.js',
         '/Scripts/product.js',
+        '/Scripts/display.js',
+        '/Scripts/modules/utils.js',
         '/Styles/index.css',
         '/Styles/product.css',
+        '/Styles/display.css',
         '/Views/List.cshtml',
         '/Views/Index.cshtml',
+        '/Views/Display.cshtml',
         '/Views/RegistryLink.cshtml',
         '/Views/ProductLink.cshtml',
-        '/Scripts/modules/utils.js'
+        '/Views/_Loading.cshtml'
     ]
 
 files.forEach(file => {

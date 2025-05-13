@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using DocumentFormat.OpenXml.Bibliography;
+﻿using System.Collections.Generic;
+using DocumentFormat.OpenXml.Drawing;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using Nop.Core.Domain.Customers;
@@ -9,9 +8,9 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Extensions;
 
 public static class RegistryExtensions
 {
-    public static Data.GiftRegistry ToEntity(this RegistryDTO source)
+    public static GiftRegistry ToEntity(this RegistryDTO source)
     {
-        return new Data.GiftRegistry
+        return new GiftRegistry
         {
             Name = source.Name,
             Description = source.Description,
@@ -19,7 +18,7 @@ public static class RegistryExtensions
         };
     }
 
-    public static RegistryDTO ToDTO(this Data.GiftRegistry source)
+    public static RegistryDTO ToDTO(this GiftRegistry source)
     {
         if (source.IsNull())
         {
@@ -33,6 +32,16 @@ public static class RegistryExtensions
             EventDate: source.EventDate
         );
     }
+
+    //public static void SetIsMine(this GiftRegistry source, int customerId)
+    //{
+    //    if (source.IsNull())
+    //    {
+    //        return;
+    //    }
+
+    //    source.IsMine = source.CustomerId == customerId;
+    //}
 
     public static RegistryDTO AddRegistryItems(this RegistryDTO source, IList<RegistryItemDTO> registryItems)
     {
@@ -63,7 +72,7 @@ public static class RegistryExtensions
         return source;
     }
 
-    public static RegistryItemDTO ToDTO(this Data.GiftRegistryItem source)
+    public static RegistryItemDTO ToDTO(this GiftRegistryItem source)
     {
         if (source.IsNull())
         {

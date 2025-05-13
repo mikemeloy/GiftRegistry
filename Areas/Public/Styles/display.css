@@ -1,0 +1,65 @@
+:root {
+    --white: #fff;
+    --border: #ddd;
+    --gray-dark: #434343;
+    --gray-light: #c5c5c5;
+    --blue-link: blue;
+    --loading: #c5c5c573;
+}
+
+[data-registry-product-list] {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin: 1rem 0;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid var(--gray-light);
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 5px 5px 15px var(--gray-light);
+
+        header {
+            img {
+                background-position: center;
+                background-size: cover;
+                background-repeat: no-repeat;
+                width: 100%;
+            }
+        }
+
+        main {
+            flex: 1;
+            padding: .5rem;
+            min-height: 5rem;
+            display: flex;
+            flex-direction: column;
+            gap: .5rem;
+
+            h3,
+            p {
+                text-align: center;
+            }
+        }
+
+        section {
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 700;
+            padding: .3rem 0
+        }
+
+        footer {
+            min-height: 1rem;
+            display: flex;
+
+            button {
+                border: none;
+                flex: 1;
+                padding: 1rem 0;
+            }
+        }
+    }
+}

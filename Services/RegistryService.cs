@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
-using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 
@@ -14,10 +13,40 @@ public class RegistryService : IRegistryService
 {
     private readonly IRegistryRepository _registryRepository;
     private readonly ILogger_R _logger_R;
-    public RegistryService(IRegistryRepository registryRepository, ILogger_R logger_R)
+    private readonly INopServices _nopServices;
+    public RegistryService(IRegistryRepository registryRepository, INopServices opServices, ILogger_R logger_R)
     {
         _registryRepository = registryRepository;
+        _nopServices = opServices;
         _logger_R = logger_R;
+    }
+
+    public async Task<bool> DeleteRegistryAsync(int id)
+    {
+        try
+        {
+            await _registryRepository.DeleteRegistryAsync(id);
+            return true;
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync($"Unable to delete registry with the id of {id}", e);
+            return false;
+        }
+    }
+
+    public async Task<bool> DeleteRegistryItemAsync(int registryItemId)
+    {
+        try
+        {
+            await _registryRepository.DeleteRegistryItemAsync(registryItemId);
+            return true;
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync($"Unable to delete registry with the id of {registryItemId}", e);
+            return false;
+        }
     }
 
     public async Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync()
@@ -35,17 +64,26 @@ public class RegistryService : IRegistryService
         }
     }
 
-    public async Task<RegistryDTO> GetCustomerRegistryByIdAsync(int registryId)
+    public async Task<RegistryViewModel> GetCustomerRegistryByIdAsync(int registryId)
     {
         try
         {
             var registry = await _registryRepository.GetRegistryByIdAsync(registryId);
             var items = await _registryRepository.GetRegistryItemsByIdAsync(registryId);
-            var customer = _registryRepository.GetRegistryOwner(registryId);
+            var iAmOwner = await _registryRepository.GetRegistryOwnerAssociationAsync(registryId);
 
-            return registry
-                .AddRegistryItems(items)
-                .AddCustomerInfo(customer);
+            foreach (var item in items)
+            {
+                item.ImageUrl = await _nopServices.GetProductImageUrlAsync(item.ProductId);
+            }
+
+            return new RegistryViewModel()
+            {
+                Name = registry.Name,
+                Description = registry.Description,
+                RegistryItems = items,
+                IamOwner = iAmOwner,
+            };
         }
         catch (Exception e)
         {

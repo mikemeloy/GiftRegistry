@@ -1,5 +1,5 @@
 ﻿@using i7MEDIA.Plugin.Widgets.Registry
-@model i7MEDIA.Plugin.Widgets.Registry.Models.RegistryModel
+@model i7MEDIA.Plugin.Widgets.Registry.Models.PluginModel
 
 @{
     Layout = "_Root";
@@ -8,6 +8,7 @@
     var registrySearchRoute = Url.RouteUrl(RegistryDefaults.List);
     var baseRoute = Url.RouteUrl(RegistryDefaults.Index);
     var insertRoute = Url.RouteUrl(RegistryDefaults.Insert);
+    var deleteRoute = Url.RouteUrl(RegistryDefaults.Delete);
 }
 
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/index.css?v=@version" />
@@ -15,38 +16,18 @@
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/index.js?v=@version';
 
-    init('@registrySearchRoute', '@insertRoute');
+    init('@registrySearchRoute', '@insertRoute', '@deleteRoute');
 </!script>
 
-<div data-registry class="registry-wrapper">
-    <form data-search>
-        <input type="text" autocomplete="off" name="q" placeholder="Search registries" aria-label="Search registries">
-        <button type="submit">Search</button>
-    </form>
-    <button data-add type="button">New</button>
+<div data-registry class="registry-wrapper round">
+    <header>
+        <form data-search>
+            <input type="text" autocomplete="off" placeholder="Search registries..." aria-label="Search registries">
+        </form>
+        <button data-add type="button">New</button>
+    </header>
     <section data-result>
     </section>
-
-    <dialog data-modal-add>
-        <header>
-            Create a New Registry!
-        </header>
-        <main>
-            <section>
-                <label>Name</label>
-                <input data-add-name type="text" name="name" />
-            </section>
-            <section>
-                <label>Description</label>
-                <input data-add-description type="text" name="name" />
-            </section>
-            <section>
-                <label>Event Date</label>
-                <input data-add-event-date type="date" name="name" />
-            </section>
-        </main>
-        <footer>
-            <button data-registry-save class="button-1">Save</button>
-        </footer>
-    </dialog>
+    @await Html.PartialAsync("_AddDialog.cshtml")
 </div>
+@await Html.PartialAsync("_Loading.cshtml")

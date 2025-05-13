@@ -19,23 +19,37 @@ public class RegistryController : BasePluginController
     [IgnoreAntiforgeryToken]
     public IActionResult Index()
     {
-        var model = new RegistryModel("1.0.0");
+        var model = new PluginModel("1.0.0");
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/Index.cshtml", model);
     }
 
     [HttpGet]
     [IgnoreAntiforgeryToken]
-    public async Task<IActionResult> ListAsync(string query)
+    public async Task<IActionResult> List(string query)
     {
         var model = await _registryService.Query(query);
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/List.cshtml", model);
     }
 
+    [HttpGet]
+    [IgnoreAntiforgeryToken]
+    public async Task<IActionResult> RegistryAsync(int? id)
+    {
+        if (id.IsNull())
+        {
+            return View();
+        }
+
+        var model = await _registryService.GetCustomerRegistryByIdAsync(id.Value);
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/Display.cshtml", model);
+    }
+
     [HttpPost]
     [IgnoreAntiforgeryToken]
-    public async Task<bool> Save([FromBody] RegistryAddProductRequest request)
+    public async Task<bool> SaveAsync([FromBody] RegistryAddProductRequest request)
     {
         if (!request.IsValid())
         {
@@ -59,5 +73,39 @@ public class RegistryController : BasePluginController
         var success = await _registryService.InsertCustomerRegistryAsync(request.Name, request.Description, request.EventDate);
 
         return success;
+    }
+
+    [HttpDelete]
+    [IgnoreAntiforgeryToken]
+    public async Task<bool> DeleteAsync(int? id)
+    {
+        if (id.IsNull())
+        {
+            return false;
+        }
+
+        var success = await _registryService.DeleteRegistryAsync(id.Value);
+
+        return success;
+    }
+
+    [HttpDelete]
+    [IgnoreAntiforgeryToken]
+    public async Task<bool> DeleteItemAsync(int? id)
+    {
+        if (id.IsNull())
+        {
+            return false;
+        }
+
+        var success = await _registryService.DeleteRegistryItemAsync(id.Value);
+
+        return success;
+    }
+
+    [HttpPost]
+    public async Task<bool> AddToCartAsync(int? id)
+    {
+        return true;
     }
 }
