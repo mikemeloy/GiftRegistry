@@ -94,6 +94,7 @@ const events = {
       endLoading = Loading(),
       name = utils.getInputValue('[data-add-name]'),
       description = utils.getInputValue('[data-add-description]'),
+      notes = utils.getInputValue('[data-add-notes]'),
       eventDate = utils.getInputValue('[data-add-event-date]');
 
     try {
@@ -101,7 +102,8 @@ const events = {
         success = Post(_insertRoute, {
           name,
           description,
-          eventDate
+          eventDate,
+          notes
         });
 
       if (success) {

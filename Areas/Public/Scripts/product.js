@@ -4,14 +4,40 @@ let
   _root = '#product-details-form',
   _saveRoute,
   _productId,
-  _registrationId;
+  _registrationId,
+  _quantity;
 
 const
   events = {
     onAdd_Click: async ({ target }) => {
-      const { dataset } = target;
+      const
+        dialog = QuerySelector('[data-registry-select]', _root),
+        { dataset } = target;
       _registrationId = dataset.registryId;
-      addToRegistry();
+
+      dialog.showModal();
+    },
+    onSubmit_Click: () => {
+      const
+        registryData = {
+          productId: _productId,
+          giftRegistryId: _registrationId,
+          quantity: _quantity
+        };
+
+      addToRegistry(registryData);
+    },
+    onCancel_Click: () => {
+      const
+        dialog = QuerySelector('[data-registry-select]', _root);
+
+      dialog.close();
+    },
+    onRadio_Change: ({ target }) => {
+      _registrationId = target.value;
+    },
+    onQuantity_Change: ({ target }) => {
+      _quantity = target.value;
     }
   }
 
@@ -25,9 +51,17 @@ const
   },
   setEvents = () => {
     const
-      btn = QuerySelector('[data-registry-button-add]', _root);
+      btnAdd = QuerySelector('[data-registry-button-add]', _root),
+      btnCancel = QuerySelector('[data-cancel]', _root),
+      btnSubmit = QuerySelector('[data-submit]', _root),
+      txtQuantity = QuerySelector('[data-quantity]', _root),
+      radios = document.querySelectorAll('input[name="registry-radio"]');//fix later
 
-    btn.addEventListener('click', events.onAdd_Click);
+    btnAdd.addEventListener('click', events.onAdd_Click);
+    btnCancel.addEventListener('click', events.onCancel_Click);
+    btnSubmit.addEventListener('click', events.onSubmit_Click);
+    txtQuantity.addEventListener('change', events.onQuantity_Change)
+    radios.forEach(radio => radio.addEventListener('change', events.onRadio_Change))
   },
   setTemplate = () => {
     const
@@ -37,14 +71,14 @@ const
 
     overview.prepend(clone);
   },
-  addToRegistry = async () => {
+  addToRegistry = async (data) => {
     const
-      success = await Post(_saveRoute, {
-        productId: _productId,
-        giftRegistryId: _registrationId
-      });
+      dialog = QuerySelector('[data-registry-select]', _root),
+      { success } = await Post(_saveRoute, data);
 
-    Log(`Success: ${success}`);
+    if (success) {
+      dialog.close();
+    }
   };
 
 export { init }

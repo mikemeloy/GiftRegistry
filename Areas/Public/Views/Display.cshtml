@@ -17,11 +17,14 @@
 
     init('@deleteRoute', '@addToCartRoute');
 </!script>
+<article>
+    <q>@Model.Notes</q>
+</article>
 <div data-registry-product-list>
     @{
         foreach (var item in items)
         {
-            <form data-registry-item-id="@item.Id">
+            <form data-registry-item-id="@item.Id" data-purchased="@item.Purchased">
                 <header>
                     <img src="@item.ImageUrl" alt="@item.Name">
                 </header>
@@ -35,20 +38,17 @@
                     @item.Price.ToString("C", CultureInfo.CurrentCulture)
                 </section>
                 <footer>
-                    @if (!item.Purchased)
-                    {
-                        <button data-item-id="@item.ProductId" data-add class="btn-success" type="button">
-                            <i class="fas fa-shopping-basket" aria-hidden="true"></i>
-                            Add to Cart
-                        </button>
+                    <button data-item-id="@item.ProductId" data-add class="btn-success" type="button">
+                        <i class="fas fa-shopping-basket" aria-hidden="true"></i>
+                        Add to Cart
+                    </button>
 
-                        @if (Model.IamOwner)
-                        {
-                            <button data-item-id="@item.ProductId" data-delete class="btn-danger" type="button">
-                                <i class="fas fa-trash" aria-hidden="true"></i>
-                                Delete
-                            </button>
-                        }
+                    @if (Model.IamOwner)
+                    {
+                        <button data-item-id="@item.ProductId" data-delete class="btn-danger" type="button">
+                            <i class="fas fa-trash" aria-hidden="true"></i>
+                            Delete
+                        </button>
                     }
                 </footer>
             </form>

@@ -83,6 +83,7 @@ public class RegistryService : IRegistryService
                 Description = registry.Description,
                 RegistryItems = items,
                 IamOwner = iAmOwner,
+                Notes = registry.Notes
             };
         }
         catch (Exception e)
@@ -92,11 +93,11 @@ public class RegistryService : IRegistryService
         }
     }
 
-    public async Task<bool> InsertCustomerRegistryAsync(string name, string description, DateTime eventDate)
+    public async Task<bool> InsertCustomerRegistryAsync(string name, string description, DateTime eventDate, string notes)
     {
         try
         {
-            await _registryRepository.InsertRegistryAsync(new RegistryDTO(name, description, eventDate));
+            await _registryRepository.InsertRegistryAsync(new(name, description, eventDate, notes));
             return true;
         }
         catch (Exception e)
@@ -106,11 +107,11 @@ public class RegistryService : IRegistryService
         }
     }
 
-    public async Task<bool> InsertRegistryItemAsync(int registryId, int productId)
+    public async Task<bool> InsertRegistryItemAsync(int registryId, int productId, int quantity)
     {
         try
         {
-            await _registryRepository.InsertRegistryItemAsync(registryId, productId);
+            await _registryRepository.InsertRegistryItemAsync(registryId, productId, quantity);
             return true;
         }
         catch (Exception e)

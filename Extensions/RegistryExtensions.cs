@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using DocumentFormat.OpenXml.Drawing;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using Nop.Core.Domain.Customers;
@@ -15,6 +14,7 @@ public static class RegistryExtensions
             Name = source.Name,
             Description = source.Description,
             EventDate = source.EventDate,
+            Notes = source.Notes
         };
     }
 
@@ -29,19 +29,10 @@ public static class RegistryExtensions
             Id: source.Id,
             Name: source.Name,
             Description: source.Description,
-            EventDate: source.EventDate
+            EventDate: source.EventDate,
+            Notes: source.Notes
         );
     }
-
-    //public static void SetIsMine(this GiftRegistry source, int customerId)
-    //{
-    //    if (source.IsNull())
-    //    {
-    //        return;
-    //    }
-
-    //    source.IsMine = source.CustomerId == customerId;
-    //}
 
     public static RegistryDTO AddRegistryItems(this RegistryDTO source, IList<RegistryItemDTO> registryItems)
     {
@@ -85,5 +76,15 @@ public static class RegistryExtensions
             CartItemId: source.CartItemId,
             OrderId: source.OrderId
         );
+    }
+
+    public static bool IsPurchased(this GiftRegistryItem source)
+    {
+        if (source.IsNull())
+        {
+            return false;
+        }
+
+        return source.OrderId > 0;
     }
 }

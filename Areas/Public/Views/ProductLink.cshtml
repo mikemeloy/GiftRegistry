@@ -12,30 +12,48 @@
     var firstReg = registries.FirstOrDefault();
 }
 
-@(firstReg is not null){
+@if (firstReg != null)
+{
+    <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/product.css?v=@version" />
 
-<!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/product.css?v=@version" />
+    <script type="module">
+        import { init } from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/product.js?v=@version';
 
-<script type="module">
-    import { init } from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/product.js?v=@version';
+        init('@saveRoute', '@productId', @registryCount);
+    </script>
 
-    init('@saveRoute', '@productId', @registryCount);
-</script>
+    <template data-registry-link-add>
+        <button data-registry-id="@firstReg.Id" data-registry-button-add class="btn-register" type="button">
+            @T("Registry.Product.Link")
+        </button>
 
-<template data-registry-link-add>
-    <button data-registry-id="@firstReg.Id" data-registry-button-add class="btn-register" type="button">@T("Registry.Product.Link")</button>
+        <dialog data-registry-select>
+            <header>
+                Select a Registry...
+            </header>
+            <main>
+                <form>
+                    @{
+                        foreach (var reg in registries)
+                        {
+                            <section>
+                                <input id="registry-radio-@reg.Id" type="radio" value="@reg.Id" name="registry-radio" />
+                                <label for="@reg.Name">@reg.Name</label>
+                            </section>
+                        }
+                    }
 
-    <dialog data-registry-select>
-        @{
-            foreach (var reg in registries)
-            {
-                <button data-registry-id="@reg.Id" data-registry-button-add class="btn-register" type="button">
-                    @T("Registry.Product.Link")
-                </button>
-            }
-        }
-    </dialog>
+                    <section>
+                        <label>Quantity</label>
+                        <input data-quantity type="number">
+                    </section>
+                </form>
 
-</template>
-
+            </main>
+            <footer>
+                <button data-cancel type="button">Cancel</button>
+                <button data-submit type="button">Submit</button>
+            </footer>
+        </dialog>
+    </template>
 }

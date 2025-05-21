@@ -21,6 +21,7 @@ public class RegistryViewModel
     public bool IamOwner { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
+    public string Notes { get; set; }
     public string PluginVersion { get; set; }
     public string Owner { get; set; }
     public IEnumerable<RegistryItemViewModel> RegistryItems { get; set; }

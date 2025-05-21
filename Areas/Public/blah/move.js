@@ -20,7 +20,8 @@ const
         '/Views/Display.cshtml',
         '/Views/RegistryLink.cshtml',
         '/Views/ProductLink.cshtml',
-        '/Views/_Loading.cshtml'
+        '/Views/_Loading.cshtml',
+        '/Views/_AddDialog.cshtml'
     ]
 
 files.forEach(file => {

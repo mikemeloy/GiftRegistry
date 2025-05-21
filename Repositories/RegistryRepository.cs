@@ -42,8 +42,7 @@ public class RegistryRepository : IRegistryRepository
         return await _registry.GetAllAsync(query =>
                 from r in query
                 where r.CustomerId == customer.Id && !r.Deleted
-                select r
-          , cache => default);
+                select r);
     }
 
     public async Task<RegistryDTO> GetRegistryByIdAsync(int registryId)
@@ -66,12 +65,13 @@ public class RegistryRepository : IRegistryRepository
         await _registry.InsertAsync(entity);
     }
 
-    public async Task InsertRegistryItemAsync(int registryId, int productId)
+    public async Task InsertRegistryItemAsync(int registryId, int productId, int quantity)
     {
         var item = new GiftRegistryItem()
         {
             RegistryId = registryId,
             ProductId = productId,
+            Quantity = quantity,
             CreatedDate = DateTime.UtcNow
         };
 
@@ -135,7 +135,8 @@ public class RegistryRepository : IRegistryRepository
                         Description = prod.ShortDescription,
                         Price = prod.Price,
                         ProductId = prod.Id,
-                        CartItemId = reg.CartItemId
+                        CartItemId = reg.CartItemId,
+                        Purchased = reg.IsPurchased()
                     };
 
 

@@ -56,7 +56,7 @@ public class RegistryController : BasePluginController
             return false;
         }
 
-        var success = await _registryService.InsertRegistryItemAsync(request.GiftRegistryId, request.ProductId);
+        var success = await _registryService.InsertRegistryItemAsync(request.GiftRegistryId, request.ProductId, request.Quantity);
 
         return success;
     }
@@ -70,7 +70,7 @@ public class RegistryController : BasePluginController
             return false;
         }
 
-        var success = await _registryService.InsertCustomerRegistryAsync(request.Name, request.Description, request.EventDate);
+        var success = await _registryService.InsertCustomerRegistryAsync(request.Name, request.Description, request.EventDate, request.Notes);
 
         return success;
     }
