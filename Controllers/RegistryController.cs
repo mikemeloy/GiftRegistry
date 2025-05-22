@@ -106,6 +106,16 @@ public class RegistryController : BasePluginController
     [HttpPost]
     public async Task<bool> AddToCartAsync(int? id)
     {
+        if (id.IsNull())
+        {
+            return false;
+        }
+
+        //JS will add item to cart, we need to add an attribute with the product id to the cart item after the fact.
+        // will need to return cart quantity to update cart
+        await _registryService.AddRegistryItemToCart(id.Value);
+
+
         return true;
     }
 }

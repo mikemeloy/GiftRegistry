@@ -3,6 +3,7 @@ using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Stores;
 using Nop.Data;
 using Nop.Services.Media;
 
@@ -10,13 +11,15 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Services;
 
 public class NopServices : INopServices
 {
+    private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
     private readonly IPictureService _pictureService;
     private readonly IRepository<Product> _product;
-    public NopServices(IWorkContext workContext, IPictureService pictureService, IRepository<Product> product)
+    public NopServices(IStoreContext storeContext, IWorkContext workContext, IPictureService pictureService, IRepository<Product> product)
     {
         _pictureService = pictureService;
         _workContext = workContext;
+        _storeContext = storeContext;
         _product = product;
     }
 
@@ -35,5 +38,12 @@ public class NopServices : INopServices
         var currentCustomer = await _workContext.GetCurrentCustomerAsync();
 
         return currentCustomer;
+    }
+
+    public async Task<Store> GetStoreAsync()
+    {
+        var store = await _storeContext.GetCurrentStoreAsync();
+
+        return store;
     }
 }

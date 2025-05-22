@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
-using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using Nop.Core.Domain.Orders;
+using Nop.Services.Orders;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Services;
 
 public class RegistryService : IRegistryService
 {
-    private readonly IRegistryRepository _registryRepository;
     private readonly ILogger_R _logger_R;
     private readonly INopServices _nopServices;
+    private readonly IRegistryRepository _registryRepository;
+    private readonly IShoppingCartService _shoppingCartService;
     public RegistryService(IRegistryRepository registryRepository, INopServices opServices, ILogger_R logger_R)
     {
         _registryRepository = registryRepository;
@@ -124,9 +126,14 @@ public class RegistryService : IRegistryService
 
     public async Task<RegistryList> Query(string query)
     {
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            return new() { RegistryItems = Enumerable.Empty<RegistryListItem>() };
+        }
+
         try
         {
-            var items = _registryRepository.Query(query);
+            var items = await _registryRepository.QueryAsync(query);
 
             return new() { RegistryItems = items };
         }
@@ -134,6 +141,27 @@ public class RegistryService : IRegistryService
         {
             await _logger_R.LogErrorAsync($"Unable to perform request", ex);
             return new() { RegistryItems = Enumerable.Empty<RegistryListItem>() };
+        }
+    }
+
+    public async Task AddRegistryItemToCart(int registryItemId)
+    {
+        var customer = await _nopServices.GetCurrentCustomerAsync();
+        var store = await _nopServices.GetStoreAsync();
+        var item = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
+
+        var addToCartWarnings = await _shoppingCartService.AddToCartAsync(
+            customer: customer,
+            product: item.ProductId,
+            shoppingCartType: ShoppingCartType.ShoppingCart,
+            storeId: store.Id,
+            attributesXml: null,
+            quantity: item.Quantity
+            );
+
+        if (addToCartWarnings.Any())
+        {
+
         }
     }
 }

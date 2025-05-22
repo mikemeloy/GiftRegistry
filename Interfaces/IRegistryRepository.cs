@@ -12,9 +12,10 @@ public interface IRegistryRepository
     public Task<bool> GetRegistryOwnerAssociationAsync(int registryId);
     public Task<List<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId);
     public Task InsertRegistryAsync(RegistryDTO registry);
-    public IList<RegistryListItem> Query(string query);
+    public Task<IList<RegistryListItem>> QueryAsync(string query);
     public Task InsertRegistryItemAsync(int registryId, int productId, int quantity);
     public Task DeleteRegistryAsync(int registryId);
+    public Task<GiftRegistryItem> GetRegistryItemByIdAsync(int registryItemId);
     public Task DeleteRegistryItemAsync(int registryItemId);
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
 }

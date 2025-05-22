@@ -16,4 +16,5 @@ public interface IRegistryService
     public Task<RegistryList> Query(string query);
     public Task<bool> DeleteRegistryAsync(int registryId);
     public Task<bool> DeleteRegistryItemAsync(int registryItemId);
+    public Task AddRegistryItemToCart(int registryItemId);
 }

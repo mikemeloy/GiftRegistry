@@ -4,7 +4,8 @@ let
   _container,
   _searchRoute,
   _insertRoute,
-  _deleteRoute;
+  _deleteRoute,
+  _debounce;
 
 const
   init = (searchUrl, insertRoute, deleteRoute) => {
@@ -19,9 +20,13 @@ const
       btnAdd = utils.querySelector('[data-add]'),
       btnSave = utils.querySelector('[data-registry-save]');
 
-    form.addEventListener('submit', events.onSearch_Submit);
+    form.addEventListener('keyup', events.onSearch_KeyUp);
     btnAdd.addEventListener('click', events.onAdd_Click);
     btnSave.addEventListener('click', events.onSave_Click);
+  },
+  debounce = (el) => {
+    clearTimeout(_debounce);
+    _debounce = setTimeout(async () => await el?.(), 400);
   }
 
 
@@ -55,33 +60,35 @@ const utils = {
 }
 
 const events = {
-  onSearch_Submit: async (e) => {
-    e?.preventDefault();
-
-    const
-      endLoading = Loading();
-
-    try {
+  onSearch_KeyUp: async () => {
+    debounce(async () => {
       const
-        query = utils.getInputValue('[data-search] input'),
-        { success, data, error } = await Get(_searchRoute, { query }),
-        rsltWindow = utils.querySelector('[data-result]');
+        endLoading = Loading();
 
-      if (!success) {
+      try {
+        const
+          query = utils.getInputValue('[data-search] input'),
+          { success, data, error } = await Get(_searchRoute, { query }),
+          rsltWindow = utils.querySelector('[data-result]');
+
+        if (!success) {
+          LogError('Failed to Search', error);
+          return;
+        }
+
+        rsltWindow.replaceChildren();
+        rsltWindow.insertAdjacentHTML('afterbegin', data);
+
+        const
+          btns = rsltWindow.querySelectorAll('[data-registry-id]');
+
+        btns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
+      } catch (error) {
         LogError('Failed to Search', error);
-        return;
+      } finally {
+        endLoading();
       }
-
-      rsltWindow.replaceChildren();
-      rsltWindow.insertAdjacentHTML('afterbegin', data);
-
-      const btns = rsltWindow.querySelectorAll('[data-registry-id]');
-      btns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
-    } catch (error) {
-      LogError('Failed to Search', error);
-    } finally {
-      endLoading();
-    }
+    });
   },
   onAdd_Click: () => {
     const
@@ -126,7 +133,7 @@ const events = {
         success = await Delete(`${_deleteRoute}?id=${registryId}`);
 
       if (success) {
-        events.onSearch_Submit();
+        events.onSearch_KeyUp();
       }
     } catch (error) {
       LogError(error);

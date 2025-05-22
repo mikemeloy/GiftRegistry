@@ -68,9 +68,11 @@ const
 
     return () => {
       const
+        duration = 200,
         loading = QuerySelector('[data-loader]');
 
-      body.removeChild(loading);
+      loading.animate([{ opacity: 0 }], { duration });
+      setTimeout(() => loading.remove(), duration - 3);
     }
   };
 

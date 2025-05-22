@@ -15,4 +15,13 @@ internal static class Extensions
 
         return $"{customer.FirstName} {customer.LastName}";
     }
+    public static bool IsEqual(this Customer customer, Customer comparer)
+    {
+        if (customer.IsNull() || comparer.IsNull())
+        {
+            return false;
+        }
+
+        return customer.Id == comparer.Id;
+    }
 }

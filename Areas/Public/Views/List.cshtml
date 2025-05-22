@@ -5,11 +5,14 @@
     {
         <span>@registry.Owner</span>
         <span>@registry.Name</span>
-        <span>@registry.Description</span>
-        <span>@registry.EventDate</span>
+        <span title="@registry.Description">@registry.Description</span>
+        <span>@registry.EventDate.ToString("MMMM d, yyyy")</span>
         <span class="row-action">
-            <a data-registry-id="@registry.Id">Delete</a>
-            <a href="/registry/@registry.Id">View</a>
+            @if (registry.CanModify)
+            {
+                <a type="button" class="btn" data-registry-id="@registry.Id">Delete</a>
+            }
+            <a type="button" class="btn" data-invert href="/registry/@registry.Id">Explore</a>
         </span>
     }
 }

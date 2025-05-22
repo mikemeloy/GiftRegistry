@@ -9,13 +9,14 @@
     var version = Model.PluginVersion;
     var deleteRoute = Url.RouteUrl(RegistryDefaults.DeleteItem);
     var addToCartRoute = Url.RouteUrl(RegistryDefaults.AddToCart);
+    var addToCartLink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = 0, shoppingCartTypeId = 0, quantity = 0 });
 }
 
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/display.css?v=@version" />
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/display.js?v=@version';
 
-    init('@deleteRoute', '@addToCartRoute');
+    init('@deleteRoute', '@addToCartRoute', '@addToCartLink');
 </!script>
 <article>
     <q>@Model.Notes</q>

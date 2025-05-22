@@ -1,10 +1,14 @@
 ﻿:root {
+  --text: #555;
+  --black: #000;
   --white: #fff;
   --border: #ddd;
   --gray-dark: #434343;
   --gray-light: #c5c5c5;
   --blue-link: blue;
   --loading: #c5c5c573;
+  --danger: var(--red, #e75f5f);
+  --success: var(--tan, #d1cbc3);
 }
 
 ::backdrop {
@@ -37,10 +41,12 @@ body:has(dialog[open]) {
     margin: 1rem auto;
   }
 
-  button {
+  button,
+  a {
     outline: none;
     border: none;
-    background-color: var(--border);
+    background-color: var(--danger);
+    border-radius: 6px;
     color: var(--white);
     padding: .7rem 1rem;
     text-transform: uppercase;
@@ -61,15 +67,18 @@ body:has(dialog[open]) {
 
   section[data-result] {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    margin: 1rem 0;
-    padding: 1rem;
+    align-items: center;
+    grid-template-columns: repeat(4, 1fr) min-content;
+    gap: .5rem;
+    margin: 1rem;
     color: var(--gray-dark, #434343);
 
     &>span {
-      padding: .5rem;
-      border-bottom: 1px solid var(--border, #434343);
-
+      color: var(--text);
+      font-size: 1.2rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
       &:nth-last-child(-n+5) {
         border: none;
       }
@@ -80,9 +89,10 @@ body:has(dialog[open]) {
       justify-content: flex-end;
       gap: 1rem;
 
-      >a {
-        color: var(--blue-link);
-        text-decoration: underline;
+      a[data-invert] {
+        color: var(--danger);
+        border: 1px solid var(--danger);
+        background-color: transparent;
       }
     }
   }
@@ -104,7 +114,7 @@ body:has(dialog[open]) {
     }
   }
 
-  [data-modal-add] {    
+  [data-modal-add] {
     flex-direction: column;
     position: absolute;
     top: 50%;

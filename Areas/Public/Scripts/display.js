@@ -4,10 +4,11 @@ let
   _removeRoute;
 
 const
-  init = (removeRoute, addToCartRoute) => {
+  init = (removeRoute, addToCartRoute, addToCartLink) => {
     _addToCartRoute = addToCartRoute;
     _removeRoute = removeRoute;
     setFormEvents();
+    console.dir(addToCartLink);
   },
   setFormEvents = () => {
     const

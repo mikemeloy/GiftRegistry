@@ -85,6 +85,11 @@ public class RegistryRepository : IRegistryRepository
         await _registry.UpdateAsync(entity);
     }
 
+    public async Task<GiftRegistryItem> GetRegistryItemByIdAsync(int registryItemId)
+    {
+        return await _registryItem.GetByIdAsync(registryItemId);
+    }
+
     public async Task DeleteRegistryItemAsync(int registryItemId)
     {
         var entity = await _registryItem.GetByIdAsync(registryItemId);
@@ -105,11 +110,13 @@ public class RegistryRepository : IRegistryRepository
             return false;
         }
 
-        return customer.Id == currentCustomer.Id;
+        return customer.IsEqual(currentCustomer);
     }
 
-    public IList<RegistryListItem> Query(string query)
+    public async Task<IList<RegistryListItem>> QueryAsync(string query)
     {
+        var currentCustomer = await _workContext.GetCurrentCustomerAsync();
+
         return (from reg in _registry.Table
                 join cust in _customer.Table on reg.CustomerId equals cust.Id
                 where reg.Name.Contains(query) && reg.Deleted == false
@@ -120,6 +127,7 @@ public class RegistryRepository : IRegistryRepository
                     Name = reg.Name,
                     Description = reg.Description,
                     EventDate = reg.EventDate,
+                    CanModify = cust.IsEqual(currentCustomer),
                 }).ToList();
     }
 
