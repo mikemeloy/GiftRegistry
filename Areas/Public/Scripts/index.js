@@ -62,9 +62,6 @@ const utils = {
 const events = {
   onSearch_KeyUp: async () => {
     debounce(async () => {
-      const
-        endLoading = Loading();
-
       try {
         const
           query = utils.getInputValue('[data-search] input'),
@@ -76,17 +73,21 @@ const events = {
           return;
         }
 
-        rsltWindow.replaceChildren();
-        rsltWindow.insertAdjacentHTML('afterbegin', data);
+        rsltWindow
+          .animate({ opacity: [1, 0] }, { duration: 100 })
+          .addEventListener('finish', (e) => {
+            rsltWindow.replaceChildren();
+            rsltWindow.insertAdjacentHTML('afterbegin', data);
+            rsltWindow.animate({ opacity: [0, 1] }, { duration: 100 });
 
-        const
-          btns = rsltWindow.querySelectorAll('[data-registry-id]');
+            const
+              btns = rsltWindow.querySelectorAll('[data-registry-id]');
 
-        btns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
+            btns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
+          });
+
       } catch (error) {
         LogError('Failed to Search', error);
-      } finally {
-        endLoading();
       }
     });
   },

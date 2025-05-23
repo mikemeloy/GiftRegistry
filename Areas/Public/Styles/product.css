@@ -7,21 +7,57 @@
   --loading: #c5c5c573;
 }
 
-.btn-register {
-  padding: 0.75rem;
-  border: none;
-  background-color: #eaeaea;
-  color: #666;
-}
-
 ::backdrop {
   background-color: var(--gray-dark, #434343);
   opacity: .8;
 }
 
+input[type="number"] {
+  font-size: 1rem;
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  padding: 1rem;
+}
+
+time {
+  font-size: .7rem;
+  opacity: .8;
+  font-style: italic;
+}
+
+.btn-register {
+  padding: 0.75rem;
+  border: none;
+  background-color: #eaeaea;
+  color: var(--gray-dark);
+}
+
+.info-ico {
+  position: absolute;
+  font-size: 1rem;
+  color: var(--gray-light);
+  border: 1px solid;
+  padding: .6rem;
+  border-radius: 50%;
+  height: 10px;
+  width: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  right: .3rem;
+  background: var(--white);
+  transform: translate(-0%, -50%);
+
+  &::after {
+    content: "\2139";
+  }
+}
+
 [data-registry-select] {
-  height: 35vh;
-  width: 35vw;
+  min-height: 35vh;
+  min-width: 35vw;
   font-size: 14px;
   position: fixed;
   top: 50%;
@@ -33,19 +69,64 @@
   user-select: none;
   box-shadow: 3px 3px 15px var(--gray-dark);
   transform: translate(-50%, -50%);
+  border-radius: 6px;
 
   main {
     flex: 1;
     display: flex;
 
     >form {
-      flex-direction: column;
-      gap: 1rem;
-      margin: 2rem;
+      margin: 2rem 0;
+
+      section[data-radio] {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: .4rem;
+
+        button {
+          border: 1px solid var(--border);
+          background-color: var(--white);
+          color: var(--gray-dark);
+          text-align: center;
+          border-radius: 6px;
+          padding: 0;
+          min-width: 30%;
+          /* for info icon placement */
+          position: relative;
+        }
+
+        label {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 1rem;
+        }
+
+        input[type="radio"] {
+          position: fixed;
+          opacity: 0;
+
+          &:checked+label {
+            color: var(--white);
+            background-color: var(--border);
+          }
+        }
+      }
+
+      section[data-quant] {
+        display: flex;
+        margin: 4rem 1rem 0;
+        flex-direction: column;
+        gap: 1rem;
+
+        label {
+          font-size: 1rem;
+          display: block;
+        }
+      }
     }
   }
-
-
 
   footer {
     display: flex;

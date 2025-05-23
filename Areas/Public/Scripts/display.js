@@ -27,7 +27,12 @@ const
 const events = {
   onAddToCart_Click: async ({ registryItemId }) => {
     const
-      success = await Post(_addToCartRoute, registryItemId);
+      ui = document.querySelector('.cart-qty'),
+      success = await Post(`${_addToCartRoute}?registryItemId=${registryItemId}`, +registryItemId);
+
+    if (success) {
+      ui.innerHTML = '(1)';
+    }
   },
   onRemoveItem_Click: async ({ registryItemId }) => {
     const

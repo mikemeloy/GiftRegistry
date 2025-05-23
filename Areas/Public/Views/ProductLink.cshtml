@@ -29,30 +29,34 @@
 
         <dialog data-registry-select>
             <header>
-                Select a Registry...
+                <h2>
+                    Multiple Registries Found! Please Select the Correct one Below...
+                </h2>
             </header>
             <main>
                 <form>
-                    @{
-                        foreach (var reg in registries)
+                    <section data-radio>
+                        @foreach (var reg in registries)
                         {
-                            <section>
+                            <button type="button">
                                 <input id="registry-radio-@reg.Id" type="radio" value="@reg.Id" name="registry-radio" />
-                                <label for="@reg.Name">@reg.Name</label>
-                            </section>
+                                <label for="registry-radio-@reg.Id">
+                                    <div>@reg.Name</div>
+                                    <time datetime="@reg.EventDate">@reg.EventDate.ToString("MMMM d, yyyy")</time>
+                                </label>
+                                <span class="info-ico" title="@reg.Description"></span>
+                            </button>
                         }
-                    }
-
-                    <section>
-                        <label>Quantity</label>
-                        <input data-quantity type="number">
+                    </section>
+                    <section data-quant>
+                        <label>How Many?</label>
+                        <input min="1" data-quantity type="number">
                     </section>
                 </form>
-
             </main>
             <footer>
                 <button data-cancel type="button">Cancel</button>
-                <button data-submit type="button">Submit</button>
+                <button data-submit type="button">Add</button>
             </footer>
         </dialog>
     </template>

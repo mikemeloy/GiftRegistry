@@ -6,6 +6,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Nop.Core.Infrastructure;
+using Nop.Services.Catalog;
+using Nop.Services.Orders;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Infrastructure;
 
@@ -23,14 +25,15 @@ public class PluginNopStartup : INopStartup
 
     private static void AddCustomServices(IServiceCollection services)
     {
-        services.AddScoped<IRegistryRepository, RegistryRepository>();
-        services.AddScoped<IRegistryService, RegistryService>();
         services.AddScoped<ILogger_R, Logger>();
-
+        services.TryAddScoped<INopServices, NopServices>();
+        services.AddScoped<IRegistryService, RegistryService>();
+        services.AddScoped<IRegistryRepository, RegistryRepository>();
     }
 
     private static void AddNopServices(IServiceCollection services)
     {
-        services.TryAddScoped<INopServices, NopServices>();
+        services.TryAddScoped<IProductService, ProductService>();
+        services.TryAddScoped<IShoppingCartService, ShoppingCartService>();
     }
 }

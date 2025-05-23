@@ -16,8 +16,9 @@ public class RegistryService : IRegistryService
     private readonly INopServices _nopServices;
     private readonly IRegistryRepository _registryRepository;
     private readonly IShoppingCartService _shoppingCartService;
-    public RegistryService(IRegistryRepository registryRepository, INopServices opServices, ILogger_R logger_R)
+    public RegistryService(IShoppingCartService shoppingCartService, IRegistryRepository registryRepository, INopServices opServices, ILogger_R logger_R)
     {
+        _shoppingCartService = shoppingCartService;
         _registryRepository = registryRepository;
         _nopServices = opServices;
         _logger_R = logger_R;
@@ -149,19 +150,20 @@ public class RegistryService : IRegistryService
         var customer = await _nopServices.GetCurrentCustomerAsync();
         var store = await _nopServices.GetStoreAsync();
         var item = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
+        var product = await _nopServices.GetProductByIdAsync(item.ProductId);
 
         var addToCartWarnings = await _shoppingCartService.AddToCartAsync(
-            customer: customer,
-            product: item.ProductId,
-            shoppingCartType: ShoppingCartType.ShoppingCart,
-            storeId: store.Id,
-            attributesXml: null,
-            quantity: item.Quantity
+                customer: customer,
+                product: product,
+                shoppingCartType: ShoppingCartType.ShoppingCart,
+                storeId: store.Id,
+                attributesXml: null,//TODO:add that this item is from a registry?
+                quantity: item.Quantity
             );
 
         if (addToCartWarnings.Any())
         {
-
+            //TODO:
         }
     }
 }
