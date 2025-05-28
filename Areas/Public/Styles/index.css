@@ -75,7 +75,7 @@ body:has(dialog[open]) {
 
     &>span {
       color: var(--text);
-      font-size: 1.2rem;
+      font-size: clamp(17px, 1.2rem, 20px);;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;

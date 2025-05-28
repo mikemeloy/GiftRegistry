@@ -78,6 +78,11 @@ public class RegistryRepository : IRegistryRepository
         await _registryItem.InsertAsync(item);
     }
 
+    public async Task UpdateRegistryItemAsync(GiftRegistryItem item)
+    {
+        await _registryItem.UpdateAsync(item);
+    }
+
     public async Task DeleteRegistryAsync(int registryId)
     {
         var entity = await _registry.GetByIdAsync(registryId);

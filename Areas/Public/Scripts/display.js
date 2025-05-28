@@ -28,11 +28,17 @@ const events = {
   onAddToCart_Click: async ({ registryItemId }) => {
     const
       ui = document.querySelector('.cart-qty'),
-      success = await Post(`${_addToCartRoute}?registryItemId=${registryItemId}`, +registryItemId);
+      { success, error } = await Post(`${_addToCartRoute}?registryItemId=${registryItemId}`, +registryItemId),
+      displayMessage = success
+        ? `cart item ${registryItemId} added successfully`
+        : error;
 
+    //TODO: will need to return actual cart count
     if (success) {
       ui.innerHTML = '(1)';
     }
+
+    alert(displayMessage);
   },
   onRemoveItem_Click: async ({ registryItemId }) => {
     const

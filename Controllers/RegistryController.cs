@@ -111,8 +111,6 @@ public class RegistryController : BasePluginController
             return false;
         }
 
-        //JS will add item to cart, we need to add an attribute with the product id to the cart item after the fact.
-        // will need to return cart quantity to update cart
         await _registryService.AddRegistryItemToCart(registryItemId.Value);
 
         return true;

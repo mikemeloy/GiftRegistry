@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
+using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 using Nop.Core.Domain.Orders;
@@ -16,10 +17,12 @@ public class RegistryService : IRegistryService
     private readonly INopServices _nopServices;
     private readonly IRegistryRepository _registryRepository;
     private readonly IShoppingCartService _shoppingCartService;
-    public RegistryService(IShoppingCartService shoppingCartService, IRegistryRepository registryRepository, INopServices opServices, ILogger_R logger_R)
+    private readonly IOrderService _orderService;
+    public RegistryService(IOrderService orderService,IShoppingCartService shoppingCartService, IRegistryRepository registryRepository, INopServices opServices, ILogger_R logger_R)
     {
         _shoppingCartService = shoppingCartService;
         _registryRepository = registryRepository;
+        _orderService = orderService;
         _nopServices = opServices;
         _logger_R = logger_R;
     }
@@ -157,13 +160,58 @@ public class RegistryService : IRegistryService
                 product: product,
                 shoppingCartType: ShoppingCartType.ShoppingCart,
                 storeId: store.Id,
-                attributesXml: null,//TODO:add that this item is from a registry?
+                attributesXml: null, //TODO:will need for complex products 
                 quantity: item.Quantity
             );
 
         if (addToCartWarnings.Any())
         {
-            //TODO:
+            return;
         }
+
+        await _nopServices.AddRegistryItemAttributeAsync(customer, registryItemId);
+    }
+    /// <summary>
+    /// Need to test concurrency!!
+    /// </summary>
+    /// <param name="order"></param>
+    /// <returns></returns>
+    public async Task ReconcileRegistry(Order order)
+    {
+        //1. get customer.
+        var customer = await _nopServices.GetCustomerByIdAsync(order.CustomerId);
+        //2. get attribute.
+        var registryItemIds = await _nopServices.GetRegistryItemAttributeAsync(customer);
+        //if not return early...
+        if (registryItemIds.Length == 0)
+        {
+            return;
+        }
+        //3. compare order with attribute.
+        var orderItems = await _orderService.GetOrderItemsAsync(order.Id);
+
+        foreach (var registryItemId in registryItemIds)
+        {
+            var regItem = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
+
+            if (regItem.IsNull())
+            {
+                continue;
+            }
+
+            var hasProduct = orderItems.Any(oi => oi.ProductId == regItem.ProductId);
+
+            if (!hasProduct)
+            {
+                continue;
+            }
+
+            //4. mark items on registry as purchase by adding order id to registry item :)
+            regItem.OrderId = order.Id;
+            await _registryRepository.UpdateRegistryItemAsync(regItem);
+        }
+
+        //5. clear registry attribute (if they didn't purchase them this time...)
+        await _nopServices.ClearRegistryItemAttributeAsync(customer);
     }
 }

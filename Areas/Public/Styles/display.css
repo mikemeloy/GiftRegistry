@@ -1,7 +1,8 @@
 :root {
+    --gray-dark: #434343;
+    --primary: var(--red, --gray-dark);
     --white: #fff;
     --border: #ddd;
-    --gray-dark: #434343;
     --gray-light: #c5c5c5;
     --blue-link: blue;
     --loading: #c5c5c573;
@@ -69,6 +70,20 @@ article {
                 border: none;
                 flex: 1;
                 padding: 1rem 0;
+            }
+
+            [data-delete] {
+                &::before{
+                    content: '&#128465';
+                }
+                border: 2px solid var(--primary);
+                color: var(--primary);
+                font-weight: 500;
+            }
+
+            [data-add] {
+                color: var(--white);
+                background-color: var(--primary);
             }
         }
     }

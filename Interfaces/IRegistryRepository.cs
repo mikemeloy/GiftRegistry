@@ -8,14 +8,15 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 
 public interface IRegistryRepository
 {
-    public Task<RegistryDTO> GetRegistryByIdAsync(int registryId);
-    public Task<bool> GetRegistryOwnerAssociationAsync(int registryId);
-    public Task<List<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId);
-    public Task InsertRegistryAsync(RegistryDTO registry);
     public Task<IList<RegistryListItem>> QueryAsync(string query);
-    public Task InsertRegistryItemAsync(int registryId, int productId, int quantity);
+    public Task<RegistryDTO> GetRegistryByIdAsync(int registryId);
+    public Task InsertRegistryAsync(RegistryDTO registry);
     public Task DeleteRegistryAsync(int registryId);
+    public Task<List<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId);
     public Task<GiftRegistryItem> GetRegistryItemByIdAsync(int registryItemId);
+    public Task InsertRegistryItemAsync(int registryId, int productId, int quantity);
+    public Task UpdateRegistryItemAsync(GiftRegistryItem item);
     public Task DeleteRegistryItemAsync(int registryItemId);
+    public Task<bool> GetRegistryOwnerAssociationAsync(int registryId);
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
 }

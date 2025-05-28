@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
-using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using Nop.Core.Domain.Orders;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 
@@ -17,4 +17,5 @@ public interface IRegistryService
     public Task<bool> DeleteRegistryAsync(int registryId);
     public Task<bool> DeleteRegistryItemAsync(int registryItemId);
     public Task AddRegistryItemToCart(int registryItemId);
+    public Task ReconcileRegistry(Order order);
 }

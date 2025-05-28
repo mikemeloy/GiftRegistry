@@ -1,31 +1,28 @@
 ﻿using System.Threading.Tasks;
+using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Events;
 using Nop.Services.Events;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Infrastructure.EventListeners;
 
-public class CartItemChangeEventListener : IConsumer<EntityInsertedEvent<ShoppingCartItem>>, IConsumer<EntityUpdatedEvent<ShoppingCartItem>>, IConsumer<EntityDeletedEvent<ShoppingCartItem>>, IConsumer<OrderPlacedEvent>
+public class CartItemChangeEventListener : IConsumer<EntityDeletedEvent<ShoppingCartItem>>, IConsumer<OrderPlacedEvent>
 {
-    public Task HandleEventAsync(EntityInsertedEvent<ShoppingCartItem> eventMessage)
+    private readonly IRegistryService _registryService;
+    public CartItemChangeEventListener(IRegistryService registryService)
     {
-        var entity = eventMessage.Entity;
-
-        return Task.CompletedTask;
-    }
-
-    public Task HandleEventAsync(EntityUpdatedEvent<ShoppingCartItem> eventMessage)
-    {
-        return Task.CompletedTask;
+        _registryService = registryService;
     }
 
     public Task HandleEventAsync(EntityDeletedEvent<ShoppingCartItem> eventMessage)
     {
+        var cartItem = eventMessage.Entity;
+
         return Task.CompletedTask;
     }
 
-    public Task HandleEventAsync(OrderPlacedEvent eventMessage)
+    public async Task HandleEventAsync(OrderPlacedEvent eventMessage)
     {
-        return Task.CompletedTask;
+        await _registryService.ReconcileRegistry(eventMessage.Order);
     }
 }
