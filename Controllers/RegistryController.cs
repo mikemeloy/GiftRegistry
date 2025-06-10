@@ -26,6 +26,15 @@ public class RegistryController : BasePluginController
 
     [HttpGet]
     [IgnoreAntiforgeryToken]
+    public IActionResult Report()
+    {
+        var model = new PluginModel("1.0.0");
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/Report/Index.cshtml", model);
+    }
+
+    [HttpGet]
+    [IgnoreAntiforgeryToken]
     public async Task<IActionResult> List(string query)
     {
         var model = await _registryService.Query(query);

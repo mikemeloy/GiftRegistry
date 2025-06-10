@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Components;
+using Microsoft.AspNetCore.Routing;
 using Nop.Services.Cms;
 using Nop.Services.Localization;
 using Nop.Services.Plugins;
+using Nop.Web.Framework;
 using Nop.Web.Framework.Infrastructure;
+using Nop.Web.Framework.Menu;
 
 namespace i7MEDIA.Plugin.Widgets.Registry;
 
-public class RegistryPlugin : BasePlugin, IWidgetPlugin
+public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
 {
     public bool HideInWidgetList => false;
     private readonly ILocalizationService _localizationService;
@@ -29,6 +33,8 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin
         {
             return typeof(RegistryLinkComponent);
         }
+
+
 
         return typeof(RegistryLinkComponent);
     }
@@ -50,5 +56,26 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin
         });
 
         await base.InstallAsync();
+    }
+
+    public async Task ManageSiteMapAsync(SiteMapNode rootNode)
+    {
+        var config = rootNode.ChildNodes.FirstOrDefault(node => node.SystemName.Equals("Customers"));
+
+        if (config == null)
+        {
+            return;
+        }
+
+        config.ChildNodes.Insert(config.ChildNodes.Count, new SiteMapNode()
+        {
+            Visible = true,
+            ControllerName = "Registry",
+            ActionName = "Report",
+            SystemName = "Registry plugin",
+            Title = await _localizationService.GetResourceAsync("Registry.Link"),
+            IconClass = "far fa-dot-circle",
+            //RouteValues = new RouteValueDictionary { { "area", AreaNames.Admin } }
+        });
     }
 }

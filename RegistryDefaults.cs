@@ -10,5 +10,6 @@ public static class RegistryDefaults
     public static string Registry => "Plugin.Widget.Registry.Registry";
     public static string DeleteItem => "Plugin.Widget.Registry.Delete.Item";
     public static string AddToCart => "Plugin.Widget.Registry.Delete.Add.To.Cart";
+    public static string Report => "Plugin.Widget.Registry.Report";
     public static string GiftRegistryAttribute => "registry_item_ids";
 }
