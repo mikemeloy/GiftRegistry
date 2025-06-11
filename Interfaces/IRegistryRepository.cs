@@ -19,4 +19,5 @@ public interface IRegistryRepository
     public Task DeleteRegistryItemAsync(int registryItemId);
     public Task<bool> GetRegistryOwnerAssociationAsync(int registryId);
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
+    public Task UpdateRegistryAsync(RegistryDTO registryDTO);
 }

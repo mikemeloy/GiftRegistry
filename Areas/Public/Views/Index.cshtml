@@ -8,7 +8,9 @@
     var registrySearchRoute = Url.RouteUrl(RegistryDefaults.List);
     var baseRoute = Url.RouteUrl(RegistryDefaults.Index);
     var insertRoute = Url.RouteUrl(RegistryDefaults.Insert);
+    var updateRoute = Url.RouteUrl(RegistryDefaults.Update);
     var deleteRoute = Url.RouteUrl(RegistryDefaults.Delete);
+    var getRoute = Url.RouteUrl(RegistryDefaults.Get);
 }
 
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/index.css?v=@version" />
@@ -16,7 +18,7 @@
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/index.js?v=@version';
 
-    init('@registrySearchRoute', '@insertRoute', '@deleteRoute');
+    init('@registrySearchRoute', '@insertRoute', '@deleteRoute', '@getRoute', '@updateRoute');
 </!script>
 
 <div data-registry class="registry-wrapper round">

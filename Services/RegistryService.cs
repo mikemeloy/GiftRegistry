@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
+using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using Microsoft.Win32;
 using Nop.Core.Domain.Orders;
 using Nop.Services.Orders;
 
@@ -18,7 +20,7 @@ public class RegistryService : IRegistryService
     private readonly IRegistryRepository _registryRepository;
     private readonly IShoppingCartService _shoppingCartService;
     private readonly IOrderService _orderService;
-    public RegistryService(IOrderService orderService,IShoppingCartService shoppingCartService, IRegistryRepository registryRepository, INopServices opServices, ILogger_R logger_R)
+    public RegistryService(IOrderService orderService, IShoppingCartService shoppingCartService, IRegistryRepository registryRepository, INopServices opServices, ILogger_R logger_R)
     {
         _shoppingCartService = shoppingCartService;
         _registryRepository = registryRepository;
@@ -85,7 +87,9 @@ public class RegistryService : IRegistryService
 
             return new RegistryViewModel()
             {
+                Id = registryId,
                 Name = registry.Name,
+                EventDate = registry.EventDate,
                 Description = registry.Description,
                 RegistryItems = items,
                 IamOwner = iAmOwner,
@@ -99,16 +103,16 @@ public class RegistryService : IRegistryService
         }
     }
 
-    public async Task<bool> InsertCustomerRegistryAsync(string name, string description, DateTime eventDate, string notes)
+    public async Task<bool> InsertCustomerRegistryAsync(RegistryDTO registryDTO)
     {
         try
         {
-            await _registryRepository.InsertRegistryAsync(new(name, description, eventDate, notes));
+            await _registryRepository.InsertRegistryAsync(registryDTO);
             return true;
         }
         catch (Exception e)
         {
-            await _logger_R.LogErrorAsync($"Unable to insert registry with the name of {name}", e);
+            await _logger_R.LogErrorAsync($"Unable to insert registry with the name of {registryDTO.Name}", e);
             return false;
         }
     }
@@ -213,5 +217,19 @@ public class RegistryService : IRegistryService
 
         //5. clear registry attribute (if they didn't purchase them this time...)
         await _nopServices.ClearRegistryItemAttributeAsync(customer);
+    }
+
+    public async Task<bool> UpdateCustomerRegistryAsync(RegistryDTO registryDTO)
+    {
+        try
+        {
+            await _registryRepository.UpdateRegistryAsync(registryDTO);
+            return true;
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync($"Unable to update registry with the id of {registryDTO.Id}", e);
+            return false;
+        }
     }
 }

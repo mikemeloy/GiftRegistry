@@ -74,6 +74,42 @@ const
       loading.animate([{ opacity: 0 }], { duration });
       setTimeout(() => loading.remove(), duration - 3);
     }
+  },
+  GetInputValue = (selector, parent) => {
+    const
+      input = QuerySelector(selector, parent);
+
+    if (!input) {
+      return "";
+    }
+
+    return input.value;
+  },
+  SetInputValue = (selector, parent, value) => {
+    const
+      input = QuerySelector(selector, parent);
+
+    if (!input) {
+      console.error(`input selector [${parent} ${selector}] not found`)
+      return;
+    }
+
+    input.value = value;
+  },
+  DateToInputString = (val) => {
+    try {
+      const
+        seed = new Date(val),
+        year = seed.toLocaleString('default', { year: 'numeric' }),
+        month = seed.toLocaleString('default', { month: '2-digit' }),
+        day = seed.toLocaleString('default', { day: '2-digit' });
+
+      return [year, month, day].join('-');
+    } catch (error) {
+      console.error(error);
+    }
+
+    return new Date().toLocaleDateString();
   };
 
 export {
@@ -84,5 +120,8 @@ export {
   LogError,
   QuerySelector,
   QuerySelectorAll,
-  Loading
+  Loading,
+  GetInputValue,
+  SetInputValue,
+  DateToInputString
 }

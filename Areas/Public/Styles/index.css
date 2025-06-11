@@ -59,9 +59,9 @@ body:has(dialog[open]) {
   }
 
   input[type="date"] {
-    height: 36px;
-    border: 1px solid #ddd;
-    padding: 8px;
+    height: 45px;
+    border: 1px solid #b5b5b5;
+    padding: 8px 14px;
     vertical-align: middle
   }
 

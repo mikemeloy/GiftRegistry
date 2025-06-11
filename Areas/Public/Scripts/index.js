@@ -1,24 +1,28 @@
-import { Get, Post, Delete, Loading, LogError } from './modules/utils.js';
+import { Get, Post, Delete, Loading, LogError, GetInputValue, QuerySelector, SetInputValue, DateToInputString } from './modules/utils.js';
 
 let
-  _container,
   _searchRoute,
   _insertRoute,
+  _updateRoute,
   _deleteRoute,
+  _getRoute,
   _debounce;
 
 const
-  init = (searchUrl, insertRoute, deleteRoute) => {
+  init = (searchUrl, insertRoute, deleteRoute, getRoute, updateRoute) => {
     _searchRoute = searchUrl;
     _insertRoute = insertRoute;
     _deleteRoute = deleteRoute;
+    _getRoute = getRoute;
+    _updateRoute = updateRoute
+
     setFormEvents();
   },
   setFormEvents = () => {
     const
-      form = utils.querySelector('[data-search]'),
-      btnAdd = utils.querySelector('[data-add]'),
-      btnSave = utils.querySelector('[data-registry-save]');
+      form = querySelector('[data-search]'),
+      btnAdd = querySelector('[data-add]'),
+      btnSave = querySelector('[data-registry-save]');
 
     form.addEventListener('keyup', events.onSearch_KeyUp);
     btnAdd.addEventListener('click', events.onAdd_Click);
@@ -27,121 +31,128 @@ const
   debounce = (el) => {
     clearTimeout(_debounce);
     _debounce = setTimeout(async () => await el?.(), 400);
-  }
-
-
-const utils = {
-  querySelector: (selector) => {
-    if (!_container) {
-      _container = document.querySelector('[data-registry]');
-    }
-
-    const
-      el = _container.querySelector(`:scope ${selector}`);
-
-    if (!el) {
-      console.error(`element with the selector of ${selector} not found!`);
-    }
-
-    return el ?? {
-      showModal: () => console.log(`method doesn't exist!`)
-    };
   },
-  getInputValue: (selector) => {
+  querySelector = (selector) => QuerySelector(selector, '[data-registry]'),
+  getInputValue = (selector) => GetInputValue(selector, '[data-registry]'),
+  prepareModal = (name = '', desc = '', date = '', note = '', id = '') => {
     const
-      input = utils.querySelector(selector);
+      set = (selector, val) => SetInputValue(`[${selector}]`, '[data-modal-add]', val);
 
-    if (!input) {
-      return "";
-    }
+    set('data-add-id', id);
+    set('data-add-name', name);
+    set('data-add-description', desc);
+    set('data-add-event-date', DateToInputString(date));
+    set('data-add-notes', note);
 
-    return input.value;
-  }
-}
+    return querySelector('[data-modal-add]');
+  };
 
-const events = {
-  onSearch_KeyUp: async () => {
-    debounce(async () => {
+const
+  events = {
+    onSearch_KeyUp: async () => {
+      debounce(async () => {
+        try {
+          const
+            query = getInputValue('[data-search] input'),
+            { success, data, error } = await Get(_searchRoute, { query }),
+            rsltWindow = querySelector('[data-result]');
+
+          if (!success) {
+            LogError('Failed to Search', error);
+            return;
+          }
+
+          rsltWindow
+            .animate({ opacity: [1, 0] }, { duration: 100 })
+            .addEventListener('finish', (e) => {
+              rsltWindow.replaceChildren();
+              rsltWindow.insertAdjacentHTML('afterbegin', data);
+              rsltWindow.animate({ opacity: [0, 1] }, { duration: 100 });
+
+              const
+                deleteBtns = rsltWindow.querySelectorAll('[data-registry-delete]'),
+                editBtns = rsltWindow.querySelectorAll('[data-registry-edit]');
+
+              deleteBtns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
+              editBtns.forEach(btn => btn.addEventListener('click', events.onEdit_Click))
+            });
+
+        } catch (error) {
+          LogError('Failed to Search', error);
+        }
+      });
+    },
+    onAdd_Click: () => {
+      const
+        modal = prepareModal();
+
+      modal.showModal();
+    },
+    onSave_Click: () => {
+      const
+        endLoading = Loading(),
+        id = getInputValue('[data-add-id]'),
+        name = getInputValue('[data-add-name]'),
+        description = getInputValue('[data-add-description]'),
+        notes = getInputValue('[data-add-notes]'),
+        eventDate = getInputValue('[data-add-event-date]'),
+        url = Number.isSafeInteger(id) ? _updateRoute : _insertRoute;
+
       try {
         const
-          query = utils.getInputValue('[data-search] input'),
-          { success, data, error } = await Get(_searchRoute, { query }),
-          rsltWindow = utils.querySelector('[data-result]');
-
-        if (!success) {
-          LogError('Failed to Search', error);
-          return;
-        }
-
-        rsltWindow
-          .animate({ opacity: [1, 0] }, { duration: 100 })
-          .addEventListener('finish', (e) => {
-            rsltWindow.replaceChildren();
-            rsltWindow.insertAdjacentHTML('afterbegin', data);
-            rsltWindow.animate({ opacity: [0, 1] }, { duration: 100 });
-
-            const
-              btns = rsltWindow.querySelectorAll('[data-registry-id]');
-
-            btns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
+          success = Post(url, {
+            id,
+            name,
+            description,
+            eventDate,
+            notes
           });
 
+        if (success) {
+          const dialog = querySelector('[data-modal-add]');
+          dialog.close();
+        }
       } catch (error) {
-        LogError('Failed to Search', error);
+        LogError(error);
+      } finally {
+        endLoading();
       }
-    });
-  },
-  onAdd_Click: () => {
-    const
-      modal = utils.querySelector('[data-modal-add]');
-
-    modal.showModal();
-  },
-  onSave_Click: () => {
-    const
-      endLoading = Loading(),
-      name = utils.getInputValue('[data-add-name]'),
-      description = utils.getInputValue('[data-add-description]'),
-      notes = utils.getInputValue('[data-add-notes]'),
-      eventDate = utils.getInputValue('[data-add-event-date]');
-
-    try {
+    },
+    onDelete_Click: async ({ target }) => {
       const
-        success = Post(_insertRoute, {
-          name,
-          description,
-          eventDate,
-          notes
-        });
+        endLoading = Loading(),
+        { dataset: { registryId } } = target;
 
-      if (success) {
-        const dialog = utils.querySelector('[data-modal-add]');
-        dialog.close();
+      try {
+        const
+          success = await Delete(`${_deleteRoute}?id=${registryId}`);
+
+        if (success) {
+          events.onSearch_KeyUp();
+        }
+      } catch (error) {
+        LogError(error);
+      } finally {
+        endLoading();
       }
-    } catch (error) {
-      LogError(error);
-    } finally {
-      endLoading();
-    }
-  },
-  onDelete_Click: async ({ target }) => {
-    const
-      endLoading = Loading(),
-      { dataset: { registryId } } = target;
-
-    try {
+    },
+    onEdit_Click: async ({ target }) => {
       const
-        success = await Delete(`${_deleteRoute}?id=${registryId}`);
+        { dataset: { registryId } } = target;
 
-      if (success) {
-        events.onSearch_KeyUp();
+      const
+        { success, data } = await Get(`${_getRoute}?id=${registryId}`);
+
+      if (!success) {
+        alert('An Error has Occurred');
       }
-    } catch (error) {
-      LogError(error);
-    } finally {
-      endLoading();
+
+      const
+        { Id, Name, EventDate, Description, Notes } = data,
+        modal = prepareModal(Name, Description, EventDate, Notes, Id);
+
+      modal.showModal();
     }
-  }
-}
+  };
 
 export { init }

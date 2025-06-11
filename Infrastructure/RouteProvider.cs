@@ -16,6 +16,11 @@ internal class RouteProvider : IRouteProvider
             defaults: new { controller = "Registry", action = "Index" }
         );
         endpointRouteBuilder.MapControllerRoute(
+             name: RegistryDefaults.Get,
+             pattern: "Registry/Get",
+             defaults: new { controller = "Registry", action = "Get" }
+        );
+        endpointRouteBuilder.MapControllerRoute(
             name: RegistryDefaults.List,
             pattern: "Registry/List",
             defaults: new { controller = "Registry", action = "List" }
@@ -29,6 +34,11 @@ internal class RouteProvider : IRouteProvider
             name: RegistryDefaults.Insert,
             pattern: "Registry/Insert",
             defaults: new { controller = "Registry", action = "Insert" }
+        );
+        endpointRouteBuilder.MapControllerRoute(
+            name: RegistryDefaults.Update,
+            pattern: "Registry/Update",
+            defaults: new { controller = "Registry", action = "Update" }
         );
         endpointRouteBuilder.MapControllerRoute(
             name: RegistryDefaults.Save,

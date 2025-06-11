@@ -5,22 +5,23 @@
     <main>
         <section>
             <label for="name">Name</label>
-            <input data-add-name type="text" name="name" />
+            <input class="form-control text-box single-line" data-add-name type="text" name="name" />
         </section>
         <section>
             <label for="description">Description</label>
-            <input data-add-description type="text" name="description" />
+            <input class="form-control text-box single-line" data-add-description type="text" name="description" />
         </section>
         <section>
             <label for="eventdate">Event Date</label>
-            <input data-add-event-date type="date" name="eventdate" />
+            <input class="form-control text-box single-line" data-add-event-date type="date" name="eventdate" />
         </section>
         <section>
             <label for="notes">Summary</label>
-            <textarea data-add-notes rows="3" multiple type="text" name="notes"></textarea>
+            <textarea class="form-control text-box" data-add-notes rows="3" multiple type="text" name="notes"></textarea>
         </section>
     </main>
     <footer>
         <button data-registry-save class="button-1">Save</button>
+        <input type="hidden" data-add-id>
     </footer>
 </dialog>

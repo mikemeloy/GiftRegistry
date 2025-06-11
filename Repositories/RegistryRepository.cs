@@ -9,6 +9,7 @@ using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 using LinqToDB;
+using Microsoft.Win32;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
@@ -63,6 +64,23 @@ public class RegistryRepository : IRegistryRepository
         entity.CustomerId = customer.Id;
 
         await _registry.InsertAsync(entity);
+    }
+
+    public async Task UpdateRegistryAsync(RegistryDTO registryDTO)
+    {
+        var registry = await _registry.GetByIdAsync(registryDTO.Id);
+
+        if (registry.IsNull())
+        {
+            return;
+        }
+
+        registry.Name = registryDTO.Name;
+        registry.Description = registryDTO.Description;
+        registry.EventDate = registryDTO.EventDate;
+        registry.Notes = registryDTO.Notes;
+
+        await _registry.UpdateAsync(registry);
     }
 
     public async Task InsertRegistryItemAsync(int registryId, int productId, int quantity)

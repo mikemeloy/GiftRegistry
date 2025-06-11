@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
@@ -56,6 +57,20 @@ public class RegistryController : BasePluginController
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/Display.cshtml", model);
     }
 
+    [HttpGet]
+    [IgnoreAntiforgeryToken]
+    public async Task<RegistryViewModel> GetAsync(int? id)
+    {
+        if (id.IsNull())
+        {
+            return null;
+        }
+
+        var model = await _registryService.GetCustomerRegistryByIdAsync(id.Value);
+
+        return model;
+    }
+
     [HttpPost]
     [IgnoreAntiforgeryToken]
     public async Task<bool> SaveAsync([FromBody] RegistryAddProductRequest request)
@@ -72,14 +87,28 @@ public class RegistryController : BasePluginController
 
     [HttpPost]
     [IgnoreAntiforgeryToken]
-    public async Task<bool> InsertAsync([FromBody] RegistryInsertRequest request)
+    public async Task<bool> UpdateAsync([FromBody] RegistryDTO registryDTO)
     {
-        if (request.IsNull())
+        if (registryDTO.IsNull())
         {
             return false;
         }
 
-        var success = await _registryService.InsertCustomerRegistryAsync(request.Name, request.Description, request.EventDate, request.Notes);
+        var success = await _registryService.UpdateCustomerRegistryAsync(registryDTO);
+
+        return success;
+    }
+
+    [HttpPost]
+    [IgnoreAntiforgeryToken]
+    public async Task<bool> InsertAsync([FromBody] RegistryDTO registryDTO)
+    {
+        if (registryDTO.IsNull())
+        {
+            return false;
+        }
+
+        var success = await _registryService.InsertCustomerRegistryAsync(registryDTO);
 
         return success;
     }
