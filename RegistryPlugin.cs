@@ -70,8 +70,8 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
         config.ChildNodes.Insert(config.ChildNodes.Count, new SiteMapNode()
         {
             Visible = true,
-            ControllerName = "Registry",
-            ActionName = "Report",
+            ControllerName = "Admin",
+            ActionName = "Index",
             SystemName = "Registry plugin",
             Title = await _localizationService.GetResourceAsync("Registry.Link"),
             IconClass = "far fa-dot-circle",

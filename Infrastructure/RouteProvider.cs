@@ -65,8 +65,8 @@ internal class RouteProvider : IRouteProvider
         //Admin Section
         endpointRouteBuilder.MapControllerRoute(
            name: RegistryDefaults.Report,
-           pattern: "admin/Registry/Report",
-           defaults: new { controller = "Registry", action = "Report", area = AreaNames.Admin }
+           pattern: "Admin/Index",
+           defaults: new { controller = "Admin", action = "Index", area = AreaNames.Admin }
         );
     }
 }
