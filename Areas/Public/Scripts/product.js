@@ -1,4 +1,4 @@
-import { Log, QuerySelector, Post } from './modules/utils.js';
+import { Log, QuerySelector, Post, DisplayNotification } from './modules/utils.js';
 
 let
   _root = '#product-details-form',
@@ -78,6 +78,7 @@ const
 
     if (success) {
       dialog.close();
+      DisplayNotification("Item add to Registry")
     }
   };
 

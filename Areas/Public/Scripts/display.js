@@ -28,14 +28,10 @@ const events = {
   onAddToCart_Click: async ({ registryItemId }) => {
     const
       ui = document.querySelector('.cart-qty'),
-      { success, error } = await Post(`${_addToCartRoute}?registryItemId=${registryItemId}`, +registryItemId),
-      displayMessage = success
-        ? `cart item ${registryItemId} added successfully`
-        : error;
+      { success, error } = await Post(`${_addToCartRoute}?registryItemId=${registryItemId}`, +registryItemId);
 
-    //TODO: will need to return actual cart count
     if (success) {
-      ui.innerHTML = '(1)';
+      ui.innerHTML = '(1)'; //TODO: will need to return actual cart count
     }
 
     DisplayNotification("Item Added to Registry");

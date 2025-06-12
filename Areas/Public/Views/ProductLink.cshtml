@@ -23,9 +23,12 @@
     </script>
 
     <template data-registry-link-add>
-        <button data-registry-id="@firstReg.Id" data-registry-button-add class="btn-register" type="button">
-            @T("Registry.Product.Link")
-        </button>
+        <div>
+            <i class="fal fa-gift"></i>
+            <button data-registry-id="@firstReg.Id" data-registry-button-add class="btn-register" type="button">
+                @T("Registry.Product.Link")
+            </button>
+        </div>
 
         <dialog data-registry-select>
             <header>
@@ -60,4 +63,6 @@
             </footer>
         </dialog>
     </template>
+
+    @await Html.PartialAsync("_RegistryNotification.cshtml")
 }

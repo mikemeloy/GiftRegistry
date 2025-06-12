@@ -1,6 +1,30 @@
 ﻿<template data-registry-notify-template>
+    <style>
+        [data-registry-notify] {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            border-radius: .5rem;
+            min-height: 10rem;
+            min-width: 30rem;
+            box-shadow: 5px 5px 15px var(--gray-dark);
+            background-color: var(--white);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            z-index: 1000000000;
+
+            main {
+                color: var(--gray-light);
+                padding: .5rem;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
     <div data-registry-notify>
         <main></main>
-        <footer></footer>
+        <span class="info-ico"></span>
     </div>
 </template>

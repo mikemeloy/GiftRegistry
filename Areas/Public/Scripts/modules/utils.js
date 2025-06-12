@@ -117,15 +117,12 @@ const
         .querySelector('[data-registry-notify-template]')
         .content
         .cloneNode(true),
-      options = { duration: 500, fill: "forwards" };
+      options = { duration: 1000, fill: "forwards" };
 
-    document
-      .querySelector('[data-registry]')
-      .appendChild(clone);
-
+    document.body.appendChild(clone);
 
     const
-      dialog = document.querySelector('div [data-registry-notify]'),
+      dialog = document.querySelector('[data-registry-notify]'),
       main = dialog.querySelector('main');
 
     main.innerText = val;

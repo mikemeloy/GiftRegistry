@@ -29,7 +29,7 @@ time {
 .btn-register {
   padding: 0.75rem;
   border: none;
-  background-color: #eaeaea;
+  background-color: transparent;
   color: var(--gray-dark);
 }
 
@@ -45,10 +45,8 @@ time {
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 50%;
+  top: .3rem;
   right: .3rem;
-  background: var(--white);
-  transform: translate(-0%, -50%);
 
   &::after {
     content: "\2139";
@@ -82,7 +80,7 @@ time {
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: .4rem;
+        gap: 1rem;
 
         button {
           border: 1px solid var(--border);
@@ -94,23 +92,24 @@ time {
           min-width: 30%;
           /* for info icon placement */
           position: relative;
+          flex: 0 0;
+
+          &:has(input:checked) {
+            color: var(--white);
+            background-color: var(--red, --gray-light);
+          }
         }
 
         label {
           display: flex;
           flex-direction: column;
           justify-content: center;
-          padding: 1rem;
+          padding: 1.5rem 1rem 1rem;
         }
 
         input[type="radio"] {
           position: fixed;
           opacity: 0;
-
-          &:checked+label {
-            color: var(--white);
-            background-color: var(--border);
-          }
         }
       }
 
@@ -138,10 +137,15 @@ time {
   button {
     outline: none;
     border: none;
-    background-color: var(--border);
-    color: var(--white);
+    border: 1px solid var(--red);
+    color: var(--red);
     padding: .7rem 1rem;
     text-transform: uppercase;
+    background-color: transparent;
+
+    &[data-submit] {
+      background-color: var(--red);
+    }
   }
 
   &[open] {
