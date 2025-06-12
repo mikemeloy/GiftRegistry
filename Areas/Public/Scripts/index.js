@@ -1,4 +1,4 @@
-import { Get, Post, Delete, Loading, LogError, GetInputValue, QuerySelector, SetInputValue, DateToInputString } from './modules/utils.js';
+import { Get, Post, Delete, Loading, LogError, GetInputValue, QuerySelector, SetInputValue, DateToInputString, DisplayNotification } from './modules/utils.js';
 
 let
   _searchRoute,
@@ -96,7 +96,7 @@ const
         description = getInputValue('[data-add-description]'),
         notes = getInputValue('[data-add-notes]'),
         eventDate = getInputValue('[data-add-event-date]'),
-        url = Number.isSafeInteger(id) ? _updateRoute : _insertRoute;
+        url = (+id > 0) ? _updateRoute : _insertRoute;
 
       try {
         const
@@ -111,6 +111,7 @@ const
         if (success) {
           const dialog = querySelector('[data-modal-add]');
           dialog.close();
+          DisplayNotification("Registry Saved...");
         }
       } catch (error) {
         LogError(error);
@@ -129,6 +130,7 @@ const
 
         if (success) {
           events.onSearch_KeyUp();
+            DisplayNotification("Registry Deleted...");
         }
       } catch (error) {
         LogError(error);

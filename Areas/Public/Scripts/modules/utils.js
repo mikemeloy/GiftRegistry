@@ -110,6 +110,35 @@ const
     }
 
     return new Date().toLocaleDateString();
+  },
+  DisplayNotification = (val) => {
+    const
+      clone = document
+        .querySelector('[data-registry-notify-template]')
+        .content
+        .cloneNode(true),
+      options = { duration: 500, fill: "forwards" };
+
+    document
+      .querySelector('[data-registry]')
+      .appendChild(clone);
+
+
+    const
+      dialog = document.querySelector('div [data-registry-notify]'),
+      main = dialog.querySelector('main');
+
+    main.innerText = val;
+
+    dialog
+      .animate({ opacity: [0, 1] }, options)
+      .addEventListener('finish', (e) => {
+        setTimeout(() => {
+          dialog
+            .animate({ opacity: [1, 0] }, options)
+            .addEventListener('finish', (e) => { dialog.remove() });
+        }, options.duration);
+      })
   };
 
 export {
@@ -123,5 +152,6 @@ export {
   Loading,
   GetInputValue,
   SetInputValue,
-  DateToInputString
+  DateToInputString,
+  DisplayNotification
 }

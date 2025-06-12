@@ -69,18 +69,26 @@ body:has(dialog[open]) {
     display: grid;
     align-items: center;
     grid-template-columns: repeat(4, 1fr) min-content;
-    gap: .5rem;
+    gap: 1rem;
     margin: 1rem;
     color: var(--gray-dark, #434343);
 
     &>span {
       color: var(--text);
-      font-size: clamp(17px, 1.2rem, 20px);;
+      font-size: clamp(17px, 1.2rem, 20px);
+      ;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+
       &:nth-last-child(-n+5) {
         border: none;
+      }
+
+      &[data-header-row] {
+        text-align: center;
+        border-bottom: 1px solid var(--border, #434343);
+        font-weight: 600;
       }
     }
 
@@ -150,6 +158,27 @@ body:has(dialog[open]) {
       display: flex;
       flex-direction: row-reverse;
       padding: 1rem 0 0;
+    }
+  }
+
+  [data-registry-notify] {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    border-radius: .5rem;
+    min-height: 10rem;
+    min-width: 20rem;
+    box-shadow: 5px 5px 15px var(--gray-dark);
+    background-color: var(--white);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+
+    main {
+      padding: .5rem;
+      font-size: 1.5rem;
     }
   }
 

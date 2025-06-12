@@ -1,4 +1,4 @@
-import { QuerySelector, QuerySelectorAll, Post, Delete } from './modules/utils.js';
+import { QuerySelector, QuerySelectorAll, Post, Delete, DisplayNotification } from './modules/utils.js';
 let
   _addToCartRoute,
   _removeRoute;
@@ -38,7 +38,7 @@ const events = {
       ui.innerHTML = '(1)';
     }
 
-    alert(displayMessage);
+    DisplayNotification("Item Added to Registry");
   },
   onRemoveItem_Click: async ({ registryItemId }) => {
     const
