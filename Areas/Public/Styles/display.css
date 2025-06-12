@@ -73,9 +73,6 @@ article {
             }
 
             [data-delete] {
-                &::before{
-                    content: '&#128465';
-                }
                 border: 2px solid var(--primary);
                 color: var(--primary);
                 font-weight: 500;

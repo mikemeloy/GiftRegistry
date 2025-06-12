@@ -4,7 +4,9 @@ using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 using Microsoft.AspNetCore.Mvc;
+using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
+using Nop.Web.Framework.Mvc.Filters;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Controllers;
 
@@ -27,6 +29,8 @@ public class RegistryController : BasePluginController
 
     [HttpGet]
     [IgnoreAntiforgeryToken]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
     public IActionResult Report()
     {
         var model = new PluginModel("1.0.0");

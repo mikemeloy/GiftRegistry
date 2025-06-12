@@ -21,7 +21,6 @@
     <None Remove="Areas\Public\Scripts\product.js" />
     <None Remove="Areas\Public\Styles\display.css" />
     <None Remove="Areas\Public\Styles\index.css" />
-    <None Remove="Areas\Public\Styles\notification.css" />
     <None Remove="Areas\Public\Styles\product.css" />
     <None Remove="Areas\Public\Views\Index.cshtml" />
     <None Remove="Areas\Public\Views\List.cshtml" />
@@ -61,9 +60,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Styles\index.css">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Areas\Public\Styles\notification.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Styles\product.css">

@@ -1,4 +1,10 @@
-import { Get, Post, Delete, Loading, LogError, GetInputValue, QuerySelector, SetInputValue, DateToInputString, DisplayNotification } from './modules/utils.js';
+import {
+  Get, Post, Delete,
+  Loading, LogError, GetInputValue,
+  QuerySelector, SetInputValue,
+  DateToInputString, DisplayNotification,
+  AddQueryParamToURL, GetQueryParam
+} from './modules/utils.js';
 
 let
   _searchRoute,
@@ -17,6 +23,19 @@ const
     _updateRoute = updateRoute
 
     setFormEvents();
+    setSearchByUrl();
+  },
+  setSearchByUrl = () => {
+    const
+      searchParam = GetQueryParam('search'),
+      input = querySelector('form input');
+
+    if (!searchParam || !input) {
+      return;
+    }
+
+    input.value = searchParam;
+    events.onSearch_KeyUp();
   },
   setFormEvents = () => {
     const
@@ -62,12 +81,14 @@ const
             return;
           }
 
+          AddQueryParamToURL([{ key: 'search', value: query }]);
+
           rsltWindow
             .animate({ opacity: [1, 0] }, { duration: 100 })
             .addEventListener('finish', (e) => {
               rsltWindow.replaceChildren();
               rsltWindow.insertAdjacentHTML('afterbegin', data);
-              rsltWindow.animate({ opacity: [0, 1] }, { duration: 100 });
+              rsltWindow.animate({ opacity: [0, 1] }, { duration: 100, fill: "forwards" });
 
               const
                 deleteBtns = rsltWindow.querySelectorAll('[data-registry-delete]'),
@@ -121,7 +142,6 @@ const
     },
     onDelete_Click: async ({ target }) => {
       const
-        endLoading = Loading(),
         { dataset: { registryId } } = target;
 
       try {
@@ -130,12 +150,10 @@ const
 
         if (success) {
           events.onSearch_KeyUp();
-            DisplayNotification("Registry Deleted...");
         }
       } catch (error) {
         LogError(error);
-      } finally {
-        endLoading();
+        DisplayNotification("Unable to Delete Item");
       }
     },
     onEdit_Click: async ({ target }) => {

@@ -71,7 +71,7 @@ const
         duration = 200,
         loading = QuerySelector('[data-loader]');
 
-      loading.animate([{ opacity: 0 }], { duration });
+      loading.animate([{ opacity: 0 }], { duration, fill: "forwards" });
       setTimeout(() => loading.remove(), duration - 3);
     }
   },
@@ -136,7 +136,37 @@ const
             .addEventListener('finish', (e) => { dialog.remove() });
         }, options.duration);
       })
-  };
+  },
+  AddQueryParamToURL = (arr) => {
+
+    if (!Array.isArray(arr)) {
+      return;
+    }
+
+    try {
+      const
+        url = new URL(window.location.href),
+        urlParam = new URLSearchParams(url.search);
+
+      arr.forEach(({ key, value }) => urlParam.set(key, value));
+      window.history.replaceState(null, null, `?${urlParam.toString()}`);
+
+    } catch (error) {
+      LogError("URL param set", error);
+    }
+  },
+  GetQueryParam = (key) => {
+    try {
+      const
+        url = new URL(window.location.href),
+        urlParam = new URLSearchParams(url.search);
+
+      return urlParam.get(key);
+
+    } catch (error) {
+      LogError("URL param get", error);
+    }
+  };;
 
 export {
   Get,
@@ -150,5 +180,7 @@ export {
   GetInputValue,
   SetInputValue,
   DateToInputString,
-  DisplayNotification
+  DisplayNotification,
+  AddQueryParamToURL,
+  GetQueryParam
 }

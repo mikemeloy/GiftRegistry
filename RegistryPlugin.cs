@@ -75,7 +75,7 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
             SystemName = "Registry plugin",
             Title = await _localizationService.GetResourceAsync("Registry.Link"),
             IconClass = "far fa-dot-circle",
-            //RouteValues = new RouteValueDictionary { { "area", AreaNames.Admin } }
+            RouteValues = new RouteValueDictionary { { "area", AreaNames.Admin } }
         });
     }
 }

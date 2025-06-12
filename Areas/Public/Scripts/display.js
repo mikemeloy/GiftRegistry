@@ -48,7 +48,7 @@ const events = {
       duration = 500,
       registryItem = QuerySelector(`[data-registry-item-id="${registryItemId}"]`, '[data-registry-product-list]');
 
-    registryItem.animate([{ opacity: 0 }], { duration });
+    registryItem.animate([{ opacity: [1, 0] }], { duration, fill: "forwards" });
     setTimeout(() => registryItem.remove(), duration - 1);
   }
 }

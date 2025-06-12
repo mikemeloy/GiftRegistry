@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
+using Nop.Web.Framework;
 using Nop.Web.Framework.Mvc.Routing;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Infrastructure;
@@ -65,7 +66,7 @@ internal class RouteProvider : IRouteProvider
         endpointRouteBuilder.MapControllerRoute(
            name: RegistryDefaults.Report,
            pattern: "admin/Registry/Report",
-           defaults: new { controller = "Registry", action = "Report" }
+           defaults: new { controller = "Registry", action = "Report", area = AreaNames.Admin }
         );
     }
 }
