@@ -1,3 +1,5 @@
-﻿namespace i7MEDIA.Plugin.Widgets.Registry.Models;
+﻿using System.Collections.Generic;
 
-public record ListViewModel(string PluginVersion);
+namespace i7MEDIA.Plugin.Widgets.Registry.Models;
+
+public record ListViewModel(string PluginVersion, List<RegistryTypeDTO> RegistryTypes);

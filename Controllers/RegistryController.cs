@@ -13,7 +13,8 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Controllers;
 public class RegistryController : BasePluginController
 {
     private readonly IRegistryService _registryService;
-    public RegistryController(IRegistryService registryService)
+    private readonly IViewModelFactory _viewModelFactory;
+    public RegistryController(IRegistryService registryService, IViewModelFactory viewModelFactory)
     {
         _registryService = registryService;
     }
@@ -22,7 +23,7 @@ public class RegistryController : BasePluginController
     [IgnoreAntiforgeryToken]
     public IActionResult Index()
     {
-        var model = new ListViewModel("1.0.0");
+        var model = _viewModelFactory.GetListViewModelAsync();
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/Index.cshtml", model);
     }

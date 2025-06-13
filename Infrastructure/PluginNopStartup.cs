@@ -1,4 +1,5 @@
-﻿using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
+﻿using i7MEDIA.Plugin.Widgets.Registry.Factories;
+using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Repositories;
 using i7MEDIA.Plugin.Widgets.Registry.Services;
 using Microsoft.AspNetCore.Builder;
@@ -29,6 +30,7 @@ public class PluginNopStartup : INopStartup
         services.TryAddScoped<INopServices, NopServices>();
         services.AddScoped<IRegistryService, RegistryService>();
         services.AddScoped<IRegistryRepository, RegistryRepository>();
+        services.AddScoped<IViewModelFactory, ViewModelFactory>();
     }
 
     private static void AddNopServices(IServiceCollection services)
