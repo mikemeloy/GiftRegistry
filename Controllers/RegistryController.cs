@@ -22,7 +22,7 @@ public class RegistryController : BasePluginController
     [IgnoreAntiforgeryToken]
     public IActionResult Index()
     {
-        var model = new PluginModel("1.0.0");
+        var model = new ListViewModel("1.0.0");
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/Index.cshtml", model);
     }

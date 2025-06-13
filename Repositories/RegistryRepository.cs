@@ -20,12 +20,13 @@ public class RegistryRepository : IRegistryRepository
 {
     private readonly IRepository<GiftRegistry> _registry;
     private readonly IRepository<GiftRegistryItem> _registryItem;
+    private readonly IRepository<GiftRegistryType> _registryType;
     private readonly IRepository<Customer> _customer;
     private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product)
+    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product)
     {
         _product = product;
         _registry = registry;
@@ -33,6 +34,7 @@ public class RegistryRepository : IRegistryRepository
         _workContext = workContext;
         _registryItem = registryItem;
         _storeContext = storeContext;
+        _registryType = registryType;
     }
 
     public async Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync()
@@ -153,7 +155,7 @@ public class RegistryRepository : IRegistryRepository
                     Description = reg.Description,
                     EventDate = reg.EventDate,
                     CanModify = cust.IsEqual(currentCustomer),
-                }).ToList();
+                }).Take(20).ToList();
     }
 
     public async Task<List<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId)
@@ -173,6 +175,16 @@ public class RegistryRepository : IRegistryRepository
                     };
 
 
-        return await query.Take(20).ToListAsync();
+        return await query.ToListAsync();
+    }
+
+    public List<RegistryTypeDTO> GetRegistryTypes()
+    {
+        var query = from ty in _registryType.Table
+                    where ty.Deleted == false
+                    select new RegistryTypeDTO(ty.Id, ty.Name, ty.Description);
+
+
+        return query.ToList();
     }
 }

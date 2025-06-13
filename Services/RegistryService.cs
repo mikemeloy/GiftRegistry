@@ -7,7 +7,6 @@ using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
-using Microsoft.Win32;
 using Nop.Core.Domain.Orders;
 using Nop.Services.Orders;
 

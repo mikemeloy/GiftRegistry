@@ -13,7 +13,7 @@ public class AdminController : BasePluginController
     [Area(AreaNames.Admin)]
     public IActionResult Index()
     {
-        var model = new PluginModel("1.0.0");
+        var model = new ListViewModel("1.0.0");
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/Report/Index.cshtml", model);
     }

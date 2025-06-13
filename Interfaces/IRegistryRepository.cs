@@ -20,4 +20,5 @@ public interface IRegistryRepository
     public Task<bool> GetRegistryOwnerAssociationAsync(int registryId);
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
     public Task UpdateRegistryAsync(RegistryDTO registryDTO);
+    public List<RegistryTypeDTO> GetRegistryTypes();
 }
