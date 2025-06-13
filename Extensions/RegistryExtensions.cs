@@ -14,7 +14,8 @@ public static class RegistryExtensions
             Name = source.Name,
             Description = source.Description,
             EventDate = source.EventDate,
-            Notes = source.Notes
+            Notes = source.Notes,
+            EventType = source.EventType
         };
     }
 
@@ -30,7 +31,8 @@ public static class RegistryExtensions
             Name: source.Name,
             Description: source.Description,
             EventDate: source.EventDate,
-            Notes: source.Notes
+            Notes: source.Notes,
+            EventType: source.EventType
         );
     }
 

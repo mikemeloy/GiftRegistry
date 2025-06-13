@@ -75,15 +75,20 @@ const
       setTimeout(() => loading.remove(), duration - 3);
     }
   },
-  GetInputValue = (selector, parent) => {
+  GetInputValue = (selector, parent, options = { isNumeric: false }) => {
     const
+      { isNumeric } = options,
       input = QuerySelector(selector, parent);
 
     if (!input) {
-      return "";
+      return isNumeric
+        ? 0
+        : "";
     }
 
-    return input.value;
+    return isNumeric
+      ? Number(input.value)
+      : input.value;
   },
   SetInputValue = (selector, parent, value) => {
     const

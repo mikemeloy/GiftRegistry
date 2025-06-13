@@ -9,7 +9,7 @@ public class GiftRegistry : BaseEntity, ISoftDeletedEntity
     public int StoreId { get; set; }
     public int CustomerId { get; set; }
     public int ConsultantId { get; set; }
-    public RegistryType Type { get; set; }
+    public int EventType { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
     public string Notes { get; set; }

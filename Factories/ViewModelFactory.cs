@@ -18,4 +18,9 @@ public class ViewModelFactory : IViewModelFactory
 
         return new("1.0.1", registryTypes);
     }
+
+    public AdminViewModel GetAdminViewModelAsync()
+    {
+        return new("1.0.1");
+    }
 }

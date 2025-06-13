@@ -55,7 +55,7 @@ const
     _debounce = setTimeout(async () => await el?.(), 400);
   },
   querySelector = (selector) => QuerySelector(selector, '[data-registry]'),
-  getInputValue = (selector) => GetInputValue(selector, '[data-registry]'),
+  getInputValue = (selector, options) => GetInputValue(selector, '[data-registry]', options),
   prepareModal = (name = '', desc = '', date = '', note = '', id = '') => {
     const
       set = (selector, val) => SetInputValue(`[${selector}]`, '[data-modal-add]', val);
@@ -120,6 +120,7 @@ const
         description = getInputValue('[data-add-description]'),
         notes = getInputValue('[data-add-notes]'),
         eventDate = getInputValue('[data-add-event-date]'),
+        eventType = getInputValue('[data-add-event-type]', { isNumeric: true }),
         url = (+id > 0) ? _updateRoute : _insertRoute;
 
       try {
@@ -129,6 +130,7 @@ const
             name,
             description,
             eventDate,
+            eventType,
             notes
           });
 

@@ -17,6 +17,7 @@ public class RegistryController : BasePluginController
     public RegistryController(IRegistryService registryService, IViewModelFactory viewModelFactory)
     {
         _registryService = registryService;
+        _viewModelFactory = viewModelFactory;
     }
 
     [HttpGet]
@@ -30,7 +31,7 @@ public class RegistryController : BasePluginController
 
     [HttpGet]
     [IgnoreAntiforgeryToken]
-    public async Task<IActionResult> List(string query)
+    public async Task<IActionResult> ListAsync(string query)
     {
         var model = await _registryService.Query(query);
 
