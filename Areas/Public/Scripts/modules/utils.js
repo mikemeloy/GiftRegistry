@@ -117,7 +117,7 @@ const
         .querySelector('[data-registry-notify-template]')
         .content
         .cloneNode(true),
-      options = { duration: 1000, fill: "forwards" };
+      options = { duration: 500, fill: "forwards" };
 
     document.body.appendChild(clone);
 
@@ -134,8 +134,8 @@ const
           dialog
             .animate({ opacity: [1, 0] }, options)
             .addEventListener('finish', (e) => { dialog.remove() });
-        }, options.duration);
-      })
+        }, options.duration * 3);
+      });
   },
   AddQueryParamToURL = (arr) => {
 
@@ -148,7 +148,15 @@ const
         url = new URL(window.location.href),
         urlParam = new URLSearchParams(url.search);
 
-      arr.forEach(({ key, value }) => urlParam.set(key, value));
+      arr.forEach(({ key, value }) => {
+        if (!value?.trim()) {
+          urlParam.delete(key);
+          return;
+        }
+
+        urlParam.set(key, value)
+      });
+
       window.history.replaceState(null, null, `?${urlParam.toString()}`);
 
     } catch (error) {

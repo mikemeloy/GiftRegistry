@@ -70,9 +70,6 @@ time {
   border-radius: 6px;
 
   main {
-    flex: 1;
-    display: flex;
-
     >form {
       margin: 2rem 0;
 
@@ -145,6 +142,7 @@ time {
 
     &[data-submit] {
       background-color: var(--red);
+      color: var(--white);
     }
   }
 

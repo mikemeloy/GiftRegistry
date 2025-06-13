@@ -87,4 +87,14 @@ public static class RegistryExtensions
 
         return source.OrderId > 0;
     }
+
+    public static string GetQueryText(this GiftRegistry source, Customer customer)
+    {
+        if (source.IsNull() || customer.IsNull())
+        {
+            return "";
+        }
+
+        return $"{source.Name} {source.Description} {source.EventDate.ToLongDateString()} {customer.FirstName} {customer.LastName}";
+    }
 }

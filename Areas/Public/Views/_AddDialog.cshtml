@@ -1,11 +1,12 @@
 ﻿<dialog class="round" data-modal-add>
     <header>
-        Create a New Registry!
+        <h4>Create a New Registry!</h4>
+        <i data-modal-close class="fal fa-times"></i>
     </header>
     <main>
         <section>
             <label for="name">Name</label>
-            <input class="form-control text-box single-line" data-add-name type="text" name="name" />
+            <input class="form-control text-box single-line" data-add-name type="text" name="name" autofocus />
         </section>
         <section>
             <label for="description">Description</label>
@@ -16,8 +17,22 @@
             <input class="form-control text-box single-line" data-add-event-date type="date" name="eventdate" />
         </section>
         <section>
+            <label>Partner</label>
+            <select class="form-control text-box single-line"></select>
+        </section>
+        <section>
+            <label>Consultant</label>
+            <select class="form-control text-box single-line"></select>
+        </section>
+        <section>
+            <label>Event Type</label>
+            <select class="form-control text-box single-line"></select>
+        </section>
+
+        <section>
             <label for="notes">Summary</label>
-            <textarea class="form-control text-box" data-add-notes rows="3" multiple type="text" name="notes"></textarea>
+            <textarea class="form-control text-box" data-add-notes rows="3" multiple type="text"
+                name="notes"></textarea>
         </section>
     </main>
     <footer>

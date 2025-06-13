@@ -1,30 +1,38 @@
 ﻿<template data-registry-notify-template>
     <style>
         [data-registry-notify] {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            border-radius: .5rem;
-            min-height: 10rem;
-            min-width: 30rem;
-            box-shadow: 5px 5px 15px var(--gray-dark);
-            background-color: var(--white);
-            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 4rem;
+            gap: 2rem;
+            padding: 1rem;
+            position: fixed;
+            bottom: 2rem;
+            left: 2rem;
+            border-radius: .5rem;
+            min-height: 10rem;
+            min-width: 30rem;
+            box-shadow: 5px 5px 15px var(--black);
+            overflow: hidden;
             opacity: 0;
             z-index: 1000000000;
+            color: var(--red);
+            background-color: var(--white);
+            border-left: 1rem solid;
+            border-right: 1rem solid;
 
             main {
-                color: var(--gray-light);
-                padding: .5rem;
-                font-size: 1.5rem;
+                padding: .5em;
+                font-size: .5em;
             }
+
+            i {}
         }
     </style>
     <div data-registry-notify>
+        <i class="fal fa-gift"></i>
         <main></main>
-        <span class="info-ico"></span>
+        <i class="fal fa-gift"></i>
     </div>
 </template>

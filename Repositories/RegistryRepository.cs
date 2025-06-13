@@ -61,6 +61,7 @@ public class RegistryRepository : IRegistryRepository
         entity.StoreId = storeId;
         entity.CreatedDate = DateTime.UtcNow;
         entity.CustomerId = customer.Id;
+        entity.Search = entity.GetQueryText(customer);
 
         await _registry.InsertAsync(entity);
     }
@@ -74,12 +75,14 @@ public class RegistryRepository : IRegistryRepository
             return;
         }
 
-        registry.Name = registryDTO.Name;
-        registry.Description = registryDTO.Description;
-        registry.EventDate = registryDTO.EventDate;
-        registry.Notes = registryDTO.Notes;
 
-        await _registry.UpdateAsync(registry);
+        var customer = await _workContext.GetCurrentCustomerAsync();
+        var entity = registryDTO.ToEntity();
+        entity.Id = registry.Id;
+        entity.CustomerId = registry.CustomerId;
+        entity.Search = entity.GetQueryText(customer);
+
+        await _registry.UpdateAsync(entity);
     }
 
     public async Task InsertRegistryItemAsync(int registryId, int productId, int quantity)
@@ -141,7 +144,7 @@ public class RegistryRepository : IRegistryRepository
 
         return (from reg in _registry.Table
                 join cust in _customer.Table on reg.CustomerId equals cust.Id
-                where reg.Name.Contains(query) && reg.Deleted == false
+                where reg.Deleted == false && reg.Search.Contains(query)
                 select new RegistryListItem
                 {
                     Id = reg.Id,
@@ -170,6 +173,6 @@ public class RegistryRepository : IRegistryRepository
                     };
 
 
-        return await query.ToListAsync();
+        return await query.Take(20).ToListAsync();
     }
 }

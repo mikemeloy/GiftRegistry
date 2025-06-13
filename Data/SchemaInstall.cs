@@ -8,20 +8,44 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Data;
 [NopMigration("2025/05/07 00:00:00", "Widgets.Registry base schema", MigrationProcessType.Installation)]
 public class SchemaInstall : Migration
 {
+
+
+    private readonly string _registry = NameCompatibilityManager.GetTableName(typeof(GiftRegistry));
+    private readonly string _registryItem = NameCompatibilityManager.GetTableName(typeof(GiftRegistryItem));
+    private readonly string _registryType = NameCompatibilityManager.GetTableName(typeof(GiftRegistryType));
+
     public override void Up()
     {
-        var registry = NameCompatibilityManager.GetTableName(typeof(GiftRegistry));
-        var registryItem = NameCompatibilityManager.GetTableName(typeof(GiftRegistryItem));
-
-        if (!Schema.Table(registry).Exists())
+        if (!Schema.Table(_registry).Exists())
         {
             Create.TableFor<GiftRegistry>();
         }
 
-        if (!Schema.Table(registryItem).Exists())
+        if (!Schema.Table(_registryItem).Exists())
         {
             Create.TableFor<GiftRegistryItem>();
         }
+
+        if (!Schema.Table(_registryType).Exists())
+        {
+            Create.TableFor<GiftRegistryType>();
+        }
     }
-    public override void Down() { }
+    public override void Down()
+    {
+        if (Schema.Table(_registry).Exists())
+        {
+            Delete.Table(_registry);
+        }
+
+        if (Schema.Table(_registryItem).Exists())
+        {
+            Delete.Table(_registryItem);
+        }
+
+        if (Schema.Table(_registryType).Exists())
+        {
+            Delete.Table(_registryType);
+        }
+    }
 }

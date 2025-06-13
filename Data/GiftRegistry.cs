@@ -16,5 +16,6 @@ public class GiftRegistry : BaseEntity, ISoftDeletedEntity
     public string AdminNotes { get; set; }
     public DateTime EventDate { get; set; }
     public DateTime CreatedDate { get; set; }
+    public string Search { get; set; }
     public bool Deleted { get; set; }
 }

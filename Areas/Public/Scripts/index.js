@@ -28,24 +28,27 @@ const
   setSearchByUrl = () => {
     const
       searchParam = GetQueryParam('search'),
-      input = querySelector('form input');
+      searchInput = querySelector('form input');
 
-    if (!searchParam || !input) {
+    if (!searchParam || !searchInput) {
       return;
     }
 
-    input.value = searchParam;
+    searchInput.value = searchParam;
     events.onSearch_KeyUp();
+
   },
   setFormEvents = () => {
     const
       form = querySelector('[data-search]'),
       btnAdd = querySelector('[data-add]'),
-      btnSave = querySelector('[data-registry-save]');
+      btnSave = querySelector('[data-registry-save]'),
+      btnClose = querySelector('[data-modal-close]');
 
     form.addEventListener('keyup', events.onSearch_KeyUp);
     btnAdd.addEventListener('click', events.onAdd_Click);
     btnSave.addEventListener('click', events.onSave_Click);
+    btnClose.addEventListener('click', events.onClose_Click)
   },
   debounce = (el) => {
     clearTimeout(_debounce);
@@ -172,6 +175,16 @@ const
         modal = prepareModal(Name, Description, EventDate, Notes, Id);
 
       modal.showModal();
+    },
+    onClose_Click: ({ target }) => {
+      const
+        dialog = target.closest('dialog');
+
+      if (!dialog) {
+        return;
+      }
+
+      dialog.close();
     }
   };
 
