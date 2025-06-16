@@ -60,21 +60,14 @@ public class NopServices : INopServices
 
     public async Task<int[]> GetRegistryItemAttributeAsync(Customer customer, int storeId = 0)
     {
-        var arr = await _genericAttributeService.GetAttributeAsync(
-                                                 entity: customer,
-                                                 key: RegistryDefaults.GiftRegistryAttribute,
-                                                 storeId: storeId,
-                                                 defaultValue: ""
-                                             );
+        var giftRegistryAttribute = await _genericAttributeService.GetAttributeAsync(
+                                                entity: customer,
+                                                key: RegistryDefaults.GiftRegistryAttribute,
+                                                storeId: storeId,
+                                                defaultValue: ""
+                                            );
 
-        if (string.IsNullOrWhiteSpace(arr))
-        {
-            return Array<int>.Empty;
-        }
-
-        return arr.Split(",")
-                .Select(int.Parse)
-                .ToArray();
+        return giftRegistryAttribute.ToIntArray();
     }
 
     public async Task AddRegistryItemAttributeAsync(Customer customer, int registryItemId, int storeId = 0)
@@ -86,7 +79,7 @@ public class NopServices : INopServices
             entity: customer,
             key: RegistryDefaults.GiftRegistryAttribute,
             storeId: storeId,
-            value: string.Join(",", added)
+            value: string.Join(',', added)
         );
     }
 
@@ -99,7 +92,7 @@ public class NopServices : INopServices
             entity: customer,
             key: RegistryDefaults.GiftRegistryAttribute,
             storeId: storeId,
-            value: removed
+            value: string.Join(',', removed)
         );
     }
 
@@ -109,7 +102,7 @@ public class NopServices : INopServices
             entity: customer,
             key: RegistryDefaults.GiftRegistryAttribute,
             storeId: storeId,
-            value: Array<int>.Empty
+            value: ""
         );
     }
 }

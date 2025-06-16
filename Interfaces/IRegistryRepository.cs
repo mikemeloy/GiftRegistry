@@ -21,4 +21,5 @@ public interface IRegistryRepository
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
     public Task UpdateRegistryAsync(RegistryDTO registryDTO);
     public List<RegistryTypeDTO> GetRegistryTypes();
+    public void InsertRegistryItemOrderAsync(int orderId, int registryId, int productId, int quantity);
 }

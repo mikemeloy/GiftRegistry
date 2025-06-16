@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Nop.Core.Domain.Customers;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Extensions;
@@ -33,5 +34,20 @@ internal static class Extensions
         }
 
         return selector(obj);
+    }
+    public static int[] ToIntArray(this string val)
+    {
+        var csv = val.Split(',');
+
+        if (!csv.Any())
+        {
+            return Array.Empty<int>();
+        }
+
+        return Array.ConvertAll(val.Split(','), static s =>
+        {
+            _ = int.TryParse(s, out var n);
+            return n;
+        }).Distinct().ToArray();
     }
 }

@@ -75,19 +75,8 @@ public static class RegistryExtensions
         return new RegistryItemDTO(
             Id: source.Id,
             ProductId: source.ProductId,
-            CartItemId: source.CartItemId,
-            OrderId: source.OrderId
+            CartItemId: source.CartItemId
         );
-    }
-
-    public static bool IsPurchased(this GiftRegistryItem source)
-    {
-        if (source.IsNull())
-        {
-            return false;
-        }
-
-        return source.OrderId > 0;
     }
 
     public static string GetQueryText(this GiftRegistry source, Customer customer)

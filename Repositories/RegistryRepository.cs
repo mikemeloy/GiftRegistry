@@ -21,12 +21,13 @@ public class RegistryRepository : IRegistryRepository
     private readonly IRepository<GiftRegistry> _registry;
     private readonly IRepository<GiftRegistryItem> _registryItem;
     private readonly IRepository<GiftRegistryType> _registryType;
+    private readonly IRepository<GiftRegistryItemOrder> _registryItemOrder;
     private readonly IRepository<Customer> _customer;
     private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product)
+    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder)
     {
         _product = product;
         _registry = registry;
@@ -35,6 +36,7 @@ public class RegistryRepository : IRegistryRepository
         _registryItem = registryItem;
         _storeContext = storeContext;
         _registryType = registryType;
+        _registryItemOrder = registryItemOrder;
     }
 
     public async Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync()
@@ -171,7 +173,7 @@ public class RegistryRepository : IRegistryRepository
                         Price = prod.Price,
                         ProductId = prod.Id,
                         CartItemId = reg.CartItemId,
-                        Purchased = reg.IsPurchased()
+                        Purchased = false //will need to get all records from the item order table and see if any quanity is left to purchase
                     };
 
 
@@ -186,5 +188,15 @@ public class RegistryRepository : IRegistryRepository
 
 
         return query.ToList();
+    }
+
+    public async void InsertRegistryItemOrderAsync(int orderId, int registryId, int productId, int quantity)
+    {
+        await _registryItemOrder.InsertAsync(new GiftRegistryItemOrder()
+        {
+            OrderId = orderId,
+            RegistryItemId = productId,
+            Quantity = quantity
+        });
     }
 }

@@ -183,40 +183,41 @@ public class RegistryService : IRegistryService
     /// <returns></returns>
     public async Task ReconcileRegistry(Order order)
     {
-        //1. get customer.
+
         var customer = await _nopServices.GetCustomerByIdAsync(order.CustomerId);
-        //2. get attribute.
-        var registryItemIds = await _nopServices.GetRegistryItemAttributeAsync(customer);
-        //if not return early...
-        if (registryItemIds.Length == 0)
+        var registryItemsInCart = await _nopServices.GetRegistryItemAttributeAsync(customer);
+
+        if (registryItemsInCart.Length == 0)
         {
             return;
         }
-        //3. compare order with attribute.
+
         var orderItems = await _orderService.GetOrderItemsAsync(order.Id);
 
-        foreach (var registryItemId in registryItemIds)
+        foreach (var registryItemId in registryItemsInCart)
         {
-            var regItem = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
+            var registryItem = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
 
-            if (regItem.IsNull())
+            if (registryItem.IsNull())
             {
                 continue;
             }
 
-            var hasProduct = orderItems.Any(oi => oi.ProductId == regItem.ProductId);
+            var orderItem = orderItems.FirstOrDefault(oi => oi.ProductId == registryItem.ProductId);
 
-            if (!hasProduct)
+            if (orderItem.IsNull())
             {
                 continue;
             }
 
-            //4. mark items on registry as purchase by adding order id to registry item :)
-            regItem.OrderId = order.Id;
-            await _registryRepository.UpdateRegistryItemAsync(regItem);
+            _registryRepository.InsertRegistryItemOrderAsync(
+                orderId: order.Id,
+                productId: registryItem.Id,
+                registryId: registryItem.RegistryId,
+                quantity: orderItem.Quantity
+            );
         }
 
-        //5. clear registry attribute (if they didn't purchase them this time...)
         await _nopServices.ClearRegistryItemAttributeAsync(customer);
     }
 
