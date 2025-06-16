@@ -8,7 +8,7 @@
     var saveRoute = Url.RouteUrl(RegistryDefaults.Save);
     var productId = Model.ProductId;
     var registries = Model.Registries;
-    var registryCount = registries.Count();
+    var multipleRegistries = registries.Count() > 1;
     var firstReg = registries.FirstOrDefault();
 }
 
@@ -19,7 +19,7 @@
     <script type="module">
         import { init } from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/product.js?v=@version';
 
-        init('@saveRoute', '@productId', @registryCount);
+        init('@saveRoute', '@productId', '@firstReg.Id');
     </script>
 
     <template data-registry-link-add>
@@ -31,28 +31,37 @@
         </div>
 
         <dialog data-registry-select>
-            <header>
-                <h2>
-                    Multiple Registries Found! Please Select the Correct one Below...
-                </h2>
-            </header>
+            @if (multipleRegistries)
+            {
+                <header>
+                    <h2>
+                        Multiple Registries Found! Please Select the Correct one Below...
+                    </h2>
+                </header>
+            }
+
             <main>
                 <form>
-                    <section data-radio>
-                        @foreach (var reg in registries)
-                        {
-                            <button type="button">
-                                <input id="registry-radio-@reg.Id" type="radio" value="@reg.Id" name="registry-radio" />
-                                <label for="registry-radio-@reg.Id">
-                                    <div>@reg.Name</div>
-                                    <time datetime="@reg.EventDate">@reg.EventDate.ToString("MMMM d, yyyy")</time>
-                                </label>
-                                <span class="info-ico" title="@reg.Description"></span>
-                            </button>
-                        }
-                    </section>
+
+                    @if (multipleRegistries)
+                    {
+                        <section data-radio>
+                            @foreach (var reg in registries)
+                            {
+                                <button type="button">
+                                    <input id="registry-radio-@reg.Id" type="radio" value="@reg.Id" name="registry-radio" />
+                                    <label for="registry-radio-@reg.Id">
+                                        <div>@reg.Name</div>
+                                        <time datetime="@reg.EventDate">@reg.EventDate.ToString("MMMM d, yyyy")</time>
+                                    </label>
+                                    <span class="info-ico" title="@reg.Description"></span>
+                                </button>
+                            }
+                        </section>
+                    }
+
                     <section data-quant>
-                        <label>How Many?</label>
+                        <label>Quantity</label>
                         <input min="1" data-quantity type="number">
                     </section>
                 </form>

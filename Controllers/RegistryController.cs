@@ -73,9 +73,7 @@ public class RegistryController : BasePluginController
             return false;
         }
 
-        var success = await _registryService.InsertRegistryItemAsync(request.GiftRegistryId, request.ProductId, request.Quantity);
-
-        return success;
+        return await _registryService.InsertRegistryItemAsync(request.GiftRegistryId, request.ProductId, request.Quantity);
     }
 
     [HttpPost]
@@ -145,5 +143,3 @@ public class RegistryController : BasePluginController
         return await _registryService.AddRegistryItemToCartAsync(registryItemId.Value);
     }
 }
-
-public record AddToCartModel(int RegistryItemId);

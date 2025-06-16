@@ -6,7 +6,7 @@ public static class RequestExtensions
 {
     public static bool IsValid(this RegistryAddProductRequest source)
     {
-        if (source.IsNull() || source.GiftRegistryId.IsNull() || source.ProductId.IsNull())
+        if (source.IsNull() || source.GiftRegistryId.IsNull() || source.ProductId.IsNull() || source.Quantity < 1)
         {
             return false;
         }

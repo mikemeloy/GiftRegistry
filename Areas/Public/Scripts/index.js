@@ -115,7 +115,7 @@ const
 
       modal.showModal();
     },
-    onSave_Click: () => {
+    onSave_Click: async () => {
       const
         endLoading = Loading(),
         id = getInputValue('[data-add-id]'),
@@ -128,7 +128,7 @@ const
 
       try {
         const
-          success = Post(url, {
+          { data: success } = await Post(url, {
             id,
             name,
             description,
@@ -137,11 +137,15 @@ const
             notes
           });
 
+
         if (success) {
-          const dialog = querySelector('[data-modal-add]');
+          const
+            dialog = querySelector('[data-modal-add]');
+
           dialog.close();
           DisplayNotification("Registry Saved...");
         }
+
       } catch (error) {
         LogError(error);
       } finally {

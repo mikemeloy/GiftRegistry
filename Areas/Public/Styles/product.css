@@ -13,7 +13,6 @@
 }
 
 input[type="number"] {
-  font-size: 1rem;
   outline: none;
   border-radius: 4px;
   border: 1px solid var(--border);
@@ -54,24 +53,21 @@ time {
 }
 
 [data-registry-select] {
-  min-height: 35vh;
-  min-width: 35vw;
   font-size: 14px;
   position: fixed;
-  top: 50%;
-  left: 50%;
   outline: none;
   border: none;
   padding: 1rem;
   overflow: hidden;
   user-select: none;
   box-shadow: 3px 3px 15px var(--gray-dark);
-  transform: translate(-50%, -50%);
+
   border-radius: 6px;
 
   main {
     >form {
       margin: 2rem 0;
+      min-width: 30vw;
 
       section[data-radio] {
         display: flex;
@@ -116,10 +112,7 @@ time {
         flex-direction: column;
         gap: 1rem;
 
-        label {
-          font-size: 1rem;
-          display: block;
-        }
+        input {}
       }
     }
   }

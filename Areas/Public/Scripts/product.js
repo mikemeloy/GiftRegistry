@@ -1,10 +1,10 @@
-import { Log, QuerySelector, Post, DisplayNotification } from './modules/utils.js';
+import { QuerySelector, Post, DisplayNotification } from './modules/utils.js';
 
 let
   _root = '#product-details-form',
   _saveRoute,
   _productId,
-  _registrationId,
+  _registryId,
   _quantity;
 
 const
@@ -13,7 +13,7 @@ const
       const
         dialog = QuerySelector('[data-registry-select]', _root),
         { dataset } = target;
-      _registrationId = dataset.registryId;
+      _registryId = dataset.registryId;
 
       dialog.showModal();
     },
@@ -21,7 +21,7 @@ const
       const
         registryData = {
           productId: _productId,
-          giftRegistryId: _registrationId,
+          giftRegistryId: _registryId,
           quantity: _quantity
         };
 
@@ -34,7 +34,7 @@ const
       dialog.close();
     },
     onRadio_Change: ({ target }) => {
-      _registrationId = target.value;
+      _registryId = target.value;
     },
     onQuantity_Change: ({ target }) => {
       _quantity = target.value;
@@ -42,12 +42,13 @@ const
   }
 
 const
-  init = (saveRoute, propductId, regCount) => {
+  init = (saveRoute, propductId, registryId) => {
+    _registryId = registryId;
     _saveRoute = saveRoute;
-    _productId = propductId
+    _productId = propductId;
+
     setTemplate();
     setEvents();
-    Log(regCount);
   },
   setEvents = () => {
     const
@@ -74,12 +75,15 @@ const
   addToRegistry = async (data) => {
     const
       dialog = QuerySelector('[data-registry-select]', _root),
-      { success } = await Post(_saveRoute, data);
+      { data: success } = await Post(_saveRoute, data);
 
-    if (success) {
-      dialog.close();
-      DisplayNotification("Item add to Registry")
+    if (!success) {
+      DisplayNotification("Select a Registry and Quantity to Continue");
+      return;
     }
+
+    dialog.close();
+    DisplayNotification("Item add to Registry");
   };
 
 export { init }
