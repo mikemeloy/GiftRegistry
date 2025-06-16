@@ -87,12 +87,13 @@ public class RegistryService : IRegistryService
             return new RegistryViewModel()
             {
                 Id = registryId,
-                Name = registry.Name,
-                EventDate = registry.EventDate,
-                Description = registry.Description,
+                Name = registry.GetValueOrDefault(r => r.Name),
+                Description = registry.GetValueOrDefault(r => r.Description),
+                EventDate = registry.GetValueOrDefault(r => r.EventDate),
+                EventType = registry.GetValueOrDefault(r => r.EventType),
                 RegistryItems = items,
                 IamOwner = iAmOwner,
-                Notes = registry.Notes
+                Notes = registry.GetValueOrDefault(r => r.Notes)
             };
         }
         catch (Exception e)
@@ -151,7 +152,7 @@ public class RegistryService : IRegistryService
         }
     }
 
-    public async Task AddRegistryItemToCart(int registryItemId)
+    public async Task<IEnumerable<string>> AddRegistryItemToCartAsync(int registryItemId)
     {
         var customer = await _nopServices.GetCurrentCustomerAsync();
         var store = await _nopServices.GetStoreAsync();
@@ -169,10 +170,11 @@ public class RegistryService : IRegistryService
 
         if (addToCartWarnings.Any())
         {
-            return;
+            return addToCartWarnings;
         }
 
         await _nopServices.AddRegistryItemAttributeAsync(customer, registryItemId);
+        return Enumerable.Empty<string>();
     }
     /// <summary>
     /// Need to test concurrency!!

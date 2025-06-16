@@ -19,10 +19,10 @@ public class RegistryItemViewModel
 public class RegistryViewModel
 {
     public int Id { get; set; }
-    public RegistryViewModel() { }
     public bool IamOwner { get; set; }
     public string Name { get; set; }
     public DateTime EventDate { get; set; }
+    public int EventType { get; set; }
     public string Description { get; set; }
     public string Notes { get; set; }
     public string PluginVersion { get; set; }

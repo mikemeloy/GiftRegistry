@@ -1,4 +1,5 @@
-﻿using Nop.Core.Domain.Customers;
+﻿using System;
+using Nop.Core.Domain.Customers;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Extensions;
 
@@ -23,5 +24,14 @@ internal static class Extensions
         }
 
         return customer.Id == comparer.Id;
+    }
+    public static TResult GetValueOrDefault<TSource, TResult>(this TSource obj, Func<TSource, TResult> selector)
+    {
+        if (obj is null)
+        {
+            return default;
+        }
+
+        return selector(obj);
     }
 }

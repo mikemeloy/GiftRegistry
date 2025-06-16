@@ -28,12 +28,19 @@ const events = {
   onAddToCart_Click: async ({ registryItemId }) => {
     const
       ui = document.querySelector('.cart-qty'),
-      { success, error } = await Post(`${_addToCartRoute}?registryItemId=${registryItemId}`, +registryItemId);
+      { success, data } = await Post(`${_addToCartRoute}?registryItemId=${registryItemId}`, +registryItemId);
 
-    if (success) {
-      ui.innerHTML = '(1)'; //TODO: will need to return actual cart count
+
+    if (!success) {
+      DisplayNotification("Unable to Add Item to Bag");
     }
 
+    if (Array.isArray(data)) {
+      DisplayNotification(data.join(','));
+      return;
+    }
+
+    ui.innerHTML = '(1)'; //TODO: will need to return actual cart count
     DisplayNotification("Item Added to Registry");
   },
   onRemoveItem_Click: async ({ registryItemId }) => {

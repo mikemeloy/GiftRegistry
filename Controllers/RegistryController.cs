@@ -1,12 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 using Microsoft.AspNetCore.Mvc;
-using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
-using Nop.Web.Framework.Mvc.Filters;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Controllers;
 
@@ -61,9 +61,7 @@ public class RegistryController : BasePluginController
             return null;
         }
 
-        var model = await _registryService.GetCustomerRegistryByIdAsync(id.Value);
-
-        return model;
+        return await _registryService.GetCustomerRegistryByIdAsync(id.Value);
     }
 
     [HttpPost]
@@ -137,16 +135,14 @@ public class RegistryController : BasePluginController
     }
 
     [HttpPost]
-    public async Task<bool> AddToCartAsync([FromBody] int? registryItemId)
+    public async Task<IEnumerable<string>> AddToCartAsync([FromBody] int? registryItemId)
     {
         if (registryItemId.IsNull())
         {
-            return false;
+            return new string[] { "Unable to Add Item to Bag" };
         }
 
-        await _registryService.AddRegistryItemToCart(registryItemId.Value);
-
-        return true;
+        return await _registryService.AddRegistryItemToCartAsync(registryItemId.Value);
     }
 }
 

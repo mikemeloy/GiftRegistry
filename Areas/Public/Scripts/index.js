@@ -56,15 +56,18 @@ const
   },
   querySelector = (selector) => QuerySelector(selector, '[data-registry]'),
   getInputValue = (selector, options) => GetInputValue(selector, '[data-registry]', options),
-  prepareModal = (name = '', desc = '', date = '', note = '', id = '') => {
+  prepareModal = (name = '', desc = '', date = '', note = '', id = '', eventType = '', title = 'Create a New Registry') => {
     const
-      set = (selector, val) => SetInputValue(`[${selector}]`, '[data-modal-add]', val);
+      set = (selector, val) => SetInputValue(`[${selector}]`, '[data-modal-add]', val),
+      header = querySelector('[data-modal-add] h4');
 
     set('data-add-id', id);
     set('data-add-name', name);
     set('data-add-description', desc);
     set('data-add-event-date', DateToInputString(date));
     set('data-add-notes', note);
+    set('data-add-event-type', eventType);
+    header.innerHTML = title;
 
     return querySelector('[data-modal-add]');
   };
@@ -173,8 +176,8 @@ const
       }
 
       const
-        { Id, Name, EventDate, Description, Notes } = data,
-        modal = prepareModal(Name, Description, EventDate, Notes, Id);
+        { Id, Name, EventDate, EventType, Description, Notes } = data,
+        modal = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit`);
 
       modal.showModal();
     },

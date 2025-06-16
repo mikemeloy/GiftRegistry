@@ -3,6 +3,7 @@
 @{
     var registryTypes = Model.RegistryTypes;
 }
+
 <dialog class="round" data-modal-add>
     <header>
         <h4>Create a New Registry!</h4>
@@ -11,15 +12,18 @@
     <main>
         <section>
             <label for="name">Name</label>
-            <input class="form-control text-box single-line" data-add-name type="text" name="name" autofocus />
+            <input autocomplete="off" class="form-control text-box single-line" data-add-name type="text" name="name"
+                autofocus />
         </section>
         <section>
             <label for="description">Description</label>
-            <input class="form-control text-box single-line" data-add-description type="text" name="description" />
+            <input autocomplete="off" class="form-control text-box single-line" data-add-description type="text"
+                name="description" />
         </section>
         <section>
             <label for="eventdate">Event Date</label>
-            <input class="form-control text-box single-line" data-add-event-date type="date" name="eventdate" />
+            <input autocomplete="off" class="form-control text-box single-line" data-add-event-date type="date"
+                name="eventdate" />
         </section>
         <section>
             <label>Partner</label>
@@ -44,7 +48,7 @@
 
         <section>
             <label for="notes">Summary</label>
-            <textarea class="form-control text-box" data-add-notes rows="3" multiple type="text"
+            <textarea autocomplete="off" class="form-control text-box" data-add-notes rows="3" multiple type="text"
                 name="notes"></textarea>
         </section>
     </main>
