@@ -75,6 +75,27 @@ const
       setTimeout(() => loading.remove(), duration - 3);
     }
   },
+  UseTemplateTag = (templateSelector, containerSelector, elSelector) => {
+    const
+      el = QuerySelector(templateSelector),
+      container = QuerySelector(containerSelector),
+      clone = el.content.cloneNode(true);
+
+    container.appendChild(clone);
+
+    const component = container.querySelector(elSelector);
+
+    return {
+      component,
+      onRemove: () => {
+        const
+          duration = 200;
+
+        component.animate([{ opacity: 0 }], { duration, fill: "forwards" });
+        setTimeout(() => component.remove(), duration - 3);
+      }
+    }
+  },
   GetInputValue = (selector, parent, options = { isNumeric: false }) => {
     const
       { isNumeric } = options,
@@ -179,7 +200,7 @@ const
     } catch (error) {
       LogError("URL param get", error);
     }
-  };;
+  };
 
 export {
   Get,
@@ -195,5 +216,6 @@ export {
   DateToInputString,
   DisplayNotification,
   AddQueryParamToURL,
-  GetQueryParam
+  GetQueryParam,
+  UseTemplateTag
 }

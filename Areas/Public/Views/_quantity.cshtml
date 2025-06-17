@@ -1,0 +1,58 @@
+﻿<template data-template-dialog-quantity>
+    <style>
+        [data-dialog-quantity] {
+            border: none;
+            border-radius: 1rem;
+            color: var(--grey-black, #2f2f30);
+            user-select: none;
+
+            &[open] {
+                display: flex;
+                flex-direction: column;
+            }
+
+            label {
+                margin-bottom: 3rem;
+            }
+
+            input[type="number"] {
+                outline: none;
+                border-radius: 4px;
+                border: 1px solid var(--border);
+                padding: 1rem;
+            }
+
+            footer {
+                display: flex;
+                position: sticky;
+                bottom: 0;
+                padding: 3rem 0 0;
+                justify-content: flex-end;
+                gap: 1rem;
+
+                button {
+                    outline: none;
+                    border: none;
+                    border: 1px solid var(--red);
+                    color: var(--red);
+                    padding: .7rem 1rem;
+                    text-transform: uppercase;
+                    background-color: transparent;
+
+                    &[data-submit] {
+                        background-color: var(--red);
+                        color: var(--white);
+                    }
+                }
+            }
+        }
+    </style>
+    <dialog data-dialog-quantity>
+        <label></label>
+        <input min="1" type="number" value="1" />
+        <footer>
+            <button data-cancel type="button">Cancel</button>
+            <button data-submit type="button">Submit</button>
+        </footer>
+    </dialog>
+</template>

@@ -171,11 +171,14 @@ public class RegistryRepository : IRegistryRepository
                         Name = prod.Name,
                         Description = prod.ShortDescription,
                         Price = prod.Price,
+                        Quantity = reg.Quantity,
                         ProductId = prod.Id,
                         CartItemId = reg.CartItemId,
-                        Purchased = false //will need to get all records from the item order table and see if any quanity is left to purchase
+                        Purchased = (from order in _registryItemOrder.Table
+                                     where order.RegistryItemId == reg.Id
+                                     select order.Quantity
+                                    ).Sum() >= reg.Quantity
                     };
-
 
         return await query.ToListAsync();
     }

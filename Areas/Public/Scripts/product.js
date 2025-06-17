@@ -5,7 +5,7 @@ let
   _saveRoute,
   _productId,
   _registryId,
-  _quantity;
+  _quantity = 1;
 
 const
   events = {

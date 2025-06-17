@@ -8,6 +8,10 @@
     --loading: #c5c5c573;
 }
 
+body:has(dialog[open]) {
+    overflow: hidden;
+}
+
 article {
     font-size: 2rem;
     margin: 3rem;

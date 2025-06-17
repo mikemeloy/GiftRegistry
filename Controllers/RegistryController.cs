@@ -133,13 +133,13 @@ public class RegistryController : BasePluginController
     }
 
     [HttpPost]
-    public async Task<IEnumerable<string>> AddToCartAsync([FromBody] int? registryItemId)
+    public async Task<IEnumerable<string>> AddToCartAsync([FromBody] int? registryItemId, int? quantity)
     {
         if (registryItemId.IsNull())
         {
             return new string[] { "Unable to Add Item to Bag" };
         }
 
-        return await _registryService.AddRegistryItemToCartAsync(registryItemId.Value);
+        return await _registryService.AddRegistryItemToCartAsync(registryItemId.Value, quantity);
     }
 }

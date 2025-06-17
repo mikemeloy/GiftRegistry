@@ -16,7 +16,7 @@ public interface IRegistryService
     public Task<RegistryList> Query(string query);
     public Task<bool> DeleteRegistryAsync(int registryId);
     public Task<bool> DeleteRegistryItemAsync(int registryItemId);
-    public Task<IEnumerable<string>> AddRegistryItemToCartAsync(int registryItemId);
+    public Task<IEnumerable<string>> AddRegistryItemToCartAsync(int registryItemId, int? quantity);
     public Task ReconcileRegistry(Order order);
     public Task<bool> UpdateCustomerRegistryAsync(RegistryDTO registryDTO);
 }

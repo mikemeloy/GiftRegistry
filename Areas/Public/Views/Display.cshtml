@@ -1,28 +1,24 @@
-﻿@using System.Globalization
+﻿@model i7MEDIA.Plugin.Widgets.Registry.Models.RegistryViewModel
+@using System.Globalization
 @using i7MEDIA.Plugin.Widgets.Registry
-@model i7MEDIA.Plugin.Widgets.Registry.Models.RegistryViewModel
 
 @{
     Layout = "_Root";
 
-    var items = Model?.RegistryItems;
+    var items = Model.RegistryItems;
     var version = Model.PluginVersion;
     var deleteRoute = Url.RouteUrl(RegistryDefaults.DeleteItem);
     var addToCartRoute = Url.RouteUrl(RegistryDefaults.AddToCart);
-    var addToCartLink = Url.RouteUrl("AddProductToCart-Catalog", new
-    {
-        productId = 0,
-        shoppingCartTypeId = 0,
-        quantity = 0
-    });
 }
 
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/display.css?v=@version" />
+
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/display.js?v=@version';
 
-    init('@deleteRoute', '@addToCartRoute', '@addToCartLink');
+    init('@deleteRoute', '@addToCartRoute');
 </!script>
+
 <article>
     <q>@Model.Notes</q>
 </article>
@@ -30,7 +26,7 @@
     @{
         foreach (var item in items)
         {
-            <form data-registry-item-id="@item.Id" data-purchased="@item.Purchased">
+            <form data-quantity="@item.Quantity" data-registry-item-id="@item.Id" data-purchased="@item.Purchased">
                 <header>
                     <img src="@item.ImageUrl" alt="@item.Name">
                 </header>
@@ -41,17 +37,20 @@
                     </p>
                 </main>
                 <section>
-                    @item.Price.ToString("C", CultureInfo.CurrentCulture)
+                    Price: @item.Price.ToString("C", CultureInfo.CurrentCulture)
+                </section>
+                <section>
+                    Quantity: @item.Quantity
                 </section>
                 <footer>
-                    <button data-item-id="@item.ProductId" data-add type="button">
+                    <button data-add type="button">
                         <i class="fal fa-plus"></i>
                         Add to Cart
                     </button>
 
                     @if (Model.IamOwner)
                     {
-                        <button data-item-id="@item.ProductId" data-delete type="button">
+                        <button data-delete type="button">
                             <i class="fal fa-trash"></i>
                             Delete
                         </button>
@@ -62,3 +61,4 @@
     }
 </div>
 @await Html.PartialAsync("_RegistryNotification.cshtml")
+@await Html.PartialAsync("_quantity.cshtml")

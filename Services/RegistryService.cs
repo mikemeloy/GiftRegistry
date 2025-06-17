@@ -152,7 +152,7 @@ public class RegistryService : IRegistryService
         }
     }
 
-    public async Task<IEnumerable<string>> AddRegistryItemToCartAsync(int registryItemId)
+    public async Task<IEnumerable<string>> AddRegistryItemToCartAsync(int registryItemId, int? quantity)
     {
         var customer = await _nopServices.GetCurrentCustomerAsync();
         var store = await _nopServices.GetStoreAsync();
@@ -165,7 +165,7 @@ public class RegistryService : IRegistryService
                 shoppingCartType: ShoppingCartType.ShoppingCart,
                 storeId: store.Id,
                 attributesXml: null, //TODO:will need for complex products 
-                quantity: item.Quantity
+                quantity: quantity ?? 1
             );
 
         if (addToCartWarnings.Any())

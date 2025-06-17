@@ -22,7 +22,8 @@ const
         '/Views/ProductLink.cshtml',
         '/Views/_Loading.cshtml',
         '/Views/_AddDialog.cshtml',
-        '/Views/_RegistryNotification.cshtml'
+        '/Views/_RegistryNotification.cshtml',
+        '/Views/_Quantity.cshtml'
     ]
 
 files.forEach(file => {
