@@ -19,4 +19,6 @@ public static class AdminDefaults
 {
     public static string Index => "Plugin.Widget.Registry.Admin.Index";
     public static string Consultant => "Plugin.Widget.Registry.Admin.consultant";
+    public static string Registry => "Plugin.Widget.Registry.Admin.Registry.Query";
+    public static string RegistryType => "Plugin.Widget.Registry.Admin.types";
 }

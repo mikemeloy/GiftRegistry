@@ -80,5 +80,17 @@ internal class RouteProvider : IRouteProvider
            pattern: "Admin/Consultant",
            defaults: new { controller = "Admin", action = "Consultant", area = AreaNames.Admin }
         );
+
+        endpointRouteBuilder.MapControllerRoute(
+            name: AdminDefaults.RegistryType,
+            pattern: "Admin/RegistryTypes",
+            defaults: new { controller = "Admin", action = "RegistryTypes", area = AreaNames.Admin }
+        );
+
+        endpointRouteBuilder.MapControllerRoute(
+             name: AdminDefaults.Registry,
+             pattern: "Admin/Registry",
+             defaults: new { controller = "Admin", action = "Registry", area = AreaNames.Admin }
+         );
     }
 }

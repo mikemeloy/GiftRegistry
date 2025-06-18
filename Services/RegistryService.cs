@@ -176,11 +176,7 @@ public class RegistryService : IRegistryService
         await _nopServices.AddRegistryItemAttributeAsync(customer, registryItemId);
         return Enumerable.Empty<string>();
     }
-    /// <summary>
-    /// Need to test concurrency!!
-    /// </summary>
-    /// <param name="order"></param>
-    /// <returns></returns>
+
     public async Task ReconcileRegistry(Order order)
     {
 

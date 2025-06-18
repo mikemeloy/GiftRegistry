@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
+using i7MEDIA.Plugin.Widgets.Registry.Models;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
@@ -27,7 +28,15 @@ public class AdminController : BasePluginController
     {
         var model = _viewModelFactory.GetAdminViewModelAsync();
 
-        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/Report/Index.cshtml", model);
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/Index.cshtml", model);
+    }
+
+    [HttpGet]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task<RegistryList> RegistryAsync(string query)
+    {
+        return await _adminService.QueryAsync(query);
     }
 
     [HttpGet]
@@ -38,11 +47,27 @@ public class AdminController : BasePluginController
         return await _adminService.GetConsultantsAsync();
     }
 
+    [HttpGet]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task<IEnumerable<RegistryTypeDTO>> RegistryTypesAsync()
+    {
+        return await _adminService.GetRegistryTypesAsync();
+    }
+
     [HttpPost]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public async Task ConsultantAsync(RegistryConsultantDTO consultant)
+    public async Task ConsultantAsync([FromBody] RegistryConsultantDTO consultant)
     {
         await _adminService.UpsertConsultantAsync(consultant);
+    }
+
+    [HttpPost]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task RegistryTypesAsync([FromBody] RegistryTypeDTO registryType)
+    {
+        await _adminService.UpsertRegistryTypeAsync(registryType);
     }
 }

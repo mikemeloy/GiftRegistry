@@ -242,4 +242,24 @@ public class RegistryRepository : IRegistryRepository
             Email = email
         });
     }
+
+    public async Task InsertRegistryTypeAsync(string name, string description)
+    {
+        await _registryType.InsertAsync(new GiftRegistryType
+        {
+            Name = name,
+            Description = description
+        });
+    }
+
+    public async Task UpdateRegistryTypeAsync(int id, string name, string description, bool deleted = false)
+    {
+        await _registryType.UpdateAsync(new GiftRegistryType
+        {
+            Id = id,
+            Name = name,
+            Description = description,
+            Deleted = deleted
+        });
+    }
 }

@@ -25,4 +25,6 @@ public interface IRegistryRepository
     public Task InsertConsultantAsync(string name, string email);
     public Task UpdateConsultantAsync(int? id, string name, string email, bool deleted = false);
     public IEnumerable<RegistryConsultantDTO> GetRegistryConsultantsAsync();
+    public Task InsertRegistryTypeAsync(string name, string description);
+    public Task UpdateRegistryTypeAsync(int id, string name, string description, bool deleted = false);
 }
