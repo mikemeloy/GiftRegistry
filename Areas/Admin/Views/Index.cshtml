@@ -3,25 +3,30 @@
 
 @{
     var version = Model.PluginVersion;
+    var registryRoute = Url.RouteUrl(AdminDefaults.Registry);
+    var consultantRoute = Url.RouteUrl(AdminDefaults.Consultant);
+    var registryTypeRoute = Url.RouteUrl(AdminDefaults.RegistryType);
 }
 
-<!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Styles/index.css" />
+<!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Styles/index.css?v=@version" />
 
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Scripts/index.js?v=@version';
 
-    init();
+    init('@registryRoute', '@consultantRoute', '@registryTypeRoute');
 </!script>
 
+<header data-registry-admin-header>
+    <nav>
+        <button type="button">Search Registry</button>
+        <button type="button">Registry Consultants</button>
+        <button type="button">Registry Type</button>
+    </nav>
+</header>
+<main data-registry-admin-main>
 
-<div data-registry class="registry-wrapper round">
-    <header>
-        <form data-search>
-            <input type="text" autocomplete="off" placeholder="Search Registries..." aria-label="Search registries"
-                autofocus>
-            <i class="fal fa-search"></i>
-        </form>
-    </header>
-    <section data-result>
-    </section>
-</div>
+</main>
+<footer data-registry-admin-footer>
+    <button class="btn btn-success" type="button">Save</button>
+    <button class="btn btn-danger" type="button">Cancel</button>
+</footer>

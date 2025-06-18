@@ -1,4 +1,4 @@
-import { QuerySelector, Post, DisplayNotification } from './modules/utils.js';
+import { QuerySelector, Post, DisplayNotification } from '../../modules/utils.js';
 
 let
   _root = '#product-details-form',

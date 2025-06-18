@@ -4,7 +4,7 @@ import {
   QuerySelector, SetInputValue,
   DateToInputString, DisplayNotification,
   AddQueryParamToURL, GetQueryParam
-} from './modules/utils.js';
+} from '../../modules/utils.js';
 
 let
   _searchRoute,

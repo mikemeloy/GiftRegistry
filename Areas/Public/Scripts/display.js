@@ -1,10 +1,15 @@
-import { QuerySelector, QuerySelectorAll, Post, Delete, DisplayNotification, UseTemplateTag } from './modules/utils.js';
+import {
+  QuerySelector, QuerySelectorAll,
+  Post, Delete, DisplayNotification,
+  UseTemplateTag
+} from '../../modules/utils.js';
+
 let
   _addToCartRoute,
   _removeRoute;
 
 const
-  init = (removeRoute, addToCartRoute, addToCartLink) => {
+  init = (removeRoute, addToCartRoute) => {
     _addToCartRoute = addToCartRoute;
     _removeRoute = removeRoute;
     setFormEvents();

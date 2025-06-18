@@ -15,12 +15,15 @@
     <None Remove="Areas\Admin\Scripts\index.js" />
     <None Remove="Areas\Admin\Styles\index.css" />
     <None Remove="Areas\Admin\Views\Index.cshtml" />
+    <None Remove="Areas\Admin\Views\_RegistryConsultant.cshtml" />
+    <None Remove="Areas\Admin\Views\_RegistryList.cshtml" />
+    <None Remove="Areas\Admin\Views\_RegistryType.cshtml" />
     <None Remove="Areas\Admin\Views\_ViewImports.cshtml" />
     <None Remove="Areas\Admin\Views\_ViewStart.cshtml" />
+    <None Remove="Areas\modules\utils.js" />
     <None Remove="Areas\Public\Scripts\display.js" />
     <None Remove="Areas\Public\Scripts\index.js" />
     <None Remove="Areas\Public\Scripts\list.js" />
-    <None Remove="Areas\Public\Scripts\modules\utils.js" />
     <None Remove="Areas\Public\Scripts\product.js" />
     <None Remove="Areas\Public\Styles\display.css" />
     <None Remove="Areas\Public\Styles\index.css" />
@@ -48,10 +51,22 @@
     <Content Include="Areas\Admin\Views\Report\Index.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\Admin\Views\_RegistryConsultant.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Views\_RegistryList.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Views\_RegistryType.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Admin\Views\_ViewImports.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\modules\utils.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Scripts\display.js">
@@ -61,9 +76,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Scripts\list.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Areas\Public\Scripts\modules\utils.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Scripts\product.js">

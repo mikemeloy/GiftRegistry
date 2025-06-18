@@ -23,4 +23,19 @@ public class ViewModelFactory : IViewModelFactory
     {
         return new("1.0.1");
     }
+
+    public RegistryPartialViewModel GetRegistryPartialViewModelAsync()
+    {
+        return new RegistryPartialViewModel();
+    }
+
+    public ConsultantPartialViewModel GetConsultantPartialViewModelAsync()
+    {
+        return new ConsultantPartialViewModel();
+    }
+
+    public RegistryTypePartialViewModel GetRegistryTypePartialViewModelAsync()
+    {
+        return new RegistryTypePartialViewModel();
+    }
 }

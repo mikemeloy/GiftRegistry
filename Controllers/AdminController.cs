@@ -31,6 +31,36 @@ public class AdminController : BasePluginController
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/Index.cshtml", model);
     }
 
+    [HttpGet(template: "Admin/Registry/List")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public IActionResult RegistryList()
+    {
+        var model = _viewModelFactory.GetRegistryPartialViewModelAsync();
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryList.cshtml", model);
+    }
+
+    [HttpGet(template: "Admin/Consultant/List")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public IActionResult ConsultantList()
+    {
+        var model = _viewModelFactory.GetConsultantPartialViewModelAsync();
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryConsultant.cshtml", model);
+    }
+
+    [HttpGet(template: "Admin/RegistryType/List")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public IActionResult RegistryTypeList()
+    {
+        var model = _viewModelFactory.GetRegistryTypePartialViewModelAsync();
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryType.cshtml", model);
+    }
+
     [HttpGet]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
@@ -50,7 +80,7 @@ public class AdminController : BasePluginController
     [HttpGet]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public async Task<IEnumerable<RegistryTypeDTO>> RegistryTypesAsync()
+    public async Task<IEnumerable<RegistryTypeDTO>> RegistryTypeAsync()
     {
         return await _adminService.GetRegistryTypesAsync();
     }
@@ -66,7 +96,7 @@ public class AdminController : BasePluginController
     [HttpPost]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public async Task RegistryTypesAsync([FromBody] RegistryTypeDTO registryType)
+    public async Task RegistryTypeAsync([FromBody] RegistryTypeDTO registryType)
     {
         await _adminService.UpsertRegistryTypeAsync(registryType);
     }

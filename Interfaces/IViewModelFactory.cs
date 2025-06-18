@@ -6,4 +6,7 @@ public interface IViewModelFactory
 {
     public ListViewModel GetListViewModelAsync();
     public AdminViewModel GetAdminViewModelAsync();
+    public RegistryPartialViewModel GetRegistryPartialViewModelAsync();
+    public ConsultantPartialViewModel GetConsultantPartialViewModelAsync();
+    public RegistryTypePartialViewModel GetRegistryTypePartialViewModelAsync();
 }

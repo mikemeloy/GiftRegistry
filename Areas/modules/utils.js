@@ -19,7 +19,7 @@ const
       container = document.querySelector(parent),
       els = container.querySelectorAll(`:scope ${selector}`);
 
-    return els ?? [];
+    return els;
   },
   Get = (url, params) => {
     return new Promise((resolve, _) => {
