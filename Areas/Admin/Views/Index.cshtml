@@ -1,0 +1,20 @@
+﻿@using i7MEDIA.Plugin.Widgets.Registry
+@model i7MEDIA.Plugin.Widgets.Registry.Models.ListViewModel
+
+@{
+    var version = Model.PluginVersion;
+}
+
+<!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/index.css" />
+
+<div data-registry class="registry-wrapper round">
+    <header>
+        <form data-search>
+            <input type="text" autocomplete="off" placeholder="Search Registries..." aria-label="Search registries"
+                autofocus>
+            <i class="fal fa-search"></i>
+        </form>
+    </header>
+    <section data-result>
+    </section>
+</div>

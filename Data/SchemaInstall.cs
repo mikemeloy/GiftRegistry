@@ -14,6 +14,7 @@ public class SchemaInstall : Migration
     private readonly string _registryItem = NameCompatibilityManager.GetTableName(typeof(GiftRegistryItem));
     private readonly string _registryType = NameCompatibilityManager.GetTableName(typeof(GiftRegistryType));
     private readonly string _registryItemOrder = NameCompatibilityManager.GetTableName(typeof(GiftRegistryItemOrder));
+    private readonly string _registryConsultant = NameCompatibilityManager.GetTableName(typeof(GiftRegistryConsultant));
 
     public override void Up()
     {
@@ -36,6 +37,11 @@ public class SchemaInstall : Migration
         {
             Create.TableFor<GiftRegistryItemOrder>();
         }
+
+        if (!Schema.Table(_registryConsultant).Exists())
+        {
+            Create.TableFor<GiftRegistryConsultant>();
+        }
     }
     public override void Down()
     {
@@ -57,6 +63,11 @@ public class SchemaInstall : Migration
         if (Schema.Table(_registryItemOrder).Exists())
         {
             Delete.Table(_registryItemOrder);
+        }
+
+        if (Schema.Table(_registryConsultant).Exists())
+        {
+            Delete.Table(_registryConsultant);
         }
     }
 }

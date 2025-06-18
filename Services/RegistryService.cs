@@ -210,12 +210,12 @@ public class RegistryService : IRegistryService
                 continue;
             }
 
-            _registryRepository.InsertRegistryItemOrderAsync(
-                orderId: order.Id,
-                productId: registryItem.Id,
-                registryId: registryItem.RegistryId,
-                quantity: orderItem.Quantity
-            );
+            await _registryRepository.InsertRegistryItemOrderAsync(
+                 orderId: order.Id,
+                 productId: registryItem.Id,
+                 registryId: registryItem.RegistryId,
+                 quantity: orderItem.Quantity
+             );
         }
 
         await _nopServices.ClearRegistryItemAttributeAsync(customer);

@@ -11,11 +11,16 @@ internal class RouteProvider : IRouteProvider
 
     public void RegisterRoutes(IEndpointRouteBuilder endpointRouteBuilder)
     {
+        RegisterAdminRoutes(endpointRouteBuilder);
+        RegisterPublicRoutes(endpointRouteBuilder);
+    }
+    private static void RegisterPublicRoutes(IEndpointRouteBuilder endpointRouteBuilder)
+    {
         endpointRouteBuilder.MapControllerRoute(
-            name: RegistryDefaults.Index,
-            pattern: "Registry/",
-            defaults: new { controller = "Registry", action = "Index" }
-        );
+           name: RegistryDefaults.Index,
+           pattern: "Registry/",
+           defaults: new { controller = "Registry", action = "Index" }
+       );
         endpointRouteBuilder.MapControllerRoute(
              name: RegistryDefaults.Get,
              pattern: "Registry/Get",
@@ -61,12 +66,19 @@ internal class RouteProvider : IRouteProvider
            pattern: "Registry/AddToCart/{id?}",
            defaults: new { controller = "Registry", action = "AddToCart" }
         );
-
-        //Admin Section
+    }
+    private static void RegisterAdminRoutes(IEndpointRouteBuilder endpointRouteBuilder)
+    {
         endpointRouteBuilder.MapControllerRoute(
-           name: RegistryDefaults.Report,
+           name: AdminDefaults.Index,
            pattern: "Admin/Index",
            defaults: new { controller = "Admin", action = "Index", area = AreaNames.Admin }
+        );
+
+        endpointRouteBuilder.MapControllerRoute(
+           name: AdminDefaults.Consultant,
+           pattern: "Admin/Consultant",
+           defaults: new { controller = "Admin", action = "Consultant", area = AreaNames.Admin }
         );
     }
 }

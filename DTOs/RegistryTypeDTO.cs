@@ -1,3 +1,3 @@
-﻿namespace i7MEDIA.Plugin.Widgets.Registry.Models;
+﻿namespace i7MEDIA.Plugin.Widgets.Registry.DTOs;
 
 public record RegistryTypeDTO(int Id, string Name, string Description);

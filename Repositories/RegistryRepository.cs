@@ -22,12 +22,13 @@ public class RegistryRepository : IRegistryRepository
     private readonly IRepository<GiftRegistryItem> _registryItem;
     private readonly IRepository<GiftRegistryType> _registryType;
     private readonly IRepository<GiftRegistryItemOrder> _registryItemOrder;
+    private readonly IRepository<GiftRegistryConsultant> _registryConsultant;
     private readonly IRepository<Customer> _customer;
     private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder)
+    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant)
     {
         _product = product;
         _registry = registry;
@@ -37,6 +38,7 @@ public class RegistryRepository : IRegistryRepository
         _storeContext = storeContext;
         _registryType = registryType;
         _registryItemOrder = registryItemOrder;
+        _registryConsultant = registryConsultant;
     }
 
     public async Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync()
@@ -189,17 +191,55 @@ public class RegistryRepository : IRegistryRepository
                     where ty.Deleted == false
                     select new RegistryTypeDTO(ty.Id, ty.Name, ty.Description);
 
-
         return query.ToList();
     }
 
-    public async void InsertRegistryItemOrderAsync(int orderId, int registryId, int productId, int quantity)
+    public async Task InsertRegistryItemOrderAsync(int orderId, int registryId, int productId, int quantity)
     {
         await _registryItemOrder.InsertAsync(new GiftRegistryItemOrder()
         {
             OrderId = orderId,
             RegistryItemId = productId,
             Quantity = quantity
+        });
+    }
+
+    public IEnumerable<RegistryConsultantDTO> GetRegistryConsultantsAsync()
+    {
+        var query = from c in _registryConsultant.Table
+                    where c.Deleted == false
+                    select new RegistryConsultantDTO(c.Id, c.Name, c.Email, c.Deleted);
+
+        return query.ToList();
+    }
+
+    public async Task UpdateConsultantAsync(int? id, string name, string email, bool deleted = false)
+    {
+        if (id.IsNull())
+        {
+            return;
+        }
+
+        var consultant = _registryConsultant.GetById(id);
+
+        if (consultant.IsNull())
+        {
+            return;
+        }
+
+        consultant.Name = name;
+        consultant.Email = email;
+        consultant.Deleted = deleted;
+
+        await _registryConsultant.UpdateAsync(consultant);
+    }
+
+    public async Task InsertConsultantAsync(string name, string email)
+    {
+        await _registryConsultant.InsertAsync(new GiftRegistryConsultant
+        {
+            Name = name,
+            Email = email
         });
     }
 }
