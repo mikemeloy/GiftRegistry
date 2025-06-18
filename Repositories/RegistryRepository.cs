@@ -215,12 +215,7 @@ public class RegistryRepository : IRegistryRepository
 
     public async Task UpdateConsultantAsync(int? id, string name, string email, bool deleted = false)
     {
-        if (id.IsNull())
-        {
-            return;
-        }
-
-        var consultant = _registryConsultant.GetById(id);
+        var consultant = await _registryConsultant.GetByIdAsync(id);
 
         if (consultant.IsNull())
         {
@@ -252,14 +247,19 @@ public class RegistryRepository : IRegistryRepository
         });
     }
 
-    public async Task UpdateRegistryTypeAsync(int id, string name, string description, bool deleted = false)
+    public async Task UpdateRegistryTypeAsync(int? id, string name, string description, bool deleted = false)
     {
-        await _registryType.UpdateAsync(new GiftRegistryType
+        var registryType = await _registryType.GetByIdAsync(id);
+
+        if (registryType.IsNull())
         {
-            Id = id,
-            Name = name,
-            Description = description,
-            Deleted = deleted
-        });
+            return;
+        }
+
+        registryType.Name = name;
+        registryType.Description = description;
+        registryType.Deleted = deleted;
+
+        await _registryType.UpdateAsync(registryType);
     }
 }

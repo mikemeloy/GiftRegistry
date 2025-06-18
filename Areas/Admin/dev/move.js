@@ -8,7 +8,9 @@ const
     sourceRoot = '../',
     destinationRoot = 'C:/Repos/nopCommerce-release-4.60.4/nopCommerce-release-4.60.4/src/Presentation/Nop.Web/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/',
     files = [
-        '/Views/index.cshtml'
+        '/Views/index.cshtml',
+        '/Scripts/index.js',
+        '/Styles/index.css'
     ]
 
 files.forEach(file => {

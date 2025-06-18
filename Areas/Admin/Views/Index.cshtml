@@ -5,7 +5,14 @@
     var version = Model.PluginVersion;
 }
 
-<!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/index.css" />
+<!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Styles/index.css" />
+
+<!script type="module">
+    import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Scripts/index.js?v=@version';
+
+    init();
+</!script>
+
 
 <div data-registry class="registry-wrapper round">
     <header>
