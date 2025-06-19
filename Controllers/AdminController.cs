@@ -44,9 +44,9 @@ public class AdminController : BasePluginController
     [HttpGet(template: "Admin/Consultant/List")]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public IActionResult ConsultantList()
+    public async Task<IActionResult> ConsultantListAsync()
     {
-        var model = _viewModelFactory.GetConsultantPartialViewModelAsync();
+        var model = await _viewModelFactory.GetConsultantPartialViewModelAsync();
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryConsultant.cshtml", model);
     }
@@ -54,9 +54,9 @@ public class AdminController : BasePluginController
     [HttpGet(template: "Admin/RegistryType/List")]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public IActionResult RegistryTypeList()
+    public async Task<IActionResult> RegistryTypeListAsync()
     {
-        var model = _viewModelFactory.GetRegistryTypePartialViewModelAsync();
+        var model = await _viewModelFactory.GetRegistryTypePartialViewModelAsync();
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryType.cshtml", model);
     }

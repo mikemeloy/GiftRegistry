@@ -2,6 +2,32 @@
 
 @{
     Layout = "";
+
+    var registryTypes = Model.RegistryTypes;
+    var version = "1.0.0";//fix
 }
 
-<div>Registry Type Partial</div>
+<!link rel="stylesheet"
+    href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryType.css" />
+
+<form action="/" method="post">
+    <input type="text" data-registry-type-name>
+    <input type="text" data-registry-type-description>
+    <button type="submit" data-registry-type-submit></button>
+</form>
+
+<div>
+    @{
+        foreach (var item in registryTypes)
+        {
+            <div>
+                <span><input data-type-id="@item.Id" type="checkbox"></span>           
+                <span>@item.Name</span>
+                <span>@item.Description</span>
+            </div>
+        }
+    }
+</div>
+<dialog>
+    Hello World
+</dialog>

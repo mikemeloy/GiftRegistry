@@ -13,7 +13,13 @@
   <ItemGroup>
     <None Remove="Areas\Admin\Registry.cshtml" />
     <None Remove="Areas\Admin\Scripts\index.js" />
+    <None Remove="Areas\Admin\Scripts\Tabs\registry.js" />
+    <None Remove="Areas\Admin\Scripts\Tabs\registryConsultant.js" />
+    <None Remove="Areas\Admin\Scripts\Tabs\registryType.js" />
     <None Remove="Areas\Admin\Styles\index.css" />
+    <None Remove="Areas\Admin\Styles\Tabs\registry.css" />
+    <None Remove="Areas\Admin\Styles\Tabs\RegistryConsultant.css" />
+    <None Remove="Areas\Admin\Styles\Tabs\RegistryType.css" />
     <None Remove="Areas\Admin\Views\Index.cshtml" />
     <None Remove="Areas\Admin\Views\_RegistryConsultant.cshtml" />
     <None Remove="Areas\Admin\Views\_RegistryList.cshtml" />
@@ -42,7 +48,25 @@
     <Content Include="Areas\Admin\Scripts\index.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\Admin\Scripts\Tabs\registry.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Scripts\Tabs\registryConsultant.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Scripts\Tabs\registryType.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Admin\Styles\index.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Styles\Tabs\registry.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Styles\Tabs\RegistryConsultant.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Styles\Tabs\RegistryType.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Admin\Views\Index.cshtml">
@@ -114,7 +138,7 @@
     <Content Include="Areas\Public\Views\_quantity.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Public\Views\_RegistryNotification.cshtml">
+    <Content Include="Areas\Shared\_RegistryNotification.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\_ViewImports.cshtml">

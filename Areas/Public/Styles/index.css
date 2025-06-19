@@ -12,8 +12,7 @@
 }
 
 ::backdrop {
-  background-color: var(--gray-dark, #434343);
-  opacity: .8;
+  backdrop-filter: blur(2px);
 }
 
 body:has(dialog[open]) {
@@ -130,7 +129,7 @@ body:has(dialog[open]) {
     box-shadow: 3px 3px 15px var(--gray-dark);
     overflow: hidden;
     padding: 0;
- 
+
     header {
       display: flex;
       justify-content: center;

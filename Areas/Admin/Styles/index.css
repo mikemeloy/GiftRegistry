@@ -1,9 +1,16 @@
-﻿[data-registry-admin-header] {
+﻿::backdrop {
+    backdrop-filter: blur(2px);
+}
+
+[data-registry-admin-header] {
+    user-select: none;
     position: sticky;
     top: 0;
     text-align: center;
     padding: 1rem 0;
     font-size: 1.5rem;
+    backdrop-filter: blur(5px);
+    z-index: 1;
 
     h3 {}
 
@@ -22,6 +29,7 @@
 [data-registry-admin-main] {
     margin: 1rem;
     min-height: 200vh;
+    user-select: none;
 }
 
 [data-registry-admin-footer] {
@@ -31,5 +39,6 @@
     display: flex;
     flex-direction: row-reverse;
     gap: 1rem;
-    backdrop-filter: blur(1px);
+    backdrop-filter: blur(5px);
+    z-index: 1;
 }

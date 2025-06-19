@@ -2,6 +2,28 @@
 
 @{
     Layout = "";
+
+    var consultants = Model.Consultants;
 }
 
-<div>Consultant Partial</div>
+<!link rel="stylesheet"
+    href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryConsultant.css" />
+
+<form action="/" method="post">
+    <input type="text" data-registry-consultant-name>
+    <input type="text" data-registry-consultant-email>
+    <button type="submit" data-registry-consultant-submit></button>
+</form>
+
+<div>
+    @{
+        foreach (var item in consultants)
+        {
+            <div>
+                <span><input data-type-id="@item.Id" type="checkbox"></span>
+                <span>@item.Name</span>
+                <span>@item.Email</span>
+            </div>
+        }
+    }
+</div>

@@ -12,8 +12,14 @@ const
         '/Views/_RegistryConsultant.cshtml',
         '/Views/_RegistryType.cshtml',
         '/Views/index.cshtml',
+        '/Scripts/Tabs/registry.js',
+        '/Scripts/Tabs/registryConsultant.js',
+        '/Scripts/Tabs/registryType.js',
         '/Scripts/index.js',
-        '/Styles/index.css'
+        '/Styles/index.css',
+        '/Styles/Tabs/registry.css',
+        '/Styles/Tabs/registryConsultant.css',
+        '/Styles/Tabs/registryType.css',
     ]
 
 files.forEach(file => {

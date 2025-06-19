@@ -1,4 +1,5 @@
-﻿using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
+﻿using System.Threading.Tasks;
+using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Factories;
@@ -6,10 +7,12 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Factories;
 public class ViewModelFactory : IViewModelFactory
 {
     private readonly IRegistryRepository _registryRepository;
+    private readonly IAdminService _adminService;
 
-    public ViewModelFactory(IRegistryRepository registryRepository)
+    public ViewModelFactory(IRegistryRepository registryRepository, IAdminService adminService)
     {
         _registryRepository = registryRepository;
+        _adminService = adminService;
     }
 
     public ListViewModel GetListViewModelAsync()
@@ -29,13 +32,17 @@ public class ViewModelFactory : IViewModelFactory
         return new RegistryPartialViewModel();
     }
 
-    public ConsultantPartialViewModel GetConsultantPartialViewModelAsync()
+    public async Task<ConsultantPartialViewModel> GetConsultantPartialViewModelAsync()
     {
-        return new ConsultantPartialViewModel();
+        var consultants = await _adminService.GetConsultantsAsync();
+
+        return new ConsultantPartialViewModel(consultants);
     }
 
-    public RegistryTypePartialViewModel GetRegistryTypePartialViewModelAsync()
+    public async Task<RegistryTypePartialViewModel> GetRegistryTypePartialViewModelAsync()
     {
-        return new RegistryTypePartialViewModel();
+        var registryTypes = await _adminService.GetRegistryTypesAsync();
+
+        return new RegistryTypePartialViewModel(registryTypes);
     }
 }
