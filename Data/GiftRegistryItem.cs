@@ -10,6 +10,7 @@ public class GiftRegistryItem : BaseEntity, ISoftDeletedEntity
     public int ProductId { get; set; }
     public int CartItemId { get; set; }
     public int Quantity { get; set; }
+    public int ShippingOption { get; set; }
     public bool Deleted { get; set; }
     public DateTime CreatedDate { get; set; }
 }

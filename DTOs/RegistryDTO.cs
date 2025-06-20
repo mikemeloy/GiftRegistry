@@ -8,5 +8,3 @@ public record RegistryDTO(string Name, string Description, DateTime EventDate, s
     public string Owner { get; set; }
     public IList<RegistryItemDTO> RegistryItems { get; set; }
 }
-
-public record RegistryItemDTO(int Id, int ProductId, int CartItemId);

@@ -27,4 +27,7 @@ public interface IRegistryRepository
     public IEnumerable<RegistryConsultantDTO> GetRegistryConsultantsAsync();
     public Task InsertRegistryTypeAsync(string name, string description);
     public Task UpdateRegistryTypeAsync(int? id, string name, string description, bool deleted = false);
+    public Task InsertShippingOptionAsync(string name, string description);
+    public Task UpdateShippingOptionAsync(int? id, string name, string description, bool deleted);
+    public IEnumerable<RegistryShippingOptionDTO> GetRegistryShippingOptionsAsync();
 }

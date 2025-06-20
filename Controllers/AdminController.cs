@@ -61,6 +61,16 @@ public class AdminController : BasePluginController
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryType.cshtml", model);
     }
 
+    [HttpGet(template: "Admin/RegistryShippingOption/List")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task<IActionResult> RegistryShippingOptionListAsync()
+    {
+        var model = await _viewModelFactory.GetRegistryTypePartialViewModelAsync();
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryShippingOption.cshtml", model);
+    }
+
     [HttpGet]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
@@ -85,6 +95,14 @@ public class AdminController : BasePluginController
         return await _adminService.GetRegistryTypesAsync();
     }
 
+    [HttpGet]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task<IEnumerable<RegistryShippingOptionDTO>> ShippingOptionAsync()
+    {
+        return await _adminService.GetShippingOptionsAsync();
+    }
+
     [HttpPost]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
@@ -99,5 +117,13 @@ public class AdminController : BasePluginController
     public async Task RegistryTypeAsync([FromBody] RegistryTypeDTO registryType)
     {
         await _adminService.UpsertRegistryTypeAsync(registryType);
+    }
+
+    [HttpPost]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task ShippingOptionAsync([FromBody] RegistryShippingOptionDTO registryType)
+    {
+        await _adminService.UpsertRegistryShippingOptionAsync(registryType);
     }
 }

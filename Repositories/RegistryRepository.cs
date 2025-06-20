@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Wordprocessing;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
@@ -23,12 +24,13 @@ public class RegistryRepository : IRegistryRepository
     private readonly IRepository<GiftRegistryType> _registryType;
     private readonly IRepository<GiftRegistryItemOrder> _registryItemOrder;
     private readonly IRepository<GiftRegistryConsultant> _registryConsultant;
+    private readonly IRepository<GiftRegistryShippingOption> _registryShippingOption;
     private readonly IRepository<Customer> _customer;
     private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant)
+    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType)
     {
         _product = product;
         _registry = registry;
@@ -39,6 +41,7 @@ public class RegistryRepository : IRegistryRepository
         _registryType = registryType;
         _registryItemOrder = registryItemOrder;
         _registryConsultant = registryConsultant;
+        _registryShippingOption = registryShippingType;
     }
 
     public async Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync()
@@ -261,5 +264,39 @@ public class RegistryRepository : IRegistryRepository
         registryType.Deleted = deleted;
 
         await _registryType.UpdateAsync(registryType);
+    }
+
+    public async Task InsertShippingOptionAsync(string name, string description)
+    {
+        await _registryShippingOption.InsertAsync(new GiftRegistryShippingOption
+        {
+            Name = name,
+            Description = description
+        });
+    }
+
+    public async Task UpdateShippingOptionAsync(int? id, string name, string description, bool deleted)
+    {
+        var shippingOption = await _registryShippingOption.GetByIdAsync(id);
+
+        if (shippingOption.IsNull())
+        {
+            return;
+        }
+
+        shippingOption.Name = name;
+        shippingOption.Description = description;
+        shippingOption.Deleted = deleted;
+
+        await _registryShippingOption.InsertAsync(shippingOption);
+    }
+
+    public IEnumerable<RegistryShippingOptionDTO> GetRegistryShippingOptionsAsync()
+    {
+        var query = from c in _registryShippingOption.Table
+                    where c.Deleted == false
+                    select new RegistryShippingOptionDTO(c.Id, c.Name, c.Description, c.Deleted);
+
+        return query.ToList();
     }
 }

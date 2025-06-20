@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
@@ -118,14 +119,59 @@ public class AdminService : IAdminService
             }
 
             await _registryRepository.UpdateRegistryTypeAsync(
-              id: registryType.Id,
-              name: registryType.Name,
-              description: registryType.Description
-          );
+                id: registryType.Id,
+                name: registryType.Name,
+                description: registryType.Description
+            );
         }
         catch (Exception e)
         {
             await _logger_R.LogErrorAsync(nameof(UpsertRegistryTypeAsync), e);
+        }
+    }
+
+    public async Task<IEnumerable<RegistryShippingOptionDTO>> GetShippingOptionsAsync()
+    {
+        try
+        {
+            return _registryRepository.GetRegistryShippingOptionsAsync();
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetShippingOptionsAsync), e);
+            return Enumerable.Empty<RegistryShippingOptionDTO>();
+        }
+    }
+
+    public async Task UpsertRegistryShippingOptionAsync(RegistryShippingOptionDTO registryShippingOption)
+    {
+        if (registryShippingOption.IsNull())
+        {
+            return;
+        }
+
+        try
+        {
+            if (registryShippingOption.Id.IsNull())
+            {
+                await _registryRepository.InsertShippingOptionAsync(
+                    name: registryShippingOption.Name,
+                    description: registryShippingOption.Description
+                );
+
+                return;
+            }
+
+            await _registryRepository.UpdateShippingOptionAsync(
+                id: registryShippingOption.Id,
+                name: registryShippingOption.Name,
+                description: registryShippingOption.Description,
+                deleted: registryShippingOption.Deleted
+            );
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(UpsertRegistryShippingOptionAsync), e);
         }
     }
 }
