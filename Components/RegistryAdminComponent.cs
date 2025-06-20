@@ -7,7 +7,7 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Components;
 
 public class RegistryAdminComponent : NopViewComponent
 {
-    public IViewComponentResult InvokeAsync(string widgetZone, BaseNopEntityModel additionalData)
+    public IViewComponentResult Invoke(string widgetZone, BaseNopEntityModel additionalData)
     {
         var model = new RegistryAdminViewModel();
 

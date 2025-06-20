@@ -10,4 +10,5 @@ public interface IViewModelFactory
     public RegistryPartialViewModel GetRegistryPartialViewModelAsync();
     public Task<ConsultantPartialViewModel> GetConsultantPartialViewModelAsync();
     public Task<RegistryTypePartialViewModel> GetRegistryTypePartialViewModelAsync();
+    public Task<RegistryShippingPartialViewModel> GetRegistryShippingOptionViewModelAsync();
 }

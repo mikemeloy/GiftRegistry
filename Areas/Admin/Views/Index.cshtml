@@ -5,7 +5,8 @@
     var version = Model.PluginVersion;
     var registryRoute = Url.RouteUrl(AdminDefaults.Registry);
     var consultantRoute = Url.RouteUrl(AdminDefaults.Consultant);
-    var registryTypeRoute = Url.RouteUrl(AdminDefaults.RegistryType);
+    var TypeRoute = Url.RouteUrl(AdminDefaults.RegistryType);
+    var shippingRoute = Url.RouteUrl(AdminDefaults.RegistryShipping);
 }
 
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Styles/index.css?v=@version" />
@@ -13,7 +14,7 @@
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Scripts/index.js?v=@version';
 
-    init('@registryRoute', '@consultantRoute', '@registryTypeRoute');
+    init('@registryRoute', '@consultantRoute', '@TypeRoute', '@shippingRoute');
 </!script>
 
 <header data-registry-admin-header>
@@ -21,6 +22,7 @@
         <button type="button">Search Registry</button>
         <button type="button">Registry Consultants</button>
         <button type="button">Registry Type</button>
+        <button type="button">Registry Shipping Options</button>
     </nav>
 </header>
 <main data-registry-admin-main>
@@ -30,4 +32,3 @@
     <button class="btn btn-success" type="button">Save</button>
     <button class="btn btn-danger" type="button">Cancel</button>
 </footer>
-@await Html.PartialAsync("_RegistryNotification.cshtml")

@@ -18,10 +18,12 @@ public static class RegistryDefaults
 public static class AdminDefaults
 {
     public static string Index => "Plugin.Widget.Registry.Admin.Index";
-    public static string Consultant => "Plugin.Widget.Registry.Admin.consultant";
     public static string Registry => "Plugin.Widget.Registry.Admin.Registry.Query";
+    public static string Consultant => "Plugin.Widget.Registry.Admin.consultant";
     public static string RegistryType => "Plugin.Widget.Registry.Admin.types";
+    public static string RegistryShipping => "Plugin.Widget.Registry.Admin.Registry.Shipping";
+    public static string RegistryList => "Plugin.Widget.Registry.Admin.Registry.List";
     public static string ConsultantList => "Plugin.Widget.Registry.Admin.consultant.List";
     public static string RegistryTypeList => "Plugin.Widget.Registry.Admin.RegistryType.List";
-    public static string RegistryList => "Plugin.Widget.Registry.Admin.Registry.List";
+    public static string RegistryShippingList => "Plugin.Widget.Registry.Admin.RegistryShipping.List";
 }

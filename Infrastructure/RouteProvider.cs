@@ -76,6 +76,12 @@ internal class RouteProvider : IRouteProvider
         );
 
         endpointRouteBuilder.MapControllerRoute(
+             name: AdminDefaults.Registry,
+             pattern: "Admin/Registry",
+             defaults: new { controller = "Admin", action = "Registry", area = AreaNames.Admin }
+        );
+
+        endpointRouteBuilder.MapControllerRoute(
            name: AdminDefaults.Consultant,
            pattern: "Admin/Consultant",
            defaults: new { controller = "Admin", action = "Consultant", area = AreaNames.Admin }
@@ -88,10 +94,10 @@ internal class RouteProvider : IRouteProvider
         );
 
         endpointRouteBuilder.MapControllerRoute(
-             name: AdminDefaults.Registry,
-             pattern: "Admin/Registry",
-             defaults: new { controller = "Admin", action = "Registry", area = AreaNames.Admin }
-         );
+            name: AdminDefaults.RegistryShipping,
+            pattern: "Admin/ShippingOption",
+            defaults: new { controller = "Admin", action = "ShippingOption", area = AreaNames.Admin }
+        );
 
         endpointRouteBuilder.MapControllerRoute(
            name: AdminDefaults.RegistryList,
@@ -109,6 +115,12 @@ internal class RouteProvider : IRouteProvider
            name: AdminDefaults.RegistryTypeList,
            pattern: "Admin/RegistryType/List",
            defaults: new { controller = "Admin", action = "RegistryType/List", area = AreaNames.Admin }
+        );
+
+        endpointRouteBuilder.MapControllerRoute(
+           name: AdminDefaults.RegistryShippingList,
+           pattern: "Admin/ShippingOption/List",
+           defaults: new { controller = "Admin", action = "ShippingOption/List", area = AreaNames.Admin }
         );
     }
 }

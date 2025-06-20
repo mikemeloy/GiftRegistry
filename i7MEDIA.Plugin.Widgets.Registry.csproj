@@ -15,10 +15,12 @@
     <None Remove="Areas\Admin\Scripts\index.js" />
     <None Remove="Areas\Admin\Scripts\Tabs\registry.js" />
     <None Remove="Areas\Admin\Scripts\Tabs\registryConsultant.js" />
+    <None Remove="Areas\Admin\Scripts\Tabs\registryShippingOption.js" />
     <None Remove="Areas\Admin\Scripts\Tabs\registryType.js" />
     <None Remove="Areas\Admin\Styles\index.css" />
     <None Remove="Areas\Admin\Styles\Tabs\registry.css" />
     <None Remove="Areas\Admin\Styles\Tabs\RegistryConsultant.css" />
+    <None Remove="Areas\Admin\Styles\Tabs\registryShippingOption.css" />
     <None Remove="Areas\Admin\Styles\Tabs\RegistryType.css" />
     <None Remove="Areas\Admin\Views\Index.cshtml" />
     <None Remove="Areas\Admin\Views\_RegistryConsultant.cshtml" />
@@ -55,6 +57,9 @@
     <Content Include="Areas\Admin\Scripts\Tabs\registryConsultant.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Areas\Admin\Scripts\Tabs\registryShippingOption.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Areas\Admin\Scripts\Tabs\registryType.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -65,6 +70,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Admin\Styles\Tabs\RegistryConsultant.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Styles\Tabs\registryShippingOption.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Admin\Styles\Tabs\RegistryType.css">

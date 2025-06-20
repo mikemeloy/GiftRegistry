@@ -45,4 +45,11 @@ public class ViewModelFactory : IViewModelFactory
 
         return new RegistryTypePartialViewModel(registryTypes);
     }
+
+    public async Task<RegistryShippingPartialViewModel> GetRegistryShippingOptionViewModelAsync()
+    {
+        var registryShippingOptions = await _adminService.GetShippingOptionsAsync();
+
+        return new RegistryShippingPartialViewModel(registryShippingOptions);
+    }
 }

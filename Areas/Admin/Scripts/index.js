@@ -3,22 +3,25 @@
 let
     _registryRoute,
     _consultantRoute,
-    _registryTypeRoute;
+    _registryTypeRoute,
+    _registryShippingRoute;
 
 const
-    init = (registryRoute, consultantRoute, registryTypeRoute) => {
+    init = (registryRoute, consultantRoute, registryTypeRoute, registryShippingRoute) => {
         _consultantRoute = consultantRoute;
         _registryRoute = registryRoute;
         _registryTypeRoute = registryTypeRoute;
+        _registryShippingRoute = registryShippingRoute;
 
         setupFormEvents();
     },
     setupFormEvents = () => {
-        const [registry, consultants, registryType] = document.querySelectorAll('[data-registry-admin-header] nav button');
+        const [registry, consultants, registryType, shipping] = document.querySelectorAll('[data-registry-admin-header] nav button');
 
         registry.addEventListener('click', events.onRegistry_Click);
         consultants.addEventListener('click', events.onConsultant_Click);
         registryType.addEventListener('click', events.onRegistryType_Click);
+        shipping.addEventListener('click', events.onShippingType_Click);
     },
     appendPartial = (partial) => {
         const
@@ -59,6 +62,13 @@ const events = {
             { init } = await import('./Tabs/registryType.js');
 
         init?.(el, _registryTypeRoute);
+    },
+    onShippingType_Click: async () => {
+        const { data } = await Get(`${_registryShippingRoute}/List`),
+            el = await appendPartial(data),
+            { init } = await import('./Tabs/registryShippingOption.js');
+
+        init?.(el, _registryShippingRoute);
     }
 }
 

@@ -61,12 +61,12 @@ public class AdminController : BasePluginController
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryType.cshtml", model);
     }
 
-    [HttpGet(template: "Admin/RegistryShippingOption/List")]
+    [HttpGet(template: "Admin/ShippingOption/List")]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public async Task<IActionResult> RegistryShippingOptionListAsync()
+    public async Task<IActionResult> RegistryShippingListAsync()
     {
-        var model = await _viewModelFactory.GetRegistryTypePartialViewModelAsync();
+        var model = await _viewModelFactory.GetRegistryShippingOptionViewModelAsync();
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryShippingOption.cshtml", model);
     }
