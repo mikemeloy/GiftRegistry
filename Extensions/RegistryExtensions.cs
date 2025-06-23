@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
+using i7MEDIA.Plugin.Widgets.Registry.Models;
 using Nop.Core.Domain.Customers;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Extensions;
@@ -15,7 +17,9 @@ public static class RegistryExtensions
             Description = source.Description,
             EventDate = source.EventDate,
             Notes = source.Notes,
-            EventType = source.EventType
+            EventType = source.EventType,
+            Sponsor = source.Sponsor,
+            ShippingOption = source.ShippingOption
         };
     }
 
@@ -32,7 +36,10 @@ public static class RegistryExtensions
             Description: source.Description,
             EventDate: source.EventDate,
             Notes: source.Notes,
-            EventType: source.EventType
+            EventType: source.EventType,
+            Sponsor: source.Sponsor,
+            ShippingOption: source.ShippingOption,
+            ConsultantId: source.ConsultantId
         );
     }
 
@@ -86,6 +93,11 @@ public static class RegistryExtensions
             return "";
         }
 
-        return $"{source.Name} {source.Description} {source.EventDate.ToLongDateString()} {customer.FirstName} {customer.LastName}";
+        return $"{source.Name} {source.EventDate.ToLongDateString()} {customer.FirstName} {customer.LastName} {source.Sponsor}";
+    }
+
+    public static List<RegistryItemViewModel> SortRegistryItems(this List<RegistryItemViewModel> source)
+    {
+        return source.OrderBy(ri => ri.Purchased).ThenBy(ri => ri.Name).ToList();
     }
 }

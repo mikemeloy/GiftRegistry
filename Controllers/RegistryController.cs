@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
@@ -22,9 +21,9 @@ public class RegistryController : BasePluginController
 
     [HttpGet]
     [IgnoreAntiforgeryToken]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        var model = _viewModelFactory.GetListViewModelAsync();
+        var model = await _viewModelFactory.GetListViewModelAsync();
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/Index.cshtml", model);
     }

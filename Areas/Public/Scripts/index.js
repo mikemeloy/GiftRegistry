@@ -7,6 +7,7 @@ import {
 } from '../../modules/utils.js';
 
 let
+  _currentUser,
   _searchRoute,
   _insertRoute,
   _updateRoute,
@@ -15,12 +16,13 @@ let
   _debounce;
 
 const
-  init = (searchUrl, insertRoute, deleteRoute, getRoute, updateRoute) => {
+  init = (searchUrl, insertRoute, deleteRoute, getRoute, updateRoute, currentUser) => {
     _searchRoute = searchUrl;
     _insertRoute = insertRoute;
     _deleteRoute = deleteRoute;
     _getRoute = getRoute;
-    _updateRoute = updateRoute
+    _updateRoute = updateRoute;
+    _currentUser = currentUser;
 
     setFormEvents();
     setSearchByUrl();
@@ -42,10 +44,13 @@ const
     const
       form = querySelector('[data-search]'),
       btnAdd = querySelector('[data-add]'),
+      btnMine = querySelector('[data-search-mine]'),
       btnSave = querySelector('[data-registry-save]'),
       btnClose = querySelector('[data-modal-close]');
 
     form.addEventListener('keyup', events.onSearch_KeyUp);
+
+    btnMine.addEventListener('click', events.onShowUser_Click);
     btnAdd.addEventListener('click', events.onAdd_Click);
     btnSave.addEventListener('click', events.onSave_Click);
     btnClose.addEventListener('click', events.onClose_Click)
@@ -56,7 +61,7 @@ const
   },
   querySelector = (selector) => QuerySelector(selector, '[data-registry]'),
   getInputValue = (selector, options) => GetInputValue(selector, '[data-registry]', options),
-  prepareModal = (name = '', desc = '', date = '', note = '', id = '', eventType = '', title = 'Create a New Registry') => {
+  prepareModal = (name = '', desc = '', date = '', note = '', id = '', eventType = '0', title = 'Create a New Registry', sponsor = '', shipping = '0') => {
     const
       set = (selector, val) => SetInputValue(`[${selector}]`, '[data-modal-add]', val),
       header = querySelector('[data-modal-add] h4');
@@ -67,6 +72,8 @@ const
     set('data-add-event-date', DateToInputString(date));
     set('data-add-notes', note);
     set('data-add-event-type', eventType);
+    set('data-add-sponsor', sponsor);
+    set('data-add-event-shipping-method', shipping);
     header.innerHTML = title;
 
     return querySelector('[data-modal-add]');
@@ -118,12 +125,14 @@ const
     onSave_Click: async () => {
       const
         endLoading = Loading(),
-        id = getInputValue('[data-add-id]'),
+        id = getInputValue('[data-add-id]', { isNumeric: true }),
         name = getInputValue('[data-add-name]'),
         description = getInputValue('[data-add-description]'),
         notes = getInputValue('[data-add-notes]'),
         eventDate = getInputValue('[data-add-event-date]'),
         eventType = getInputValue('[data-add-event-type]', { isNumeric: true }),
+        shippingOption = getInputValue('[data-add-event-shipping-method]', { isNumeric: true }),
+        sponsor = getInputValue('[data-add-sponsor]'),
         url = (+id > 0) ? _updateRoute : _insertRoute;
 
       try {
@@ -134,7 +143,9 @@ const
             description,
             eventDate,
             eventType,
-            notes
+            notes,
+            shippingOption,
+            sponsor
           });
 
 
@@ -180,8 +191,8 @@ const
       }
 
       const
-        { Id, Name, EventDate, EventType, Description, Notes } = data,
-        modal = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit`);
+        { Id, Name, EventDate, EventType, Description, Notes, Sponsor, ShippingOption } = data,
+        modal = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit`, Sponsor, ShippingOption);
 
       modal.showModal();
     },
@@ -194,6 +205,10 @@ const
       }
 
       dialog.close();
+    },
+    onShowUser_Click: () => {
+      AddQueryParamToURL([{ key: 'search', value: _currentUser }]);
+      setSearchByUrl();
     }
   };
 

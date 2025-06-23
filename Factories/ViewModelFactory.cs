@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 
@@ -8,18 +9,24 @@ public class ViewModelFactory : IViewModelFactory
 {
     private readonly IRegistryRepository _registryRepository;
     private readonly IAdminService _adminService;
+    private readonly INopServices _nopServices;
 
-    public ViewModelFactory(IRegistryRepository registryRepository, IAdminService adminService)
+    public ViewModelFactory(IRegistryRepository registryRepository, IAdminService adminService, INopServices nopServices)
     {
         _registryRepository = registryRepository;
         _adminService = adminService;
+        _nopServices = nopServices;
     }
 
-    public ListViewModel GetListViewModelAsync()
+    public async Task<ListViewModel> GetListViewModelAsync()
     {
-        var registryTypes = _registryRepository.GetRegistryTypes();
+        var customer = await _nopServices.GetCurrentCustomerAsync();
+        var registryTypes = _registryRepository.GetRegistryTypesAsync();
+        var shippingOptions = _registryRepository.GetRegistryShippingOptionsAsync();
 
-        return new("1.0.1", registryTypes);
+        await Task.WhenAll(registryTypes, shippingOptions);
+
+        return new("1.0.1", customer.FullName(), registryTypes.Result, shippingOptions.Result);
     }
 
     public AdminViewModel GetAdminViewModelAsync()

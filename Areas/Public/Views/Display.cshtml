@@ -18,10 +18,17 @@
 
     init('@deleteRoute', '@addToCartRoute');
 </!script>
+<header data-registry-header>
+    <h1>@Model.Name</h1>
+    <article>
+        <q>
+            <i>
+                @Model.Description
+            </i>
+        </q>
+    </article>
+</header>
 
-<article>
-    <q>@Model.Notes</q>
-</article>
 <div data-registry-product-list>
     @{
         foreach (var item in items)

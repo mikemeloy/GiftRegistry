@@ -2,6 +2,7 @@
 
 @{
     var registryTypes = Model.RegistryTypes;
+    var shippingOptions = Model.ShippingOptions;
 }
 
 <dialog class="round" data-modal-add>
@@ -11,49 +12,103 @@
     </header>
     <main>
         <section>
-            <label for="name">Name</label>
-            <input autocomplete="off" class="form-control text-box single-line" data-add-name type="text" name="name"
-                autofocus />
-        </section>
-        <section>
-            <label for="description">Description</label>
-            <input autocomplete="off" class="form-control text-box single-line" data-add-description type="text"
-                name="description" />
-        </section>
-        <section>
-            <label for="eventdate">Event Date</label>
-            <input autocomplete="off" class="form-control text-box single-line" data-add-event-date type="date"
-                name="eventdate" />
-        </section>
-        <section>
-            <label>Partner</label>
-            <select class="form-control text-box single-line"></select>
-        </section>
-        <section>
-            <label>Consultant</label>
-            <select class="form-control text-box single-line"></select>
-        </section>
-        <section>
-            <label>Event Type</label>
-            <select data-add-event-type class="form-control text-box single-line">
-                <option value="0">Select One...</option>
-                @{
-                    foreach (var item in registryTypes)
-                    {
-                        <option title="@item.Description" value="@item.Id">@item.Name</option>
-                    }
-                }
-            </select>
+            <label>
+                Name
+                <sup>
+                    <i class="fal fa-search"></i>
+                    <i class="fal fa-info" title="The Name/Title of the Registry"></i>
+                </sup>
+                <input autocomplete="off" class="form-control text-box single-line" data-add-name type="text" autofocus />
+            </label>
         </section>
 
         <section>
-            <label for="notes">Summary</label>
-            <textarea autocomplete="off" class="form-control text-box" data-add-notes rows="3" multiple type="text"
-                name="notes"></textarea>
+            <label>
+                Summary
+                <sup>
+                    <i class="fal fa-info" title="A More Detailed"></i>
+                </sup>
+                <textarea autocomplete="off" class="form-control text-box" rows="3" multiple" data-add-description></textarea>
+            </label>
+        </section>
+
+        <section>
+            <label>
+                Partner / Co-Sponsor
+                <sup>
+                    <i class="fal fa-search"></i>
+                    <i class="fal fa-info" title="If Another Person is "></i>
+                </sup>
+                <input type="text" class="form-control text-box single-line" data-add-sponsor></input>
+            </label>
+        </section>
+
+        <section>
+            <label>
+                Event Date
+                <sup>
+                    <i class="fal fa-search"></i>
+                    <i class="fal fa-info" title="The Specific Date "></i>
+                </sup>
+                <input autocomplete="off" class="form-control text-box single-line" data-add-event-date type="date" />
+            </label>
+        </section>
+
+        <section>
+            <label>
+                Delivery Method
+                <sup>
+                    <i class="fal fa-info"></i>
+                </sup>
+                <select class="form-control text-box single-line" data-add-event-shipping-method>
+                    <option value="0">Select One...</option>
+                    @{
+                        foreach (var item in shippingOptions)
+                        {
+                            <option title="@item.Description" value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </label>
+        </section>
+
+        <section>
+            <label>
+                Event Type
+                <sup>
+                    <i class="fal fa-search"></i>
+                    <i class="fal fa-info"></i>
+                </sup>
+                <select data-add-event-type class="form-control text-box single-line">
+                    <option value="0">Select One...</option>
+                    @{
+                        foreach (var item in registryTypes)
+                        {
+                            <option title="@item.Description" value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </label>
+        </section>
+
+        <section>
+            <label for="notes">
+                My Notes
+                <sup>
+                    <i class="fal fa-info"></i>
+                    <i class="fal fa-user-secret"></i>
+                </sup>
+                <textarea autocomplete="off" class="form-control text-box single-line" data-add-notes rows="3" multiple></textarea>
+            </label>
         </section>
     </main>
     <footer>
         <button data-registry-save class="button-1">Save</button>
         <input type="hidden" data-add-id>
     </footer>
+    <sup data-registry-add-legend>
+        <i class="fal fa-search" title="User's can Search Registries on This Field">Searchable</i>
+        <i class="fal fa-info" title="See More Information About This Field">More Details</i>
+        <i class="fal fa-user-secret" title="Only Visible to You and Your Consultant">Hidden</i>
+    </sup>
 </dialog>

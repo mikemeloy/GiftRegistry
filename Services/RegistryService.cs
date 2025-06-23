@@ -78,6 +78,7 @@ public class RegistryService : IRegistryService
             var registry = await _registryRepository.GetRegistryByIdAsync(registryId);
             var items = await _registryRepository.GetRegistryItemsByIdAsync(registryId);
             var iAmOwner = await _registryRepository.GetRegistryOwnerAssociationAsync(registryId);
+            var consultant = await _registryRepository.GetConsultantByIdAsync(registry.GetValueOrDefault(r => r.ConsultantId));
 
             foreach (var item in items)
             {
@@ -91,9 +92,13 @@ public class RegistryService : IRegistryService
                 Description = registry.GetValueOrDefault(r => r.Description),
                 EventDate = registry.GetValueOrDefault(r => r.EventDate),
                 EventType = registry.GetValueOrDefault(r => r.EventType),
-                RegistryItems = items,
+                Sponsor = registry.GetValueOrDefault(r => r.Sponsor),
+                Notes = registry.GetValueOrDefault(r => r.Notes),
+                ShippingOption = registry.GetValueOrDefault(r => r.ShippingOption),
+                RegistryItems = items.SortRegistryItems(),
                 IamOwner = iAmOwner,
-                Notes = registry.GetValueOrDefault(r => r.Notes)
+                ConsultantName = consultant.GetValueOrDefault(c => c.Name),
+                ConsultantEmail = consultant.GetValueOrDefault(c => c.Email)
             };
         }
         catch (Exception e)

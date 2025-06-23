@@ -20,14 +20,15 @@ public interface IRegistryRepository
     public Task<bool> GetRegistryOwnerAssociationAsync(int registryId);
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
     public Task UpdateRegistryAsync(RegistryDTO registryDTO);
-    public List<RegistryTypeDTO> GetRegistryTypes();
+    public Task<IEnumerable<RegistryTypeDTO>> GetRegistryTypesAsync();
     public Task InsertRegistryItemOrderAsync(int orderId, int registryId, int productId, int quantity);
     public Task InsertConsultantAsync(string name, string email);
     public Task UpdateConsultantAsync(int? id, string name, string email, bool deleted = false);
-    public IEnumerable<RegistryConsultantDTO> GetRegistryConsultantsAsync();
+    public Task<IEnumerable<RegistryConsultantDTO>> GetRegistryConsultantsAsync();
     public Task InsertRegistryTypeAsync(string name, string description);
     public Task UpdateRegistryTypeAsync(int? id, string name, string description, bool deleted = false);
     public Task InsertShippingOptionAsync(string name, string description);
     public Task UpdateShippingOptionAsync(int? id, string name, string description, bool deleted);
-    public IEnumerable<RegistryShippingOptionDTO> GetRegistryShippingOptionsAsync();
+    public Task<IEnumerable<RegistryShippingOptionDTO>> GetRegistryShippingOptionsAsync();
+    public Task<GiftRegistryConsultant> GetConsultantByIdAsync(int consultantId);
 }

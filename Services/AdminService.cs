@@ -55,7 +55,7 @@ public class AdminService : IAdminService
     {
         try
         {
-            return _registryRepository.GetRegistryConsultantsAsync();
+            return await _registryRepository.GetRegistryConsultantsAsync();
         }
         catch (Exception e)
         {
@@ -68,7 +68,7 @@ public class AdminService : IAdminService
     {
         try
         {
-            return _registryRepository.GetRegistryTypes();
+            return await _registryRepository.GetRegistryTypesAsync();
         }
         catch (Exception e)
         {
@@ -132,7 +132,7 @@ public class AdminService : IAdminService
     {
         try
         {
-            return _registryRepository.GetRegistryShippingOptionsAsync();
+            return await _registryRepository.GetRegistryShippingOptionsAsync();
         }
         catch (Exception e)
         {

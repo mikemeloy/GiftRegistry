@@ -8,22 +8,27 @@
 
 <!link rel="stylesheet"
     href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryShippingOption.css" />
+<section>
+    <fieldset>
+        <legend>New Shipping Option</legend>
+        <form action="/" method="post">
+            <input type="text" data-registry-shipping-name>
+            <input type="text" data-registry-shipping-email>
+            <button type="submit" data-registry-shipping-submit></button>
+        </form>
+    </fieldset>
 
-<form action="/" method="post">
-    <input type="text" data-registry-shipping-name>
-    <input type="text" data-registry-shipping-email>
-    <button type="submit" data-registry-shipping-submit></button>
-</form>
-
-<div>
-    @{
-        foreach (var item in shippingOptions)
-        {
-            <div>
-                <span><input data-type-id="@item.Id" type="checkbox"></span>
-                <span>@item.Name</span>
-                <span>@item.Description</span>
-            </div>
+    <div>
+        @{
+            foreach (var item in shippingOptions)
+            {
+                <div>
+                    <span><input data-type-id="@item.Id" type="checkbox"></span>
+                    <span>@item.Name</span>
+                    <span>@item.Description</span>
+                </div>
+            }
         }
-    }
-</div>
+    </div>
+
+</section>

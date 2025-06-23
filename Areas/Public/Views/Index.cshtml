@@ -4,6 +4,7 @@
 @{
     Layout = "_Root";
 
+    var userName = Model.UserName;
     var version = Model.PluginVersion;
     var registrySearchRoute = Url.RouteUrl(RegistryDefaults.List);
     var baseRoute = Url.RouteUrl(RegistryDefaults.Index);
@@ -18,7 +19,7 @@
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/index.js?v=@version';
 
-    init('@registrySearchRoute', '@insertRoute', '@deleteRoute', '@getRoute', '@updateRoute');
+    init('@registrySearchRoute', '@insertRoute', '@deleteRoute', '@getRoute', '@updateRoute', '@userName');
 </!script>
 
 <div data-registry class="registry-wrapper round">
@@ -27,13 +28,14 @@
             <input type="text" autocomplete="off" placeholder="Search Registries..." aria-label="Search registries" autofocus>
             <i class="fal fa-search"></i>
         </form>
+        <button data-search-mine type="button">View my Registries</button>
         <button data-add type="button">Create New Registry</button>
     </header>
     <section data-result>
-        <div>See My Registries</div>
-        <div></div>
+        <h2>Perform a Search to See Results...</h2>
     </section>
     @await Html.PartialAsync("_AddDialog.cshtml", Model)
     @await Html.PartialAsync("_RegistryNotification.cshtml")
 </div>
+
 @await Html.PartialAsync("_Loading.cshtml")

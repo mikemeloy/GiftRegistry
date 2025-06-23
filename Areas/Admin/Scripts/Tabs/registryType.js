@@ -22,8 +22,8 @@ const events = {
         e.preventDefault();
 
         const
-            name = _main.querySelector(':scope [data-registry-consultant-name]'),
-            description = _main.querySelector(':scope [data-registry-consultant-email]');
+            name = _main.querySelector(':scope [data-registry-type-name]'),
+            description = _main.querySelector(':scope [data-registry-type-description]');
 
         await Post(_url, { name: name.value, description: description.value })
     }
