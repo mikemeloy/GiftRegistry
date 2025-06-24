@@ -6,24 +6,54 @@
     var consultants = Model.Consultants;
 }
 
-<!link rel="stylesheet"
-    href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryConsultant.css" />
+<!link rel="stylesheet" href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryConsultant.css" />
 
-<form action="/" method="post">
-    <input type="text" data-registry-consultant-name>
-    <input type="text" data-registry-consultant-email>
-    <button type="submit" data-registry-consultant-submit></button>
-</form>
+<section data-registry-option>
+    <fieldset data-table>
+        <legend>
+            Registry Consultants
+            <i data-success data-consultant-option-add class="fa fa-plus-circle"></i>
+        </legend>
+        <header>
+            <span></span>
+            <h4>Name</h4>
+            <h4>Email</h4>
+            <span></span>
+        </header>
 
-<div>
-    @{
-        foreach (var item in consultants)
-        {
-            <div>
+        <div data-row></div>
+
+        @{
+            foreach (var item in consultants)
+            {
                 <span><input data-type-id="@item.Id" type="checkbox"></span>
                 <span>@item.Name</span>
                 <span>@item.Email</span>
-            </div>
+                <span>
+                    <i data-edit-consultant-option data-name="@item.Name" data-Email="@item.Email" data-id="@item.Id" class="fa fa-edit"></i>
+                    <i data-delete-consultant-option data-name="@item.Name" data-Email="@item.Email" data-id="@item.Id" class="fa fa-trash"></i>
+                </span>
+                <div data-row></div>
+            }
         }
-    }
-</div>
+        <span></span>
+    </fieldset>
+
+    <dialog data-dialog-edit>
+        <header>
+            <i data-registry-consultant-close class="fa fa-times"></i>
+        </header>
+        <section>
+            <label for="consultantOptionName">Name</label>
+            <input type="text" data-registry-consultant-name class="form-control text-box" name="consultantOptionName">
+        </section>
+        <section>
+            <label for="consultantEmail">Email</label>
+            <input type="email" data-registry-consultant-Email class="form-control text-box" name="consultantEmail" rows="3" />
+        </section>
+        <footer>
+            <input type="hidden" data-registry-consultant-id>
+            <button type="submit" class="btn btn-success" data-registry-consultant-submit>Save</button>
+        </footer>
+    </dialog>
+</section>

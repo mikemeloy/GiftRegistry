@@ -16,7 +16,7 @@ main {
             gap: 1rem 2rem;
             color: #869099;
             border-radius: 6px;
-            height: 70vh;
+            max-height: 70vh;
             overflow-y: auto;
 
             legend {

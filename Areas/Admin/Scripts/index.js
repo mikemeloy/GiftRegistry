@@ -86,7 +86,8 @@ const events = {
     onRefresh_Click: async ({ detail }) => {
         var fn = {
             home: events.onRegistry_Click,
-            shipping: events.onShippingType_Click
+            shipping: events.onShippingType_Click,
+            consultant: events.onConsultant_Click
         }[detail];
 
         fn?.();

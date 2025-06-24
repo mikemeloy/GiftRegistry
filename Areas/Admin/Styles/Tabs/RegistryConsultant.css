@@ -1,3 +1,53 @@
 main {
-    background-color: aquamarine;
+    [data-registry-option] {
+
+        form {
+            display: inline-flex;
+            flex-direction: column;
+        }
+
+        [data-table] {
+            all: revert;
+            border: 1px solid #869099;
+            margin: 0 1rem;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: fit-content(250px) repeat(2, 1fr) fit-content(250px);
+            gap: 1rem 2rem;
+            color: #869099;
+            border-radius: 6px;
+            max-height: 70vh;
+            overflow-y: auto;
+
+            legend {
+                all: revert;
+                font-size: 1.3rem;
+            }
+
+            header {
+                grid-column: span 4;
+                display: grid;
+                grid-template-columns: fit-content(250px) repeat(2, 1fr) fit-content(250px);
+                position: sticky;
+                top: 0;
+                background-color: #ecf0f5c9;
+                backdrop-filter: blur(5px);
+            }
+
+            h4 {
+                text-align: center;
+            }
+
+            [data-row] {
+                grid-column: span 4;
+                border-bottom: 1px solid;
+            }
+
+            footer {
+                position: sticky;
+                bottom: 0;
+                grid-column: span 4;
+            }
+        }
+    }
 }
