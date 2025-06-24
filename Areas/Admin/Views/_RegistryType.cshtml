@@ -7,27 +7,54 @@
     var version = "1.0.0";//fix
 }
 
-<!link rel="stylesheet"
-    href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryType.css" />
+<!link rel="stylesheet" href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryType.css" />
 
-<form action="/" method="post">
-    <input type="text" data-registry-type-name>
-    <input type="text" data-registry-type-description>
-    <button type="submit" data-registry-type-submit></button>
-</form>
+<section data-registry-option>
+    <fieldset data-table>
+        <legend>
+            Registry Type
+            <i data-success data-type-option-add class="fa fa-plus-circle"></i>
+        </legend>
+        <header>
+            <span></span>
+            <h4>Name</h4>
+            <h4>Description</h4>
+            <span></span>
+        </header>
 
-<div>
-    @{
-        foreach (var item in registryTypes)
-        {
-            <div>
-                <span><input data-type-id="@item.Id" type="checkbox"></span>           
+        <div data-row></div>
+
+        @{
+            foreach (var item in registryTypes)
+            {
+                <span><input data-type-id="@item.Id" type="checkbox"></span>
                 <span>@item.Name</span>
                 <span>@item.Description</span>
-            </div>
+                <span>
+                    <i data-edit-type-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-edit"></i>
+                    <i data-delete-type-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-trash"></i>
+                </span>
+                <div data-row></div>
+            }
         }
-    }
-</div>
-<dialog>
-    Hello World
-</dialog>
+        <span></span>
+    </fieldset>
+
+    <dialog data-dialog-edit>
+        <header>
+            <i data-registry-type-close class="fa fa-times"></i>
+        </header>
+        <section>
+            <label for="TypeName">Name</label>
+            <input type="text" data-registry-type-name class="form-control text-box" name="TypeName">
+        </section>
+        <section>
+            <label for="TypeDescription">Description</label>
+            <textarea type="text" data-registry-type-description class="form-control text-box" name="TypeDescription" rows="3"></textarea>
+        </section>
+        <footer>
+            <input type="hidden" data-registry-type-id>
+            <button type="submit" class="btn btn-success" data-registry-type-submit>Save</button>
+        </footer>
+    </dialog>
+</section>

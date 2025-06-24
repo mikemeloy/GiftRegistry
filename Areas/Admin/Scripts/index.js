@@ -87,7 +87,8 @@ const events = {
         var fn = {
             home: events.onRegistry_Click,
             shipping: events.onShippingType_Click,
-            consultant: events.onConsultant_Click
+            consultant: events.onConsultant_Click,
+            type: events.onRegistryType_Click
         }[detail];
 
         fn?.();
