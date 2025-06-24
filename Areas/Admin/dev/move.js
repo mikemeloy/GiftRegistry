@@ -12,16 +12,20 @@ const
         '/Views/_RegistryConsultant.cshtml',
         '/Views/_RegistryType.cshtml',
         '/Views/index.cshtml',
+        '/Views/_RegistryShippingOption.cshtml',
+
         '/Scripts/Tabs/registry.js',
         '/Scripts/Tabs/registryConsultant.js',
         '/Scripts/Tabs/registryType.js',
         '/Scripts/Tabs/registryShippingOption.js',
         '/Scripts/index.js',
+
         '/Styles/index.css',
         '/Styles/Tabs/registry.css',
         '/Styles/Tabs/registryConsultant.css',
         '/Styles/Tabs/registryType.css',
         '/Styles/Tabs/registryShippingOption.css',
+        '../modules/utils.js'
     ]
 
 files.forEach(file => {

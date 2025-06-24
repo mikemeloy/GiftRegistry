@@ -1,4 +1,4 @@
-﻿import { Get } from '../../modules/utils.js';
+﻿import { Get, AddQueryParamToURL } from '../../modules/utils.js';
 
 let
     _registryRoute,
@@ -16,12 +16,18 @@ const
         setupFormEvents();
     },
     setupFormEvents = () => {
-        const [registry, consultants, registryType, shipping] = document.querySelectorAll('[data-registry-admin-header] nav button');
+        const
+            [
+                registry, consultants,
+                registryType, shipping
+            ] = document.querySelectorAll('[data-registry-admin-header] nav button'),
+            container = document.querySelector('main[data-registry-admin-main]');
 
         registry.addEventListener('click', events.onRegistry_Click);
         consultants.addEventListener('click', events.onConsultant_Click);
         registryType.addEventListener('click', events.onRegistryType_Click);
         shipping.addEventListener('click', events.onShippingType_Click);
+        container.addEventListener('refresh', events.onRefresh_Click);
     },
     appendPartial = (partial) => {
         const
@@ -39,6 +45,9 @@ const
                 });
         });
 
+    },
+    setTabQuery = (value) => {
+        AddQueryParamToURL([{ key: 'tab', value }]);
     };
 
 const events = {
@@ -48,6 +57,7 @@ const events = {
             { init } = await import('./Tabs/registry.js');
 
         init?.(el, _registryRoute);
+        setTabQuery('registry');
     },
     onConsultant_Click: async () => {
         const { data } = await Get(`${_consultantRoute}/List`),
@@ -55,6 +65,7 @@ const events = {
             { init } = await import('./Tabs/registryConsultant.js');
 
         init?.(el, _consultantRoute);
+        setTabQuery('consultant');
     },
     onRegistryType_Click: async () => {
         const { data } = await Get(`${_registryTypeRoute}/List`),
@@ -62,6 +73,7 @@ const events = {
             { init } = await import('./Tabs/registryType.js');
 
         init?.(el, _registryTypeRoute);
+        setTabQuery('type');
     },
     onShippingType_Click: async () => {
         const { data } = await Get(`${_registryShippingRoute}/List`),
@@ -69,6 +81,15 @@ const events = {
             { init } = await import('./Tabs/registryShippingOption.js');
 
         init?.(el, _registryShippingRoute);
+        setTabQuery('ship');
+    },
+    onRefresh_Click: async ({ detail }) => {
+        var fn = {
+            home: events.onRegistry_Click,
+            shipping: events.onShippingType_Click
+        }[detail];
+
+        fn?.();
     }
 }
 

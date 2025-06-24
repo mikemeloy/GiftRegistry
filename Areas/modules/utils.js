@@ -200,6 +200,9 @@ const
     } catch (error) {
       LogError("URL param get", error);
     }
+  },
+  GetDataSet = (event) => {
+    return { ...event?.target?.dataset ?? {} };
   };
 
 export {
@@ -217,5 +220,6 @@ export {
   DisplayNotification,
   AddQueryParamToURL,
   GetQueryParam,
-  UseTemplateTag
+  UseTemplateTag,
+  GetDataSet
 }

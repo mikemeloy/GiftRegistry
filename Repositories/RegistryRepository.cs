@@ -274,7 +274,7 @@ public class RegistryRepository : IRegistryRepository
         shippingOption.Description = description;
         shippingOption.Deleted = deleted;
 
-        await _registryShippingOption.InsertAsync(shippingOption);
+        await _registryShippingOption.UpdateAsync(shippingOption);
     }
 
     public async Task<IEnumerable<RegistryTypeDTO>> GetRegistryTypesAsync()

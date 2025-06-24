@@ -1,4 +1,4 @@
-import { Post } from '../../../modules/utils.js';
+import { Post, GetDataSet, SetInputValue, GetInputValue } from '../../../modules/utils.js';
 
 let
     _main,
@@ -9,25 +9,79 @@ const
         _main = el;
         _url = url;
         setupFormEvents();
+        setupRowEvents();
     },
     setupFormEvents = () => {
         const
-            submit = _main.querySelector(':scope [data-registry-shipping-submit]');
+            btnClose = _main.querySelector(':scope [data-registry-shipping-close]'),
+            btnSave = _main.querySelector(':scope [data-registry-shipping-submit]'),
+            btnNew = _main.querySelector(':scope [data-shipping-option-add]');
 
-        submit.addEventListener('click', events.onAddShippingOption_Click);
+        btnClose.addEventListener('click', events.onDialog_Close);
+        btnSave.addEventListener('click', events.onSave_Click);
+        btnNew.addEventListener('click', events.onNewOption_Click);
+    },
+    setupRowEvents = () => {
+        const
+            editBtns = document.querySelectorAll('[data-edit-shipping-option]'),
+            dltBtns = document.querySelectorAll('[data-delete-shipping-option]');
+
+        editBtns.forEach(btn => btn.addEventListener('click', events.onEditRow_Click));
+        dltBtns.forEach(btn => btn.addEventListener('click', events.onDeletedRow_Click));
+    },
+    showEditDialog = (id = '', name = '', description = '') => {
+        const
+            dialog = _main.querySelector('dialog');
+
+        SetInputValue('[data-registry-shipping-id]', '[data-dialog-edit]', id);
+        SetInputValue('[data-registry-shipping-name]', '[data-dialog-edit]', name);
+        SetInputValue('[data-registry-shipping-description]', '[data-dialog-edit]', description);
+
+        dialog.showModal();
+    },
+    onChangeEvent = (el, detail = "home") => {
+        el?.dispatchEvent(new CustomEvent("refresh", {
+            bubbles: true,
+            detail
+        }));
     };
 
-const events = {
-    onAddShippingOption_Click: async (e) => {
-        e.preventDefault();
+const
+    events = {
+        onNewOption_Click: () => {
+            const dialog = _main.querySelector('dialog');
 
-        const
-            name = _main.querySelector(':scope [data-registry-shipping-name]'),
-            description = _main.querySelector(':scope [data-registry-shipping-email]');
+            showEditDialog();
 
-        await Post(_url, { name: name.value, description: description.value })
+            dialog.showModal();
+        },
+        onSave_Click: async (e) => {
+            const
+                id = GetInputValue('[data-registry-shipping-id]', '[data-dialog-edit]'),
+                name = GetInputValue('[data-registry-shipping-name]', '[data-dialog-edit]'),
+                description = GetInputValue('[data-registry-shipping-description]', '[data-dialog-edit]');
+
+            await Post(_url, { id, name, description });
+            onChangeEvent(e.target, "shipping");
+        },
+        onDialog_Close: () => {
+            const dialog = _main.querySelector('dialog');
+
+            dialog.close();
+        },
+        onEditRow_Click: (e) => {
+            const
+                { id, name, description } = GetDataSet(e);
+
+            showEditDialog(id, name, description);
+        },
+        onDeletedRow_Click: async (e) => {
+            const
+                { id, name, description } = GetDataSet(e);
+
+            await Post(_url, { id, name, description, deleted: true });
+            onChangeEvent(e.target, "shipping");
+        }
     }
-}
-
 
 export { init }

@@ -6,29 +6,54 @@
     var shippingOptions = Model.RegistryShippingOptions;
 }
 
-<!link rel="stylesheet"
-    href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryShippingOption.css" />
-<section>
-    <fieldset>
-        <legend>New Shipping Option</legend>
-        <form action="/" method="post">
-            <input type="text" data-registry-shipping-name>
-            <input type="text" data-registry-shipping-email>
-            <button type="submit" data-registry-shipping-submit></button>
-        </form>
-    </fieldset>
+<!link rel="stylesheet" href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registryShippingOption.css" />
 
-    <div>
+<section data-registry-option>
+    <fieldset data-table>
+        <legend>
+            Shipping Options
+            <i data-success data-shipping-option-add class="fa fa-plus-circle"></i>
+        </legend>
+        <header>
+            <span></span>
+            <h4>Name</h4>
+            <h4>Description</h4>
+            <span></span>
+        </header>
+
+        <div data-row></div>
+
         @{
             foreach (var item in shippingOptions)
             {
-                <div>
-                    <span><input data-type-id="@item.Id" type="checkbox"></span>
-                    <span>@item.Name</span>
-                    <span>@item.Description</span>
-                </div>
+                <span><input data-type-id="@item.Id" type="checkbox"></span>
+                <span>@item.Name</span>
+                <span>@item.Description</span>
+                <span>
+                    <i data-edit-shipping-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-edit"></i>
+                    <i data-delete-shipping-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-trash"></i>
+                </span>
+                <div data-row></div>
             }
         }
-    </div>
+        <span></span>
+    </fieldset>
 
+    <dialog data-dialog-edit>
+        <header>
+            <i data-registry-shipping-close class="fa fa-times"></i>
+        </header>
+        <section>
+            <label for="ShippingOptionName">Name</label>
+            <input type="text" data-registry-shipping-name class="form-control text-box" name="ShippingOptionName">
+        </section>
+        <section>
+            <label for="ShippingOptionDescription">Description</label>
+            <textarea type="text" data-registry-shipping-description class="form-control text-box" name="ShippingOptionDescription" rows="3"></textarea>
+        </section>
+        <footer>
+            <input type="hidden" data-registry-shipping-id>
+            <button type="submit" class="btn btn-success" data-registry-shipping-submit>Save</button>
+        </footer>
+    </dialog>
 </section>

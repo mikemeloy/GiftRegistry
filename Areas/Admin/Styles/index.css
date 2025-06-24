@@ -2,6 +2,29 @@
     backdrop-filter: blur(2px);
 }
 
+dialog {
+    border: none;
+    border-radius: 6px;
+    color: var(--grey-black, #2f2f30);
+    user-select: none;
+
+    &[open] {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+input {
+    outline: none;
+    border-radius: 4px;
+    border: 1px solid var(--grey-black, #2f2f30);
+    padding: 1rem;
+}
+
+i {
+    cursor: pointer;
+}
+
 [data-registry-admin-header] {
     user-select: none;
     position: sticky;
@@ -11,8 +34,6 @@
     font-size: 1.5rem;
     backdrop-filter: blur(5px);
     z-index: 1;
-
-    h3 {}
 
     nav {
         display: flex;
@@ -28,7 +49,6 @@
 
 [data-registry-admin-main] {
     margin: 1rem;
-    min-height: 200vh;
     user-select: none;
 }
 
@@ -41,4 +61,25 @@
     gap: 1rem;
     backdrop-filter: blur(5px);
     z-index: 1;
+}
+
+[data-dialog-edit] {
+    min-width: 25vw;
+    min-height: 25vh;
+
+    header {
+        display: flex;
+        flex-direction: row-reverse;
+        font-size: 1.3rem;
+    }
+
+    footer {
+        display: flex;
+        flex-direction: row-reverse;
+        margin-top: 1rem;
+    }
+}
+
+[data-success] {
+    color: var(--success, #4db806);
 }
