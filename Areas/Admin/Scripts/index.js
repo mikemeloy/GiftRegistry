@@ -1,4 +1,4 @@
-﻿import { Get, AddQueryParamToURL } from '../../modules/utils.js';
+﻿import { Get, AddQueryParamToURL, GetQueryParam } from '../../modules/utils.js';
 
 let
     _registryRoute,
@@ -14,6 +14,7 @@ const
         _registryShippingRoute = registryShippingRoute;
 
         setupFormEvents();
+        initTab();
     },
     setupFormEvents = () => {
         const
@@ -48,6 +49,10 @@ const
     },
     setTabQuery = (value) => {
         AddQueryParamToURL([{ key: 'tab', value }]);
+    },
+    initTab = () => {
+        const param = GetQueryParam('tab') ?? 'home';
+        events.onRefresh_Click({ detail: param })
     };
 
 const events = {
@@ -83,10 +88,10 @@ const events = {
         init?.(el, _registryShippingRoute);
         setTabQuery('ship');
     },
-    onRefresh_Click: async ({ detail }) => {
+    onRefresh_Click: async ({ detail = 'home' }) => {
         var fn = {
             home: events.onRegistry_Click,
-            shipping: events.onShippingType_Click,
+            ship: events.onShippingType_Click,
             consultant: events.onConsultant_Click,
             type: events.onRegistryType_Click
         }[detail];

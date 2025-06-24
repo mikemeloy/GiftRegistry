@@ -42,7 +42,8 @@ public class AdminService : IAdminService
             await _registryRepository.UpdateConsultantAsync(
                 id: consultant.Id,
                 name: consultant.Name,
-                email: consultant.Email
+                email: consultant.Email,
+                deleted: consultant.Deleted
             );
         }
         catch (Exception e)
@@ -119,7 +120,8 @@ public class AdminService : IAdminService
             await _registryRepository.UpdateRegistryTypeAsync(
                 id: registryType.Id,
                 name: registryType.Name,
-                description: registryType.Description
+                description: registryType.Description,
+                deleted: registryType.Deleted
             );
         }
         catch (Exception e)

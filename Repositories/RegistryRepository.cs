@@ -281,7 +281,7 @@ public class RegistryRepository : IRegistryRepository
     {
         var query = from ty in _registryType.Table
                     where ty.Deleted == false
-                    select new RegistryTypeDTO(ty.Id, ty.Name, ty.Description);
+                    select new RegistryTypeDTO(ty.Id, ty.Name, ty.Description, ty.Deleted);
 
         return await query.ToListAsync();
     }

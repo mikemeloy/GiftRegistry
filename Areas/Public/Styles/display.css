@@ -21,6 +21,7 @@ article {
 header[data-registry-header] {
     border-block: .2rem solid var(--red);
     border-radius: 25px;
+    margin-block: 0 5rem;
 
     h1 {
         text-align: center;
