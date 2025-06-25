@@ -96,6 +96,7 @@ const
         clone = rowTemplate.content.cloneNode(true),
         btnDelete = clone.querySelector('[data-action-delete]'),
         btnEdit = clone.querySelector('[data-action-edit]'),
+        actionRow = clone.querySelector('[data-actions]'),
         setValue = (selector, value) => {
           const el = clone.querySelector(`[data-${selector}]`);
 
@@ -103,6 +104,7 @@ const
             return;
           }
 
+          el.dataset.deleteId = Id;
           el.innerHTML = value;
         };
 
@@ -110,13 +112,14 @@ const
       setValue('price', ToCurrency(Price));
       setValue('quantity', Quantity);
       setValue('purchased', Purchased);
+      actionRow.dataset.deleteId = Id;
 
       btnEdit.addEventListener('click', () =>
         events.onRegistryitemEdit_Click(registryItem)
       );
 
       btnDelete.addEventListener('click', () =>
-        events.onRegistryitemDelete_Click(Id, clone)
+        events.onRegistryitemDelete_Click(Id)
       );
 
       container.appendChild(clone);
@@ -259,7 +262,7 @@ const
       AddQueryParamToURL([{ key: 'search', value: _currentUser }]);
       setSearchByUrl();
     },
-    onRegistryitemDelete_Click: async (registryItemId, row) => {
+    onRegistryitemDelete_Click: async (registryItemId) => {
       const
         { success, data: deleted } = await Delete(`${_deleteItemRoute}?id=${registryItemId}`);
 
@@ -268,7 +271,17 @@ const
         return;
       }
 
-      console.dir(row);
+      const
+        rows = document.querySelectorAll(`[data-delete-id="${registryItemId}"]`),
+        actions = document.querySelector(`[data-actions][data-delete-id="${registryItemId}"]`);
+
+      for (const el of rows) {
+        el
+          .animate({ opacity: [1, .2] }, { duration: 300, fill: "forwards" });
+        console.dir(el);
+      }
+
+      actions?.remove();
 
     },
     onRegistryitemEdit_Click: (registryItem) => {

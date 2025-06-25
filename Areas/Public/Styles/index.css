@@ -253,6 +253,10 @@ body:has(dialog[open]) {
           text-align: center;
         }
       }
+
+      [data-row]:last-of-type {
+        display: none;
+      }
     }
 
     footer {
