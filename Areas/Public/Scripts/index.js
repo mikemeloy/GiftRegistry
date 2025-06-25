@@ -3,7 +3,8 @@ import {
   Loading, LogError, GetInputValue,
   QuerySelector, SetInputValue,
   DateToInputString, DisplayNotification,
-  AddQueryParamToURL, GetQueryParam
+  AddQueryParamToURL, GetQueryParam,
+  ToCurrency
 } from '../../modules/utils.js';
 
 let
@@ -12,17 +13,19 @@ let
   _insertRoute,
   _updateRoute,
   _deleteRoute,
+  _deleteItemRoute,
   _getRoute,
   _debounce;
 
 const
-  init = (searchUrl, insertRoute, deleteRoute, getRoute, updateRoute, currentUser) => {
+  init = (searchUrl, insertRoute, deleteRoute, getRoute, updateRoute, currentUser, deleteItemRoute) => {
     _searchRoute = searchUrl;
     _insertRoute = insertRoute;
     _deleteRoute = deleteRoute;
     _getRoute = getRoute;
     _updateRoute = updateRoute;
     _currentUser = currentUser;
+    _deleteItemRoute = deleteItemRoute;
 
     setFormEvents();
     setSearchByUrl();
@@ -77,6 +80,47 @@ const
     header.innerHTML = title;
 
     return querySelector('[data-modal-add]');
+  },
+  generateItemRow = (registryItems) => {
+    const
+      headerTemplate = querySelector('[data-template-registry-item-header]'),
+      headerClone = headerTemplate.content.cloneNode(true),
+      rowTemplate = querySelector('[data-template-registry-item-row]'),
+      container = querySelector('[data-registry-item]');
+
+    container.replaceChildren(headerClone)
+
+    for (const registryItem of registryItems) {
+      const
+        { Id, Name, Price, Quantity, Purchased } = registryItem,
+        clone = rowTemplate.content.cloneNode(true),
+        btnDelete = clone.querySelector('[data-action-delete]'),
+        btnEdit = clone.querySelector('[data-action-edit]'),
+        setValue = (selector, value) => {
+          const el = clone.querySelector(`[data-${selector}]`);
+
+          if (!el) {
+            return;
+          }
+
+          el.innerHTML = value;
+        };
+
+      setValue('name', Name);
+      setValue('price', ToCurrency(Price));
+      setValue('quantity', Quantity);
+      setValue('purchased', Purchased);
+
+      btnEdit.addEventListener('click', () =>
+        events.onRegistryitemEdit_Click(registryItem)
+      );
+
+      btnDelete.addEventListener('click', () =>
+        events.onRegistryitemDelete_Click(Id, clone)
+      );
+
+      container.appendChild(clone);
+    }
   };
 
 const
@@ -191,10 +235,15 @@ const
       }
 
       const
-        { Id, Name, EventDate, EventType, Description, Notes, Sponsor, ShippingOption } = data,
-        modal = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit`, Sponsor, ShippingOption);
+        {
+          Id, Name, EventDate, EventType,
+          Description, Notes, Sponsor,
+          ShippingOption, RegistryItems
+        } = data,
+        modal = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit: ${Name}`, Sponsor, ShippingOption);
 
       modal.showModal();
+      generateItemRow(RegistryItems);
     },
     onClose_Click: ({ target }) => {
       const
@@ -209,6 +258,21 @@ const
     onShowUser_Click: () => {
       AddQueryParamToURL([{ key: 'search', value: _currentUser }]);
       setSearchByUrl();
+    },
+    onRegistryitemDelete_Click: async (registryItemId, row) => {
+      const
+        { success, data: deleted } = await Delete(`${_deleteItemRoute}?id=${registryItemId}`);
+
+      if (!success || !deleted) {
+        DisplayNotification(`Unable to Delete Item From Registry`);
+        return;
+      }
+
+      console.dir(row);
+
+    },
+    onRegistryitemEdit_Click: (registryItem) => {
+      console.dir(registryItem);
     }
   };
 

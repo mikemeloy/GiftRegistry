@@ -16,7 +16,7 @@ const
   },
   setFormEvents = () => {
     const
-      forms = QuerySelectorAll('form[data-purchased="False"]', '[data-registry-product-list]');
+      forms = QuerySelectorAll('form[data-fulfilled="False"]', '[data-registry-product-list]');
 
     forms.forEach(form => {
       const
@@ -24,10 +24,10 @@ const
         [add, remove] = form.querySelectorAll('button');
 
       add.addEventListener('click', () => events.onAddToCart_Click(dataset));
-      remove?.addEventListener('click', () => events.onRemoveItem_Click(dataset));
+      remove.addEventListener('click', () => events.onRemoveItem_Click(dataset));
     });
   },
-  promptUserQuantity = (requestedQuantity) => {
+  promptUserQuantity = (requestedQuantity, productName) => {
 
     if (+requestedQuantity <= 1) {
       return Promise.resolve({ cancel: false, pledge: 1 });
@@ -45,7 +45,7 @@ const
       cancel = dialog.querySelector(':scope [data-cancel]'),
       submit = dialog.querySelector(':scope [data-submit');
 
-    label.innerHTML = `Select a Quantity Between 1 and ${requestedQuantity}`;
+    label.innerHTML = `<strong>Mike</strong> has requested <strong>${requestedQuantity}</strong> of <strong>${productName}</strong>, Would you like to purchase more than one?`;
     input.max = requestedQuantity;
     dialog.showModal();
 
@@ -63,10 +63,10 @@ const
   }
 
 const events = {
-  onAddToCart_Click: async ({ registryItemId, quantity }) => {
+  onAddToCart_Click: async ({ registryItemId, quantity, productName }) => {
     const
       ui = document.querySelector('.cart-qty'),
-      { cancel, pledge } = await promptUserQuantity(quantity);
+      { cancel, pledge } = await promptUserQuantity(quantity, productName);
 
     if (cancel) {
       return;

@@ -186,7 +186,7 @@ public class RegistryRepository : IRegistryRepository
                         Purchased = (from order in _registryItemOrder.Table
                                      where order.RegistryItemId == reg.Id
                                      select order.Quantity
-                                    ).Sum() >= reg.Quantity
+                                    ).Sum()
                     };
 
         return await query.ToListAsync();

@@ -5,6 +5,8 @@
             border-radius: 1rem;
             color: var(--grey-black, #2f2f30);
             user-select: none;
+            box-shadow: 2px 2px 20px var(--grey);
+            width: clamp(300px, 50vw, 600px);
 
             &[open] {
                 display: flex;
@@ -12,7 +14,13 @@
             }
 
             label {
+                all: revert;
                 margin-bottom: 3rem;
+
+                strong {
+                    color: var(--red);
+                    text-decoration: underline;
+                }
             }
 
             input[type="number"] {

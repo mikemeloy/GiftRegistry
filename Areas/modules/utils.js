@@ -1,4 +1,10 @@
 const
+  formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD'
+  });
+
+const
   Log = (str) => console.log(str),
   LogError = (str, data) => console.error(str, data),
   QuerySelector = (selector = "", parent = "body") => {
@@ -203,7 +209,8 @@ const
   },
   GetDataSet = (event) => {
     return { ...event?.target?.dataset ?? {} };
-  };
+  },
+  ToCurrency = (val) => formatter.format(val);
 
 export {
   Get,
@@ -221,5 +228,6 @@ export {
   AddQueryParamToURL,
   GetQueryParam,
   UseTemplateTag,
-  GetDataSet
+  GetDataSet,
+  ToCurrency
 }

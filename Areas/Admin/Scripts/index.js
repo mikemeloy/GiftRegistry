@@ -62,7 +62,7 @@ const events = {
             { init } = await import('./Tabs/registry.js');
 
         init?.(el, _registryRoute);
-        setTabQuery('registry');
+        setTabQuery('home');
     },
     onConsultant_Click: async () => {
         const { data } = await Get(`${_consultantRoute}/List`),

@@ -21,7 +21,7 @@ public class RegistryController : BasePluginController
 
     [HttpGet]
     [IgnoreAntiforgeryToken]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> IndexAsync()
     {
         var model = await _viewModelFactory.GetListViewModelAsync();
 

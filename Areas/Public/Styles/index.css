@@ -114,6 +114,7 @@ body:has(dialog[open]) {
 
   [data-search] {
     display: inline-flex;
+    gap: 1rem;
     align-items: center;
     border-bottom: 1px solid var(--border);
     overflow: hidden;
@@ -127,6 +128,16 @@ body:has(dialog[open]) {
       background-color: var(--border);
       color: var(--white);
       padding: 0 1rem;
+    }
+
+    [data-search-mine] {
+      color: var(--danger);
+      transition: transform 700ms;
+      padding-right: 1rem;
+    }
+
+    [data-search-mine]:hover {
+      transform: scale(1.3);
     }
   }
 
@@ -191,6 +202,55 @@ body:has(dialog[open]) {
           i {
             cursor: pointer;
           }
+        }
+      }
+
+      [data-registry-item] {
+        display: grid;
+        grid-template-columns: 30% repeat(3, 1fr) min-content;
+        gap: 1rem;
+        margin: 0 auto;
+        border: 1px solid var(--border);
+        padding: 1rem;
+        border-radius: 6px;
+
+        div {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          padding-inline: 1rem;
+        }
+
+        [data-row] {
+          grid-column: span 5;
+          border-bottom: 1px solid var(--border);
+        }
+
+        [data-actions] {
+          display: flex;
+          gap: 2rem;
+          align-items: center;
+
+          i {
+            cursor: pointer;
+
+            &:hover {
+              ::after {
+                content: '';
+                height: 50px;
+                width: 50px;
+                background-color: #4343439f;
+              }
+            }
+          }
+        }
+
+        .right {
+          text-align: right;
+        }
+
+        .center {
+          text-align: center;
         }
       }
     }

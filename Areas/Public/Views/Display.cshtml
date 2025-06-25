@@ -33,7 +33,7 @@
     @{
         foreach (var item in items)
         {
-            <form data-quantity="@item.Quantity" data-registry-item-id="@item.Id" data-purchased="@item.Purchased">
+            <form data-quantity="@item.Quantity" data-registry-item-id="@item.Id" data-fulfilled="@item.Fulfilled" data-product-name="@item.Name">
                 <header>
                     <img src="@item.ImageUrl" alt="@item.Name">
                 </header>
@@ -43,11 +43,11 @@
                         @item.Description
                     </p>
                 </main>
-                <section>
+                <section data-currency>
                     Price: @item.Price.ToString("C", CultureInfo.CurrentCulture)
                 </section>
                 <section>
-                    Quantity: @item.Quantity
+                    Purchased: @item.Purchased of @item.Quantity
                 </section>
                 <footer>
                     <button data-add type="button">
@@ -67,5 +67,6 @@
         }
     }
 </div>
+
 @await Html.PartialAsync("_RegistryNotification.cshtml")
 @await Html.PartialAsync("_quantity.cshtml")

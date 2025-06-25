@@ -15,7 +15,8 @@ public class RegistryItemViewModel
     public decimal Price { get; set; }
     public int Quantity { get; set; }
     public string ImageUrl { get; set; }
-    public bool Purchased { get; set; }
+    public int Purchased { get; set; }
+    public bool Fulfilled => Purchased >= Quantity;
 }
 
 public class RegistryViewModel

@@ -43,49 +43,6 @@ public static class RegistryExtensions
         );
     }
 
-    public static RegistryDTO AddRegistryItems(this RegistryDTO source, IList<RegistryItemDTO> registryItems)
-    {
-        if (source.IsNull())
-        {
-            return null;
-        }
-
-        source.RegistryItems = registryItems;
-
-        return source;
-    }
-
-    public static RegistryDTO AddCustomerInfo(this RegistryDTO source, Customer customer)
-    {
-        if (source.IsNull())
-        {
-            return null;
-        }
-
-        if (customer.IsNull())
-        {
-            return source;
-        }
-
-        source.Owner = $"{customer.FirstName} {customer.LastName}";
-
-        return source;
-    }
-
-    public static RegistryItemDTO ToDTO(this GiftRegistryItem source)
-    {
-        if (source.IsNull())
-        {
-            return null;
-        }
-
-        return new RegistryItemDTO(
-            Id: source.Id,
-            ProductId: source.ProductId,
-            CartItemId: source.CartItemId
-        );
-    }
-
     public static string GetQueryText(this GiftRegistry source, Customer customer)
     {
         if (source.IsNull() || customer.IsNull())
@@ -98,6 +55,9 @@ public static class RegistryExtensions
 
     public static List<RegistryItemViewModel> SortRegistryItems(this List<RegistryItemViewModel> source)
     {
-        return source.OrderBy(ri => ri.Purchased).ThenBy(ri => ri.Name).ToList();
+        return source
+            .OrderBy(ri => ri.Fulfilled)
+            .ThenBy(ri => ri.Name)
+            .ToList();
     }
 }

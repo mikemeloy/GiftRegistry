@@ -28,8 +28,8 @@
                 <sup>
                     <i class="fal fa-info" title="A More Detailed"></i>
                 </sup>
-                <textarea autocomplete="off" class="form-control text-box" rows="3" multiple" data-add-description></textarea>
             </label>
+            <textarea autocomplete="off" class="form-control text-box" rows="3" multiple" data-add-description></textarea>
         </section>
 
         <section>
@@ -39,8 +39,8 @@
                     <i class="fal fa-search"></i>
                     <i class="fal fa-info" title="If Another Person is "></i>
                 </sup>
-                <input type="text" class="form-control text-box single-line" data-add-sponsor></input>
             </label>
+            <input type="text" class="form-control text-box single-line" data-add-sponsor></input>
         </section>
 
         <section>
@@ -50,8 +50,8 @@
                     <i class="fal fa-search"></i>
                     <i class="fal fa-info" title="The Specific Date "></i>
                 </sup>
-                <input autocomplete="off" class="form-control text-box single-line" data-add-event-date type="date" />
             </label>
+            <input autocomplete="off" class="form-control text-box single-line" data-add-event-date type="date" />
         </section>
 
         <section>
@@ -60,16 +60,16 @@
                 <sup>
                     <i class="fal fa-info"></i>
                 </sup>
-                <select class="form-control text-box single-line" data-add-event-shipping-method>
-                    <option value="0">Select One...</option>
-                    @{
-                        foreach (var item in shippingOptions)
-                        {
-                            <option title="@item.Description" value="@item.Id">@item.Name</option>
-                        }
-                    }
-                </select>
             </label>
+            <select class="form-control text-box single-line" data-add-event-shipping-method>
+                <option value="0">Select One...</option>
+                @{
+                    foreach (var item in shippingOptions)
+                    {
+                        <option title="@item.Description" value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
         </section>
 
         <section>
@@ -79,16 +79,14 @@
                     <i class="fal fa-search"></i>
                     <i class="fal fa-info"></i>
                 </sup>
-                <select data-add-event-type class="form-control text-box single-line">
-                    <option value="0">Select One...</option>
-                    @{
-                        foreach (var item in registryTypes)
-                        {
-                            <option title="@item.Description" value="@item.Id">@item.Name</option>
-                        }
-                    }
-                </select>
             </label>
+            <select data-add-event-type class="form-control text-box single-line">
+                <option value="0">Select One...</option>
+                @foreach (var item in registryTypes)
+                {
+                    <option title="@item.Description" value="@item.Id">@item.Name</option>
+                }
+            </select>
         </section>
 
         <section>
@@ -98,9 +96,18 @@
                     <i class="fal fa-info"></i>
                     <i class="fal fa-user-secret"></i>
                 </sup>
-                <textarea autocomplete="off" class="form-control text-box single-line" data-add-notes rows="3" multiple></textarea>
+            </label>
+            <textarea autocomplete="off" class="form-control text-box single-line" data-add-notes rows="3" multiple></textarea>
+        </section>
+        <section>
+            <label for="notes">
+                Registry Items
+                <sup>
+                    <i class="fal fa-info"></i>
+                </sup>
             </label>
         </section>
+        <section data-registry-item>@*dynamic content*@</section>
     </main>
     <footer>
         <button data-registry-save class="button-1">Save</button>
@@ -112,3 +119,24 @@
         <i class="fal fa-user-secret" title="Only Visible to You and Your Consultant">Hidden</i>
     </sup>
 </dialog>
+
+<template data-template-registry-item-header>
+    <div class="center">Name</div>
+    <div class="center">Price</div>
+    <div class="center">Requested</div>
+    <div class="center">Purchased</div>
+    <div class="center"></div>
+    <div data-row></div>
+</template>
+
+<template data-template-registry-item-row>
+    <div data-name></div>
+    <div data-price class="right"></div>
+    <div data-quantity class="center"></div>
+    <div data-purchased class="center"></div>
+    <div data-actions>
+        <i data-action-edit class="fal fa-pencil"></i>
+        <i data-action-delete class="fal fa-trash"></i>
+    </div>
+    <div data-row></div>
+</template>

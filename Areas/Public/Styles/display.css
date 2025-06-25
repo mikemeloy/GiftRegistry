@@ -8,6 +8,10 @@
     --loading: #c5c5c573;
 }
 
+::backdrop {
+    backdrop-filter: blur(2px);
+}
+
 body:has(dialog[open]) {
     overflow: hidden;
 }
@@ -42,7 +46,7 @@ header[data-registry-header] {
         overflow: hidden;
         box-shadow: 5px 5px 15px var(--gray-light);
 
-        &[data-purchased="True"] {
+        &[data-fulfilled="True"] {
             opacity: .5;
             box-shadow: none;
         }
@@ -73,8 +77,12 @@ header[data-registry-header] {
         section {
             text-align: center;
             font-size: 1rem;
-            font-weight: 700;
-            padding: .3rem 0
+            padding: .3rem 0;
+
+            &[data-currency] {
+                font-size: 2rem;
+                font-weight: 700;
+            }
         }
 
         footer {
