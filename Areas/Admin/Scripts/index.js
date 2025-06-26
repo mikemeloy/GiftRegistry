@@ -1,4 +1,4 @@
-﻿import { Get, AddQueryParamToURL, GetQueryParam } from '../../modules/utils.js';
+﻿import { Get, AddQueryParamToURL, GetQueryParam, FadeOut } from '../../modules/utils.js';
 
 let
     _registryRoute,
@@ -30,22 +30,16 @@ const
         shipping.addEventListener('click', events.onShippingType_Click);
         container.addEventListener('refresh', events.onRefresh_Click);
     },
-    appendPartial = (partial) => {
+    appendPartial = async (partial) => {
         const
             main = document.querySelector('main[data-registry-admin-main]'),
-            options = { duration: 300, fill: "forwards" };
-        return new Promise((res) => {
-            main.animate({ opacity: [1, 0] }, options)
-                .addEventListener('finish', () => {
-                    main.innerHTML = partial;
+            onFadeComplete = await FadeOut(main);
 
-                    main.animate({ opacity: [0, 1] }, options)
-                        .addEventListener('finish', () => {
-                            res(main);
-                        });
-                });
-        });
+        main.innerHTML = partial;
 
+        await onFadeComplete();
+
+        return main;
     },
     setTabQuery = (value) => {
         AddQueryParamToURL([{ key: 'tab', value }]);

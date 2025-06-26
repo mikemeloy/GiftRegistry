@@ -22,51 +22,61 @@
     <section data-result>
         <h2>Perform a Search to See Results...</h2>
     </section>
-</div>
 
-<dialog data-dialog-edit-registry>
-    <header>{title}</header>
-    <main>
-        <section>
-            <label>
-                Delivery Method
-            </label>
-            <select class="form-control text-box single-line" data-add-event-shipping-method>
-                <option value="0">Select One...</option>
-                @{
-                    foreach (var item in shippingOptions)
+    <dialog data-dialog-edit-registry>
+        <header>{title}</header>
+        <main>
+            <section>
+                <label>
+                    Delivery Method
+                </label>
+                <select class="form-control text-box single-line" data-admin-update-shipping>
+                    <option value="0">Select One...</option>
+                    @{
+                        foreach (var item in shippingOptions)
+                        {
+                            <option title="@item.Description" value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </section>
+
+            <section>
+                <label>
+                    Event Type
+                </label>
+                <select data-admin-update-type class="form-control text-box single-line">
+                    <option value="0">Select One...</option>
+                    @foreach (var item in registryTypes)
                     {
                         <option title="@item.Description" value="@item.Id">@item.Name</option>
                     }
-                }
-            </select>
-        </section>
+                </select>
+            </section>
 
-        <section>
-            <label>
-                Event Type
-            </label>
-            <select data-add-event-type class="form-control text-box single-line">
-                <option value="0">Select One...</option>
-                @foreach (var item in registryTypes)
-                {
-                    <option title="@item.Description" value="@item.Id">@item.Name</option>
-                }
-            </select>
-        </section>
+            <section>
+                <label>
+                    Consultant
+                </label>
+                <select data-admin-update-consultant class="form-control text-box single-line">
+                    <option value="0">Select One...</option>
+                    @foreach (var item in consultants)
+                    {
+                        <option title="@item.Email" value="@item.Id">@item.Name</option>
+                    }
+                </select>
+            </section>
 
-        <section>
-            <label>
-                Consultant
-            </label>
-            <select data-add-event-type class="form-control text-box single-line">
-                <option value="0">Select One...</option>
-                @foreach (var item in consultants)
-                {
-                    <option title="@item.Email" value="@item.Id">@item.Name</option>
-                }
-            </select>
-        </section>
-    </main>
-    <footer>{actions}</footer>
-</dialog>
+            <section>
+                <label for="notes">
+                    Admin Notes
+                </label>
+                <textarea autocomplete="off" class="form-control text-box single-line" data-admin-update-notes rows="10" multiple></textarea>
+            </section>
+        </main>
+        <footer>
+            <input type="hidden" data-admin-update-id>
+            <button type="button" class="btn btn-success" data-admin-update-save>Save</button>
+        </footer>
+    </dialog>
+</div>

@@ -146,7 +146,7 @@ body:has(dialog[open]) {
         }
     }
 
-    [data-modal-add] {
+    [data-dialog-edit-registry] {
         outline: none;
         border: none;
         user-select: none;
@@ -186,6 +186,7 @@ body:has(dialog[open]) {
             height: clamp(250px, 65vh, 1000px);
             overflow-y: auto;
             padding: 2rem;
+            outline: none;
 
             section {
                 display: flex;
@@ -196,71 +197,6 @@ body:has(dialog[open]) {
                 textarea {
                     margin: .8rem 0;
                 }
-
-                sup {
-                    all: revert;
-                    font-size: 1rem;
-                    display: inline-flex;
-                    gap: .8rem;
-                    margin: 0 .3rem;
-
-                    i {
-                        cursor: pointer;
-                    }
-                }
-            }
-
-            [data-registry-item] {
-                display: grid;
-                grid-template-columns: 30% repeat(3, 1fr) min-content;
-                gap: 1rem;
-                margin: 0 auto;
-                border: 1px solid var(--border);
-                padding: 1rem;
-                border-radius: 6px;
-
-                div {
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    padding-inline: 1rem;
-                }
-
-                [data-row] {
-                    grid-column: span 5;
-                    border-bottom: 1px solid var(--border);
-                }
-
-                [data-actions] {
-                    display: flex;
-                    gap: 2rem;
-                    align-items: center;
-
-                    i {
-                        cursor: pointer;
-
-                        &:hover {
-                            ::after {
-                                content: '';
-                                height: 50px;
-                                width: 50px;
-                                background-color: #4343439f;
-                            }
-                        }
-                    }
-                }
-
-                .right {
-                    text-align: right;
-                }
-
-                .center {
-                    text-align: center;
-                }
-            }
-
-            [data-row]:last-of-type {
-                display: none;
             }
         }
 
@@ -270,30 +206,6 @@ body:has(dialog[open]) {
             bottom: 0;
             flex-direction: row-reverse;
             padding: 1rem;
-        }
-
-        [data-registry-add-legend] {
-            position: fixed;
-            top: 50%;
-            right: 0;
-            display: inline-flex;
-            flex-direction: column;
-            background-color: var(--red);
-            color: var(--white);
-            gap: 1rem;
-            padding: 1rem;
-            border-radius: 8px 0 0 8px;
-            box-shadow: 3px 3px 15px var(--gray-dark);
-
-            i {
-                display: flex;
-                align-items: center;
-                cursor: help;
-            }
-
-            i::before {
-                margin: 1rem;
-            }
         }
     }
 

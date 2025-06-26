@@ -276,13 +276,10 @@ const
         actions = document.querySelector(`[data-actions][data-delete-id="${registryItemId}"]`);
 
       for (const el of rows) {
-        el
-          .animate({ opacity: [1, .2] }, { duration: 300, fill: "forwards" });
-        console.dir(el);
+        el.animate({ opacity: [1, .2] }, { duration: 300, fill: "forwards" });
       }
 
       actions?.remove();
-
     },
     onRegistryitemEdit_Click: (registryItem) => {
       console.dir(registryItem);

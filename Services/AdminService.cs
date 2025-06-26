@@ -174,4 +174,17 @@ public class AdminService : IAdminService
             await _logger_R.LogErrorAsync(nameof(UpsertRegistryShippingOptionAsync), e);
         }
     }
+
+    public async Task UpdateAdminRegistryFields(AdminRegistryDTO registry)
+    {
+        try
+        {
+            await _registryRepository.UpdateRegistryAsync(registry);
+        }
+        catch (Exception e)
+        {
+
+            await _logger_R.LogErrorAsync(nameof(UpdateAdminRegistryFields), e);
+        }
+    }
 }

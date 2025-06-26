@@ -1,7 +1,8 @@
 import {
-    Get, AddQueryParamToURL, QuerySelector,
+    AddQueryParamToURL, QuerySelector,
     LogError, GetInputValue, GetDataSet,
-    FadeOut
+    FadeOut, Post, Get,
+    SetInputValue
 } from '../../../modules/utils.js';
 
 let
@@ -17,11 +18,14 @@ const
     },
     querySelector = (selector) => QuerySelector(selector, '[data-registry]'),
     getInputValue = (selector, options) => GetInputValue(selector, '[data-registry]', options),
+    setInputValue = (selector, value) => SetInputValue(selector, '[data-registry]', value),
     setFormEvents = () => {
         const
-            form = querySelector('[data-search]');
+            form = querySelector('[data-search]'),
+            save = querySelector('[data-admin-update-save]');
 
         form.addEventListener('keyup', events.onSearch_KeyUp);
+        save.addEventListener('click', events.onSave_Click);
     },
     debounce = (el) => {
         clearTimeout(_debounce);
@@ -68,13 +72,28 @@ const
         onView_Click: (e) => {
             const
                 { registryId } = GetDataSet(e);
+
+
         },
         onEdit_Click: (e) => {
             const
                 { registryId } = GetDataSet(e),
                 dialog = _main.querySelector('[data-dialog-edit-registry]');
 
+            setInputValue('[data-admin-update-id]', registryId);
+
             dialog.showModal();
+        },
+        onSave_Click: async (e) => {
+            const
+                getValueFor = (selector, options) => getInputValue(`[data-admin-update-${selector}]`, options),
+                id = getValueFor('id', { isNumeric: true }),
+                notes = getValueFor('notes'),
+                shipping = getValueFor('shipping', { isNumeric: true }),
+                consultant = getValueFor('consultant', { isNumeric: true }),
+                eventType = getValueFor('type', { isNumeric: true });
+
+            await Post(_url, { id, notes, shipping, consultant, eventType });
         }
     }
 

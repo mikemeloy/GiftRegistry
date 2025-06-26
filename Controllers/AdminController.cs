@@ -116,6 +116,14 @@ public class AdminController : BasePluginController
     [HttpPost]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
+    public async Task RegistryAsync([FromBody] AdminRegistryDTO registry)
+    {
+        await _adminService.UpdateAdminRegistryFields(registry);
+    }
+
+    [HttpPost]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
     public async Task ConsultantAsync([FromBody] RegistryConsultantDTO consultant)
     {
         await _adminService.UpsertConsultantAsync(consultant);

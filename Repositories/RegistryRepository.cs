@@ -85,7 +85,6 @@ public class RegistryRepository : IRegistryRepository
             return;
         }
 
-
         var customer = await _workContext.GetCurrentCustomerAsync();
         var entity = registryDTO.ToEntity();
 
@@ -94,6 +93,23 @@ public class RegistryRepository : IRegistryRepository
         entity.Search = entity.GetQueryText(customer);
 
         await _registry.UpdateAsync(entity);
+    }
+
+    public async Task UpdateRegistryAsync(AdminRegistryDTO source)
+    {
+        var registry = await _registry.GetByIdAsync(source.Id);
+
+        if (registry.IsNull())
+        {
+            return;
+        }
+
+        registry.ConsultantId = source.Consultant;
+        registry.AdminNotes = source.Notes;
+        registry.ShippingOption = source.Shipping;
+        registry.EventType = source.EventType;
+
+        await _registry.UpdateAsync(registry);
     }
 
     public async Task InsertRegistryItemAsync(int registryId, int productId, int quantity)
