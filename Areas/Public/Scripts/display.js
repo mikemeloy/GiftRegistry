@@ -1,7 +1,7 @@
 import {
   QuerySelector, QuerySelectorAll,
   Post, Delete, DisplayNotification,
-  UseTemplateTag
+  UseTemplateTag, FadeOut
 } from '../../modules/utils.js';
 
 let
@@ -96,11 +96,11 @@ const events = {
     }
 
     const
-      duration = 500,
       registryItem = QuerySelector(`[data-registry-item-id="${registryItemId}"]`, '[data-registry-product-list]');
 
-    registryItem.animate([{ opacity: [1, 0] }], { duration, fill: "forwards" });
-    setTimeout(() => registryItem.remove(), duration - 1);
+    await FadeOut(registryItem);
+
+    registryItem.remove();
   }
 }
 

@@ -207,10 +207,16 @@ const
       LogError("URL param get", error);
     }
   },
-  GetDataSet = (event) => {
-    return { ...event?.target?.dataset ?? {} };
-  },
-  ToCurrency = (val) => formatter.format(val);
+  GetDataSet = (event) => ({ ...event?.target?.dataset ?? {} }),
+  ToCurrency = (val) => formatter.format(val),
+  FadeOut = (el, duration = 300) => new Promise((res, rej) => {
+    el.animate({ opacity: [1, 0] }, { duration, fill: "forwards" })
+      .addEventListener('finish', (e) => res(() => _FadeIn(el)));
+  }),
+  _FadeIn = (el, duration = 300) => new Promise((res, rej) => {
+    el.animate({ opacity: [0, 1] }, { duration, fill: "forwards" })
+      .addEventListener('finish', (e) => res());
+  })
 
 export {
   Get,
@@ -229,5 +235,6 @@ export {
   GetQueryParam,
   UseTemplateTag,
   GetDataSet,
-  ToCurrency
+  ToCurrency,
+  FadeOut
 }

@@ -1,0 +1,27 @@
+﻿@model i7MEDIA.Plugin.Widgets.Registry.Models.RegistryAdminRowViewModel
+
+@{
+    Layout = "";
+
+    var registries = Model.Registries;
+}
+
+<span data-header-row>Name</span>
+<span data-header-row>EventDate</span>
+<span data-header-row>Consultant</span>
+<span data-header-row>Shipping Method</span>
+<span data-header-row>Deleted</span>
+<span data-header-row>Actions</span>
+
+@foreach (var registry in registries)
+{
+    <span>@registry.Name</span>
+    <span>@registry.EventDate.ToString("MMMM d, yyyy")</span>
+    <span>@registry.ConsultantName</span>
+    <span>@registry.ShippingMethod</span>
+    <span>@registry.Deleted</span>
+    <span data-column-actions>
+        <i data-action-edit class="fa fa-eye" data-registry-id="@registry.Id" title="Edit"></i>
+        <i data-action-view class="fa fa-eye" data-registry-id="@registry.Id" title="View Public Registry Page"></i>
+    </span>
+}

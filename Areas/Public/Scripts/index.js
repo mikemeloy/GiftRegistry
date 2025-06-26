@@ -4,7 +4,7 @@ import {
   QuerySelector, SetInputValue,
   DateToInputString, DisplayNotification,
   AddQueryParamToURL, GetQueryParam,
-  ToCurrency
+  ToCurrency, FadeIn, FadeOut
 } from '../../modules/utils.js';
 
 let
@@ -143,20 +143,20 @@ const
 
           AddQueryParamToURL([{ key: 'search', value: query }]);
 
-          rsltWindow
-            .animate({ opacity: [1, 0] }, { duration: 100 })
-            .addEventListener('finish', (e) => {
-              rsltWindow.replaceChildren();
-              rsltWindow.insertAdjacentHTML('afterbegin', data);
-              rsltWindow.animate({ opacity: [0, 1] }, { duration: 100, fill: "forwards" });
+          const
+            onComplete = await FadeOut(rsltWindow);
 
-              const
-                deleteBtns = rsltWindow.querySelectorAll('[data-registry-delete]'),
-                editBtns = rsltWindow.querySelectorAll('[data-registry-edit]');
+          rsltWindow.replaceChildren();
+          rsltWindow.insertAdjacentHTML('afterbegin', data);
 
-              deleteBtns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
-              editBtns.forEach(btn => btn.addEventListener('click', events.onEdit_Click))
-            });
+          const
+            deleteBtns = rsltWindow.querySelectorAll('[data-registry-delete]'),
+            editBtns = rsltWindow.querySelectorAll('[data-registry-edit]');
+
+          deleteBtns.forEach(btn => btn.addEventListener('click', events.onDelete_Click));
+          editBtns.forEach(btn => btn.addEventListener('click', events.onEdit_Click));
+
+          await onComplete();
 
         } catch (error) {
           LogError('Failed to Search', error);

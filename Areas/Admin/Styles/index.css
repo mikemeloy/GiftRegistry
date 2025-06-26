@@ -38,11 +38,15 @@ i {
     nav {
         display: flex;
         justify-content: space-around;
+        gap: 1rem;
 
         button {
             border: none;
             background-color: transparent;
             border-bottom: 1px solid;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
     }
 }

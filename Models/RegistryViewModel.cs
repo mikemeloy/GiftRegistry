@@ -28,11 +28,13 @@ public class RegistryViewModel
     public int EventType { get; set; }
     public string Description { get; set; }
     public string Notes { get; set; }
+    public string AdminNotes { get; set; }
     public string PluginVersion { get; set; }
-    public string Owner { get; set; }
     public string Sponsor { get; set; }
     public int ShippingOption { get; set; }
+    public string ShippingMethod { get; set; }
     public string ConsultantName { get; set; }
     public string ConsultantEmail { get; set; }
+    public bool Deleted { get; set; }
     public IEnumerable<RegistryItemViewModel> RegistryItems { get; set; }
 }

@@ -43,6 +43,10 @@ main {
                 border-bottom: 1px solid;
             }
 
+            [data-row]:last-of-type {
+                display: none;
+            }
+
             footer {
                 position: sticky;
                 bottom: 0;

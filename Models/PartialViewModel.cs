@@ -3,7 +3,7 @@ using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Models;
 
-public record RegistryPartialViewModel();
+public record RegistryPartialViewModel(string PluginVersion, IEnumerable<RegistryConsultantDTO> Consultants, IEnumerable<RegistryTypeDTO> RegistryTypes, IEnumerable<RegistryShippingOptionDTO> ShippingOptions);
 
 public record ConsultantPartialViewModel(IEnumerable<RegistryConsultantDTO> Consultants);
 

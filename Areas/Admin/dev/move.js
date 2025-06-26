@@ -13,6 +13,7 @@ const
         '/Views/_RegistryType.cshtml',
         '/Views/index.cshtml',
         '/Views/_RegistryShippingOption.cshtml',
+        '/Views/_RegistryRow.cshtml',
 
         '/Scripts/Tabs/registry.js',
         '/Scripts/Tabs/registryConsultant.js',

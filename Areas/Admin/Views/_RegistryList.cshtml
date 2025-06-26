@@ -1,9 +1,72 @@
+@using i7MEDIA.Plugin.Widgets.Registry
 @model i7MEDIA.Plugin.Widgets.Registry.Models.RegistryPartialViewModel
 
 @{
     Layout = "";
+
+    var version = Model.PluginVersion;
+    var shippingOptions = Model.ShippingOptions;
+    var registryTypes = Model.RegistryTypes;
+    var consultants = Model.Consultants;
 }
 
-<!link rel="stylesheet" href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\registry.css" />
+<!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Styles/Tabs/registry.css?v=@version" />
 
-<div>Coming Soon!</div>
+<div data-registry class="registry-wrapper round">
+    <header>
+        <form data-search>
+            <input type="text" autocomplete="off" placeholder="Search Registries..." aria-label="Search registries" autofocus>
+            <i class="fa fa-search" title="Search by Name, Date, Month or by Person"></i>
+        </form>
+    </header>
+    <section data-result>
+        <h2>Perform a Search to See Results...</h2>
+    </section>
+</div>
+
+<dialog data-dialog-edit-registry>
+    <header>{title}</header>
+    <main>
+        <section>
+            <label>
+                Delivery Method
+            </label>
+            <select class="form-control text-box single-line" data-add-event-shipping-method>
+                <option value="0">Select One...</option>
+                @{
+                    foreach (var item in shippingOptions)
+                    {
+                        <option title="@item.Description" value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+        </section>
+
+        <section>
+            <label>
+                Event Type
+            </label>
+            <select data-add-event-type class="form-control text-box single-line">
+                <option value="0">Select One...</option>
+                @foreach (var item in registryTypes)
+                {
+                    <option title="@item.Description" value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </section>
+
+        <section>
+            <label>
+                Consultant
+            </label>
+            <select data-add-event-type class="form-control text-box single-line">
+                <option value="0">Select One...</option>
+                @foreach (var item in consultants)
+                {
+                    <option title="@item.Email" value="@item.Id">@item.Name</option>
+                }
+            </select>
+        </section>
+    </main>
+    <footer>{actions}</footer>
+</dialog>

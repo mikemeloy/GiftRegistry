@@ -34,9 +34,13 @@ public class ViewModelFactory : IViewModelFactory
         return new("1.0.1");
     }
 
-    public RegistryPartialViewModel GetRegistryPartialViewModelAsync()
+    public async Task<RegistryPartialViewModel> GetRegistryPartialViewModelAsync()
     {
-        return new RegistryPartialViewModel();
+        var consultants = await _adminService.GetConsultantsAsync();
+        var registryTypes = await _adminService.GetRegistryTypesAsync();
+        var shippingOptions = await _adminService.GetShippingOptionsAsync();
+
+        return new RegistryPartialViewModel("1.0.0.0", consultants, registryTypes, shippingOptions);
     }
 
     public async Task<ConsultantPartialViewModel> GetConsultantPartialViewModelAsync()
@@ -58,5 +62,12 @@ public class ViewModelFactory : IViewModelFactory
         var registryShippingOptions = await _adminService.GetShippingOptionsAsync();
 
         return new RegistryShippingPartialViewModel(registryShippingOptions);
+    }
+
+    public async Task<RegistryAdminRowViewModel> GetRegistryRowPartialViewModelAsync(string query)
+    {
+        var registryItems = await _registryRepository.AdminQueryAsync(query);
+
+        return new RegistryAdminRowViewModel(registryItems);
     }
 }

@@ -23,19 +23,18 @@
 
         <div data-row></div>
 
-        @{
-            foreach (var item in shippingOptions)
-            {
-                <span><input data-type-id="@item.Id" type="checkbox"></span>
-                <span>@item.Name</span>
-                <span>@item.Description</span>
-                <span>
-                    <i data-edit-shipping-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-edit"></i>
-                    <i data-delete-shipping-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-trash"></i>
-                </span>
-                <div data-row></div>
-            }
+        @foreach (var item in shippingOptions)
+        {
+            <span><input data-type-id="@item.Id" type="checkbox"></span>
+            <span>@item.Name</span>
+            <span>@item.Description</span>
+            <span>
+                <i data-edit-shipping-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-edit"></i>
+                <i data-delete-shipping-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-trash"></i>
+            </span>
+            <div data-row></div>
         }
+
         <span></span>
     </fieldset>
 

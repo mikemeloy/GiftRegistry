@@ -24,14 +24,13 @@ public class RegistryRepository : IRegistryRepository
     private readonly IRepository<GiftRegistryItemOrder> _registryItemOrder;
     private readonly IRepository<GiftRegistryConsultant> _registryConsultant;
     private readonly IRepository<GiftRegistryShippingOption> _registryShippingOption;
-    private readonly IRepository<ProductCategory> _productCategory;
     private readonly IRepository<Category> _category;
     private readonly IRepository<Customer> _customer;
     private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType, IRepository<ProductCategory> productCategory, IRepository<Category> category)
+    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType, IRepository<Category> category)
     {
         _product = product;
         _registry = registry;
@@ -43,7 +42,6 @@ public class RegistryRepository : IRegistryRepository
         _registryItemOrder = registryItemOrder;
         _registryConsultant = registryConsultant;
         _registryShippingOption = registryShippingType;
-        _productCategory = productCategory;
         _category = category;
     }
 
@@ -149,6 +147,31 @@ public class RegistryRepository : IRegistryRepository
         }
 
         return customer.IsEqual(currentCustomer);
+    }
+
+    public async Task<IList<RegistryViewModel>> AdminQueryAsync(string q)
+    {
+        var query = from reg in _registry.Table
+                    join cust in _customer.Table on reg.CustomerId equals cust.Id
+                    join con in _registryConsultant.Table on reg.ConsultantId equals con.Id into consultantGroup
+                    from consultant in consultantGroup.DefaultIfEmpty()
+                    join del in _registryShippingOption.Table on reg.ShippingOption equals del.Id into shippingOptionGroup
+                    from shippingOption in shippingOptionGroup.DefaultIfEmpty()
+                    where reg.Search.Contains(q)
+                    select new RegistryViewModel
+                    {
+                        Id = reg.Id,
+                        Name = reg.Name,
+                        EventDate = reg.EventDate,
+                        ConsultantName = consultant.GetValueOrDefault(c => c.Name),
+                        ConsultantEmail = consultant.GetValueOrDefault(c => c.Email),
+                        ShippingMethod = shippingOption.GetValueOrDefault(s => s.Name),
+                        Notes = reg.Notes,
+                        AdminNotes = reg.AdminNotes,
+                        Deleted = reg.Deleted
+                    };
+
+        return await query.ToListAsync();
     }
 
     public async Task<IList<RegistryListItem>> QueryAsync(string query)

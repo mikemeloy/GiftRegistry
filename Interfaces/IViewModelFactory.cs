@@ -7,8 +7,9 @@ public interface IViewModelFactory
 {
     public Task<ListViewModel> GetListViewModelAsync();
     public AdminViewModel GetAdminViewModelAsync();
-    public RegistryPartialViewModel GetRegistryPartialViewModelAsync();
+    public Task<RegistryPartialViewModel> GetRegistryPartialViewModelAsync();
     public Task<ConsultantPartialViewModel> GetConsultantPartialViewModelAsync();
     public Task<RegistryTypePartialViewModel> GetRegistryTypePartialViewModelAsync();
     public Task<RegistryShippingPartialViewModel> GetRegistryShippingOptionViewModelAsync();
+    public Task<RegistryAdminRowViewModel> GetRegistryRowPartialViewModelAsync(string query);
 }

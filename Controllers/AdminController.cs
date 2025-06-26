@@ -34,11 +34,21 @@ public class AdminController : BasePluginController
     [HttpGet(template: "Admin/Registry/List")]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public IActionResult RegistryList()
+    public async Task<IActionResult> RegistryListAsync()
     {
-        var model = _viewModelFactory.GetRegistryPartialViewModelAsync();
+        var model = await _viewModelFactory.GetRegistryPartialViewModelAsync();
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryList.cshtml", model);
+    }
+
+    [HttpGet(template: "Admin/Registry/Query")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task<IActionResult> RegistryQueryAsync(string query)
+    {
+        var model = await _viewModelFactory.GetRegistryRowPartialViewModelAsync(query);
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryRow.cshtml", model);
     }
 
     [HttpGet(template: "Admin/Consultant/List")]
