@@ -21,9 +21,8 @@
     <span>@registry.ShippingMethod</span>
     <span>@registry.Deleted</span>
     <span data-column-actions>
-        <i data-action-edit class="fa fa-eye" data-registry-id="@registry.Id" title="Edit">
+        <i data-action-edit class="fa fa-eye" data-registry-name="@registry.Name" data-registry-id="@registry.Id" title="Edit"></i>
 
-        </i>
-        <i data-action-view class="fa fa-eye" data-registry-id="@registry.Id" title="View Public Registry Page"></i>
+        <a href="/registry/@registry.Id" target="_blank"><i data-action-view class="fa fa-eye" title="View Public Registry Page"></i></a>    
     </span>
 }

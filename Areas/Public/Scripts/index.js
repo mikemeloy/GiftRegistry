@@ -4,7 +4,7 @@ import {
   QuerySelector, SetInputValue,
   DateToInputString, DisplayNotification,
   AddQueryParamToURL, GetQueryParam,
-  ToCurrency, FadeIn, FadeOut
+  ToCurrency, FadeOut
 } from '../../modules/utils.js';
 
 let
@@ -163,11 +163,13 @@ const
         }
       });
     },
-    onAdd_Click: () => {
+    onAdd_Click: async () => {
       const
-        modal = prepareModal();
+        dialog = prepareModal(),
+        onFadeComplete = await FadeOut(dialog);
 
-      modal.showModal();
+      dialog.showModal();
+      await onFadeComplete();
     },
     onSave_Click: async () => {
       const
@@ -243,20 +245,22 @@ const
           Description, Notes, Sponsor,
           ShippingOption, RegistryItems
         } = data,
-        modal = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit: ${Name}`, Sponsor, ShippingOption);
+        dialog = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit: ${Name}`, Sponsor, ShippingOption),
+        onFadeComplete = await FadeOut(dialog);
 
-      modal.showModal();
+      dialog.showModal();
       generateItemRow(RegistryItems);
-    },
-    onClose_Click: ({ target }) => {
-      const
-        dialog = target.closest('dialog');
 
-      if (!dialog) {
-        return;
-      }
+      await onFadeComplete();
+    },
+    onClose_Click: async ({ target }) => {
+      const
+        dialog = target.closest('dialog'),
+        onFadeComplete = await FadeOut(dialog);
 
       dialog.close();
+
+      await onFadeComplete();
     },
     onShowUser_Click: () => {
       AddQueryParamToURL([{ key: 'search', value: _currentUser }]);

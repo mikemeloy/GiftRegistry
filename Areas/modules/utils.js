@@ -211,9 +211,9 @@ const
   ToCurrency = (val) => formatter.format(val),
   FadeOut = (el, duration = 300) => new Promise((res, rej) => {
     el.animate({ opacity: [1, 0] }, { duration, fill: "forwards" })
-      .addEventListener('finish', (e) => res(() => _FadeIn(el)));
+      .addEventListener('finish', (e) => res(() => FadeIn(el, duration)));
   }),
-  _FadeIn = (el, duration = 300) => new Promise((res, rej) => {
+  FadeIn = (el, duration = 300) => new Promise((res, rej) => {
     el.animate({ opacity: [0, 1] }, { duration, fill: "forwards" })
       .addEventListener('finish', (e) => res());
   })

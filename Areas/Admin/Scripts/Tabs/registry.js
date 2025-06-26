@@ -22,10 +22,12 @@ const
     setFormEvents = () => {
         const
             form = querySelector('[data-search]'),
-            save = querySelector('[data-admin-update-save]');
+            save = querySelector('[data-admin-update-save]'),
+            close = querySelector('[data-dialog-close]');
 
         form.addEventListener('keyup', events.onSearch_KeyUp);
         save.addEventListener('click', events.onSave_Click);
+        close.addEventListener('click', events.onClose_Click)
     },
     debounce = (el) => {
         clearTimeout(_debounce);
@@ -56,11 +58,9 @@ const
                     rsltWindow.insertAdjacentHTML('afterbegin', data);
 
                     const
-                        editBtns = rsltWindow.querySelectorAll('[data-action-edit]'),
-                        viewBtns = rsltWindow.querySelectorAll('[data-action-view]');
+                        editBtns = rsltWindow.querySelectorAll('[data-action-edit]');
 
                     editBtns.forEach(btn => btn.addEventListener('click', events.onEdit_Click));
-                    viewBtns.forEach(btn => btn.addEventListener('click', events.onView_Click));
 
                     await onComplete();
 
@@ -69,20 +69,19 @@ const
                 }
             });
         },
-        onView_Click: (e) => {
+        onEdit_Click: async (e) => {
             const
-                { registryId } = GetDataSet(e);
-
-
-        },
-        onEdit_Click: (e) => {
-            const
-                { registryId } = GetDataSet(e),
-                dialog = _main.querySelector('[data-dialog-edit-registry]');
+                { registryId, registryName } = GetDataSet(e),
+                dialog = _main.querySelector('[data-dialog-edit-registry]'),
+                header = dialog.querySelector('header h3'),
+                onFadeComplete = await FadeOut(dialog);
 
             setInputValue('[data-admin-update-id]', registryId);
+            header.innerHTML = registryName;
 
             dialog.showModal();
+
+            await onFadeComplete();
         },
         onSave_Click: async (e) => {
             const
@@ -94,6 +93,14 @@ const
                 eventType = getValueFor('type', { isNumeric: true });
 
             await Post(_url, { id, notes, shipping, consultant, eventType });
+        },
+        onClose_Click: async ({ target }) => {
+            const
+                dialog = target.closest('dialog'),
+                onFadeComplete = await FadeOut(dialog);
+
+            dialog?.close();
+            await onFadeComplete();
         }
     }
 

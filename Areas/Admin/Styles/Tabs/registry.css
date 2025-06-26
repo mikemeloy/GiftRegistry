@@ -40,7 +40,7 @@ body:has(dialog[open]) {
         margin: 1rem auto;
     }
 
-    button,
+    /* button,
     a {
         outline: none;
         border: none;
@@ -49,7 +49,7 @@ body:has(dialog[open]) {
         color: var(--white);
         padding: .7rem 1rem;
         text-transform: uppercase;
-    }
+    } */
 
     input,
     textarea {
@@ -161,20 +161,13 @@ body:has(dialog[open]) {
             position: sticky;
             top: 0;
             padding: 1rem;
-            background-color: var(--red);
+            background-color: var(--dark);
             color: var(--white);
-
-            h4 {
-                color: revert;
-                flex: 1;
-                text-align: center;
-                margin: 0;
-            }
 
             i {
                 margin-left: auto;
                 cursor: pointer;
-                font-size: 3rem;
+                font-size: 2rem;
             }
         }
 
