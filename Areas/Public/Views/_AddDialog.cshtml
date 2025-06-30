@@ -18,8 +18,8 @@
                     <i class="fal fa-search"></i>
                     <i class="fal fa-info" title="The Name/Title of the Registry"></i>
                 </sup>
-                <input autocomplete="off" class="form-control text-box single-line" data-add-name type="text" autofocus />
             </label>
+            <input autocomplete="off" class="form-control text-box single-line" data-add-name type="text" autofocus />
         </section>
 
         <section>
@@ -100,15 +100,17 @@
             <textarea autocomplete="off" class="form-control text-box single-line" data-add-notes rows="3" multiple></textarea>
         </section>
 
-        <section>
+        <section data-registry-item>
             <label>
                 Registry Items
                 <sup>
                     <i class="fal fa-info"></i>
                 </sup>
             </label>
+            <aside>
+                @*dynamic content*@
+            </aside>
         </section>
-        <section data-registry-item>@*dynamic content*@</section>
     </main>
     <footer>
         <button data-registry-save class="button-1">Save</button>
@@ -124,7 +126,7 @@
 <template data-template-registry-item-header>
     <div class="center">Name</div>
     <div class="center">Price</div>
-    <div class="center">Requested</div>
+    <div data-editable class="center">Requested</div>
     <div class="center">Purchased</div>
     <div class="center"></div>
     <div data-row></div>

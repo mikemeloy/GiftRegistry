@@ -5,8 +5,14 @@ const
   });
 
 const
-  Log = (str) => console.log(str),
-  LogError = (str, data) => console.error(str, data),
+  LogError = (str, data) => console.debug(str, data),
+  IsEmpty = (arr) => {
+    if (!Array.isArray(arr)) {
+      return false;
+    }
+
+    return arr.length === 0;
+  },
   QuerySelector = (selector = "", parent = "body") => {
     const
       container = document.querySelector(parent),
@@ -67,7 +73,7 @@ const
   Loading = () => {
     const
       el = QuerySelector('[data-template-loading]'),
-      body = QuerySelector('[data-registry]'),
+      body = document.querySelector('dialog[open]') ?? QuerySelector('[data-registry]'),
       clone = el.content.cloneNode(true);
 
     body.appendChild(clone);
@@ -78,7 +84,7 @@ const
         loading = QuerySelector('[data-loader]');
 
       loading.animate([{ opacity: 0 }], { duration, fill: "forwards" });
-      setTimeout(() => loading.remove(), duration - 3);
+      setTimeout(() => loading.remove(), duration + 3);
     }
   },
   UseTemplateTag = (templateSelector, containerSelector, elSelector) => {
@@ -108,6 +114,7 @@ const
       input = QuerySelector(selector, parent);
 
     if (!input) {
+      LogError(`no element with the selector`, { selector, parent });
       return isNumeric
         ? 0
         : "";
@@ -145,13 +152,14 @@ const
   },
   DisplayNotification = (val) => {
     const
+      body = document.querySelector('dialog[open]') ?? document.body,
       clone = document
         .querySelector('[data-registry-notify-template]')
         .content
         .cloneNode(true),
       options = { duration: 500, fill: "forwards" };
 
-    document.body.appendChild(clone);
+    body.appendChild(clone);
 
     const
       dialog = document.querySelector('[data-registry-notify]'),
@@ -209,11 +217,11 @@ const
   },
   GetDataSet = (event) => ({ ...event?.target?.dataset ?? {} }),
   ToCurrency = (val) => formatter.format(val),
-  FadeOut = (el, duration = 300) => new Promise((res, rej) => {
+  FadeOut = (el, duration = 200) => new Promise((res, rej) => {
     el.animate({ opacity: [1, 0] }, { duration, fill: "forwards" })
       .addEventListener('finish', (e) => res(() => FadeIn(el, duration)));
   }),
-  FadeIn = (el, duration = 300) => new Promise((res, rej) => {
+  FadeIn = (el, duration = 200) => new Promise((res, rej) => {
     el.animate({ opacity: [0, 1] }, { duration, fill: "forwards" })
       .addEventListener('finish', (e) => res());
   })
@@ -222,7 +230,6 @@ export {
   Get,
   Post,
   Delete,
-  Log,
   LogError,
   QuerySelector,
   QuerySelectorAll,
@@ -236,5 +243,6 @@ export {
   UseTemplateTag,
   GetDataSet,
   ToCurrency,
-  FadeOut
+  FadeOut,
+  IsEmpty
 }

@@ -89,6 +89,20 @@ public class RegistryController : BasePluginController
         return success;
     }
 
+    [HttpPost("Registry/Update/Item")]
+    [IgnoreAntiforgeryToken]
+    public async Task<bool> UpdateAsync([FromBody] RegistryItemDTO registryItemDTO)
+    {
+        if (registryItemDTO.IsNull())
+        {
+            return false;
+        }
+
+        var success = await _registryService.UpdateCustomerRegistryItemAsync(registryItemDTO);
+
+        return success;
+    }
+
     [HttpPost]
     [IgnoreAntiforgeryToken]
     public async Task<bool> InsertAsync([FromBody] RegistryDTO registryDTO)

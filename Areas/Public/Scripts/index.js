@@ -4,7 +4,7 @@ import {
   QuerySelector, SetInputValue,
   DateToInputString, DisplayNotification,
   AddQueryParamToURL, GetQueryParam,
-  ToCurrency, FadeOut
+  ToCurrency, FadeOut, IsEmpty
 } from '../../modules/utils.js';
 
 let
@@ -83,10 +83,17 @@ const
   },
   generateItemRow = (registryItems) => {
     const
+      container = querySelector('[data-registry-item] aside');
+
+    if (IsEmpty(registryItems)) {
+      container.replaceChildren()
+      return;
+    }
+
+    const
       headerTemplate = querySelector('[data-template-registry-item-header]'),
       headerClone = headerTemplate.content.cloneNode(true),
-      rowTemplate = querySelector('[data-template-registry-item-row]'),
-      container = querySelector('[data-registry-item]');
+      rowTemplate = querySelector('[data-template-registry-item-row]');
 
     container.replaceChildren(headerClone)
 
@@ -104,7 +111,7 @@ const
             return;
           }
 
-          el.dataset.deleteId = Id;
+          el.dataset.rowId = Id;
           el.innerHTML = value;
         };
 
@@ -112,18 +119,19 @@ const
       setValue('price', ToCurrency(Price));
       setValue('quantity', Quantity);
       setValue('purchased', Purchased);
-      actionRow.dataset.deleteId = Id;
+      actionRow.dataset.rowId = Id;
 
-      btnEdit.addEventListener('click', () =>
-        events.onRegistryitemEdit_Click(registryItem)
-      );
-
-      btnDelete.addEventListener('click', () =>
-        events.onRegistryitemDelete_Click(Id)
-      );
+      btnEdit.addEventListener('click', () => events.onRegistryitemEdit_Click(registryItem));
+      btnDelete.addEventListener('click', () => events.onRegistryitemDelete_Click(Id));
 
       container.appendChild(clone);
     }
+  },
+  getRowCell = (cellName = '', id = 0) => {
+    const
+      container = querySelector('[data-registry-item]');
+
+    return container.querySelector(`[data-${cellName}][data-row-id="${id}"]`);
   };
 
 const
@@ -230,11 +238,12 @@ const
     },
     onEdit_Click: async ({ target }) => {
       const
-        { dataset: { registryId } } = target;
+        { dataset: { registryId } } = target,
+        onLoadComplete = Loading();
 
       const
         { success, data } = await Get(`${_getRoute}?id=${registryId}`);
-
+      onLoadComplete();
       if (!success) {
         alert('An Error has Occurred');
       }
@@ -263,6 +272,12 @@ const
       await onFadeComplete();
     },
     onShowUser_Click: () => {
+
+      if (!_currentUser?.trim()) {
+        DisplayNotification('Login to See Your Registries!')
+        return;
+      }
+
       AddQueryParamToURL([{ key: 'search', value: _currentUser }]);
       setSearchByUrl();
     },
@@ -276,8 +291,8 @@ const
       }
 
       const
-        rows = document.querySelectorAll(`[data-delete-id="${registryItemId}"]`),
-        actions = document.querySelector(`[data-actions][data-delete-id="${registryItemId}"]`);
+        rows = document.querySelectorAll(`[data-row-id="${registryItemId}"]`),
+        actions = document.querySelector(`[data-actions][data-row-id="${registryItemId}"]`);
 
       for (const el of rows) {
         el.animate({ opacity: [1, .2] }, { duration: 300, fill: "forwards" });
@@ -286,7 +301,40 @@ const
       actions?.remove();
     },
     onRegistryitemEdit_Click: (registryItem) => {
-      console.dir(registryItem);
+      const
+        { Id } = registryItem,
+        quantityCell = getRowCell('quantity', Id),
+        value = quantityCell.innerHTML;
+
+      if (!quantityCell) {
+        console.error(`Edit Cell not found`);
+        return;
+      }
+
+      quantityCell.contentEditable = true;
+      quantityCell.focus();
+
+      quantityCell.onblur = async () => {
+        const newQuantity = quantityCell.innerHTML;
+
+        quantityCell.contentEditable = false;
+
+        if (isNaN(newQuantity)) {
+          quantityCell.innerHTML = value;
+          return;
+        }
+
+        registryItem.Quantity = newQuantity;
+
+        const { success, data } = await Post(`${_updateRoute}/item`, registryItem);
+
+        if (!success) {
+          DisplayNotification("Unable to Save Changes");
+          return;
+        }
+
+        DisplayNotification("Changes Save");
+      };
     }
   };
 

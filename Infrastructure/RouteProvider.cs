@@ -46,6 +46,11 @@ internal class RouteProvider : IRouteProvider
             pattern: "Registry/Update",
             defaults: new { controller = "Registry", action = "Update" }
         );
+        //endpointRouteBuilder.MapControllerRoute(
+        //    name: RegistryDefaults.Update,
+        //    pattern: "Registry/Update/Item",
+        //    defaults: new { controller = "Registry", action = "Update" }
+        //);
         endpointRouteBuilder.MapControllerRoute(
             name: RegistryDefaults.Save,
             pattern: "Registry/Save",

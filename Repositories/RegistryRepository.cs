@@ -24,13 +24,12 @@ public class RegistryRepository : IRegistryRepository
     private readonly IRepository<GiftRegistryItemOrder> _registryItemOrder;
     private readonly IRepository<GiftRegistryConsultant> _registryConsultant;
     private readonly IRepository<GiftRegistryShippingOption> _registryShippingOption;
-    private readonly IRepository<Category> _category;
     private readonly IRepository<Customer> _customer;
     private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType, IRepository<Category> category)
+    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType)
     {
         _product = product;
         _registry = registry;
@@ -42,7 +41,6 @@ public class RegistryRepository : IRegistryRepository
         _registryItemOrder = registryItemOrder;
         _registryConsultant = registryConsultant;
         _registryShippingOption = registryShippingType;
-        _category = category;
     }
 
     public async Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync()
@@ -125,9 +123,13 @@ public class RegistryRepository : IRegistryRepository
         await _registryItem.InsertAsync(item);
     }
 
-    public async Task UpdateRegistryItemAsync(GiftRegistryItem item)
+    public async Task UpdateRegistryItemAsync(RegistryItemDTO item)
     {
-        await _registryItem.UpdateAsync(item);
+        var registryItem = await _registryItem.GetByIdAsync(item.Id);
+
+        registryItem.Quantity = item.Quantity;
+
+        await _registryItem.UpdateAsync(registryItem);
     }
 
     public async Task DeleteRegistryAsync(int registryId)

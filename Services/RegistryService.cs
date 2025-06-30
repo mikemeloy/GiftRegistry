@@ -235,4 +235,18 @@ public class RegistryService : IRegistryService
             return false;
         }
     }
+
+    public async Task<bool> UpdateCustomerRegistryItemAsync(RegistryItemDTO registryItemDTO)
+    {
+        try
+        {
+            await _registryRepository.UpdateRegistryItemAsync(registryItemDTO);
+            return true;
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(UpdateCustomerRegistryItemAsync), e);
+            return false;
+        }
+    }
 }

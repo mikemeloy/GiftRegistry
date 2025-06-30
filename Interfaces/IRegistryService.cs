@@ -19,4 +19,5 @@ public interface IRegistryService
     public Task<IEnumerable<string>> AddRegistryItemToCartAsync(int registryItemId, int? quantity);
     public Task ReconcileRegistry(Order order);
     public Task<bool> UpdateCustomerRegistryAsync(RegistryDTO registryDTO);
+    public Task<bool> UpdateCustomerRegistryItemAsync(RegistryItemDTO registryItemDTO);
 }
