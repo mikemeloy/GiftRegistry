@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
+using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -14,11 +15,13 @@ public class AdminController : BasePluginController
 {
     private readonly IViewModelFactory _viewModelFactory;
     private readonly IAdminService _adminService;
+    private readonly IRegistryService _registryService;
 
-    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService)
+    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService, IRegistryService registryService)
     {
         _viewModelFactory = viewModelFactory;
         _adminService = adminService;
+        _registryService = registryService;
     }
 
     [HttpGet]
@@ -49,6 +52,18 @@ public class AdminController : BasePluginController
         var model = await _viewModelFactory.GetRegistryRowPartialViewModelAsync(query);
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryRow.cshtml", model);
+    }
+
+    [HttpGet(template: "Admin/Registry/Get")]
+    [IgnoreAntiforgeryToken]
+    public async Task<RegistryEditAdminModel> GetAsync(int? id)
+    {
+        if (id.IsNull())
+        {
+            return null;
+        }
+
+        return await _adminService.GetRegistryByIdAsync(id.Value);
     }
 
     [HttpGet(template: "Admin/Consultant/List")]

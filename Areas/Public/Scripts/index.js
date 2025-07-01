@@ -41,7 +41,6 @@ const
 
     searchInput.value = searchParam;
     events.onSearch_KeyUp();
-
   },
   setFormEvents = () => {
     const
@@ -83,7 +82,7 @@ const
   },
   generateItemRow = (registryItems) => {
     const
-      container = querySelector('[data-registry-item] aside');
+      container = querySelector('[data-registry-item]');
 
     if (IsEmpty(registryItems)) {
       container.replaceChildren()

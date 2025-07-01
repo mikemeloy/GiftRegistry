@@ -33,4 +33,5 @@ public interface IRegistryRepository
     public Task UpdateShippingOptionAsync(int? id, string name, string description, bool deleted);
     public Task<IEnumerable<RegistryShippingOptionDTO>> GetRegistryShippingOptionsAsync();
     public Task<GiftRegistryConsultant> GetConsultantByIdAsync(int consultantId);
+    public Task<RegistryEditAdminModel> GetAdminFieldsAsync(int id);
 }

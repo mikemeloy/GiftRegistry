@@ -2,7 +2,7 @@ import {
     AddQueryParamToURL, QuerySelector,
     LogError, GetInputValue, GetDataSet,
     FadeOut, Post, Get,
-    SetInputValue
+    SetInputValue, GetQueryParam
 } from '../../../modules/utils.js';
 
 let
@@ -15,6 +15,19 @@ const
         _main = el;
         _url = url;
         setFormEvents();
+        setSearchByUrl();
+    },
+    setSearchByUrl = () => {
+        const
+            searchParam = GetQueryParam('search'),
+            searchInput = querySelector('form input');
+
+        if (!searchParam || !searchInput) {
+            return;
+        }
+
+        searchInput.value = searchParam;
+        events.onSearch_KeyUp();
     },
     querySelector = (selector) => QuerySelector(selector, '[data-registry]'),
     getInputValue = (selector, options) => GetInputValue(selector, '[data-registry]', options),
@@ -32,6 +45,32 @@ const
     debounce = (el) => {
         clearTimeout(_debounce);
         _debounce = setTimeout(async () => await el?.(), 400);
+    },
+    setEditorFields = async (dialog, registryId, registryName) => {
+        const
+            header = dialog.querySelector('header h3'),
+            setValue = (key, value) => setInputValue(`[data-admin-update-${key}]`, value),
+            { success, data } = await Get(`${_url}/Get?id=${registryId}`);
+
+        if (!success) {
+            return false;
+        }
+
+        const {
+            DeliveryMethodId,
+            EventTypeId,
+            AdminNotes,
+            ConsultantId
+        } = data;
+
+        setValue('header', registryName);
+        setValue('id', registryId);
+        setValue('notes', AdminNotes);
+        setValue('shipping', DeliveryMethodId);
+        setValue('consultant', ConsultantId);
+        setValue('type', EventTypeId);
+
+        return true;
     };
 
 const
@@ -73,11 +112,8 @@ const
             const
                 { registryId, registryName } = GetDataSet(e),
                 dialog = _main.querySelector('[data-dialog-edit-registry]'),
-                header = dialog.querySelector('header h3'),
-                onFadeComplete = await FadeOut(dialog);
-
-            setInputValue('[data-admin-update-id]', registryId);
-            header.innerHTML = registryName;
+                onFadeComplete = await FadeOut(dialog),
+                finished = setEditorFields(dialog, registryId, registryName);
 
             dialog.showModal();
 
@@ -85,6 +121,7 @@ const
         },
         onSave_Click: async (e) => {
             const
+                dialog = _main.querySelector('[data-dialog-edit-registry]'),
                 getValueFor = (selector, options) => getInputValue(`[data-admin-update-${selector}]`, options),
                 id = getValueFor('id', { isNumeric: true }),
                 notes = getValueFor('notes'),
@@ -93,6 +130,9 @@ const
                 eventType = getValueFor('type', { isNumeric: true });
 
             await Post(_url, { id, notes, shipping, consultant, eventType });
+
+            await FadeOut(dialog);
+            dialog.close();
         },
         onClose_Click: async ({ target }) => {
             const

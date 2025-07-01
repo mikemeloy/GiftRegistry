@@ -187,4 +187,17 @@ public class AdminService : IAdminService
             await _logger_R.LogErrorAsync(nameof(UpdateAdminRegistryFields), e);
         }
     }
+
+    public async Task<RegistryEditAdminModel> GetRegistryByIdAsync(int id)
+    {
+        try
+        {
+            return await _registryRepository.GetAdminFieldsAsync(id);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetRegistryByIdAsync), e);
+            return null;
+        }
+    }
 }

@@ -20,7 +20,7 @@ internal class RouteProvider : IRouteProvider
            name: RegistryDefaults.Index,
            pattern: "Registry/",
            defaults: new { controller = "Registry", action = "Index" }
-       );
+        );
         endpointRouteBuilder.MapControllerRoute(
              name: RegistryDefaults.Get,
              pattern: "Registry/Get",
@@ -46,11 +46,6 @@ internal class RouteProvider : IRouteProvider
             pattern: "Registry/Update",
             defaults: new { controller = "Registry", action = "Update" }
         );
-        //endpointRouteBuilder.MapControllerRoute(
-        //    name: RegistryDefaults.Update,
-        //    pattern: "Registry/Update/Item",
-        //    defaults: new { controller = "Registry", action = "Update" }
-        //);
         endpointRouteBuilder.MapControllerRoute(
             name: RegistryDefaults.Save,
             pattern: "Registry/Save",
@@ -84,6 +79,12 @@ internal class RouteProvider : IRouteProvider
             name: AdminDefaults.Registry,
             pattern: "Admin/Registry",
             defaults: new { controller = "Admin", action = "Registry", area = AreaNames.Admin }
+        );
+
+        endpointRouteBuilder.MapControllerRoute(
+            name: RegistryDefaults.Get,
+            pattern: "Admin/Registry/Get",
+            defaults: new { controller = "Admin", action = "Registry/Get" }
         );
 
         endpointRouteBuilder.MapControllerRoute(

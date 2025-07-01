@@ -99,10 +99,7 @@ const
 
     return {
       component,
-      onRemove: () => {
-        const
-          duration = 200;
-
+      onRemove: (duration = 200) => {
         component.animate([{ opacity: 0 }], { duration, fill: "forwards" });
         setTimeout(() => component.remove(), duration - 3);
       }
@@ -133,7 +130,12 @@ const
       return;
     }
 
-    input.value = value;
+    if ('value' in input) {
+      input.value = value;
+      return;
+    }
+
+    input.innerHTML = value;
   },
   DateToInputString = (val) => {
     try {
@@ -150,32 +152,27 @@ const
 
     return new Date().toLocaleDateString();
   },
-  DisplayNotification = (val) => {
+  DisplayNotification = async (val, useBody = false) => {
     const
-      body = document.querySelector('dialog[open]') ?? document.body,
+      body = useBody ? document.body : document.querySelector('dialog[open]') ?? document.body,
       clone = document
         .querySelector('[data-registry-notify-template]')
         .content
-        .cloneNode(true),
-      options = { duration: 500, fill: "forwards" };
+        .cloneNode(true);
 
     body.appendChild(clone);
 
     const
-      dialog = document.querySelector('[data-registry-notify]'),
-      main = dialog.querySelector('main');
+      notification = document.querySelector('[data-registry-notify]'),
+      main = notification.querySelector('main');
 
     main.innerText = val;
 
-    dialog
-      .animate({ opacity: [0, 1] }, options)
-      .addEventListener('finish', (e) => {
-        setTimeout(() => {
-          dialog
-            .animate({ opacity: [1, 0] }, options)
-            .addEventListener('finish', (e) => { dialog.remove() });
-        }, options.duration * 3);
-      });
+    await FadeIn(notification);
+    await Delay(2000);
+    await FadeOut(notification);
+
+    notification.remove();
   },
   AddQueryParamToURL = (arr) => {
 
@@ -217,14 +214,15 @@ const
   },
   GetDataSet = (event) => ({ ...event?.target?.dataset ?? {} }),
   ToCurrency = (val) => formatter.format(val),
-  FadeOut = (el, duration = 200) => new Promise((res, rej) => {
+  FadeOut = (el, duration = 200) => new Promise((res) => {
     el.animate({ opacity: [1, 0] }, { duration, fill: "forwards" })
       .addEventListener('finish', (e) => res(() => FadeIn(el, duration)));
   }),
-  FadeIn = (el, duration = 200) => new Promise((res, rej) => {
+  FadeIn = (el, duration = 200) => new Promise((res) => {
     el.animate({ opacity: [0, 1] }, { duration, fill: "forwards" })
       .addEventListener('finish', (e) => res());
-  })
+  }),
+  Delay = (milisecond = 300) => new Promise((res) => setTimeout(() => res(), milisecond))
 
 export {
   Get,

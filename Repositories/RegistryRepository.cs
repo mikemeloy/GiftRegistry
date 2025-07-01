@@ -349,4 +349,12 @@ public class RegistryRepository : IRegistryRepository
     {
         return await _registryConsultant.GetByIdAsync(consultantId);
     }
+
+    public async Task<RegistryEditAdminModel> GetAdminFieldsAsync(int id)
+    {
+        var registry = await _registry.GetByIdAsync(id);
+
+
+        return new RegistryEditAdminModel(registry.ShippingOption, registry.EventType, registry.ConsultantId, registry.AdminNotes);
+    }
 }

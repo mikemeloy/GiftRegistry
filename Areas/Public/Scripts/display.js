@@ -1,7 +1,8 @@
 import {
   QuerySelector, QuerySelectorAll,
   Post, Delete, DisplayNotification,
-  UseTemplateTag, FadeOut
+  UseTemplateTag, FadeOut,
+  LogError
 } from '../../modules/utils.js';
 
 let
@@ -27,7 +28,7 @@ const
       remove.addEventListener('click', () => events.onRemoveItem_Click(dataset));
     });
   },
-  promptUserQuantity = (requestedQuantity, productName) => {
+  promptUserQuantity = async (requestedQuantity, productName) => {
 
     if (+requestedQuantity <= 1) {
       return Promise.resolve({ cancel: false, pledge: 1 });
@@ -43,22 +44,19 @@ const
       input = dialog.querySelector(':scope input'),
       label = dialog.querySelector(':scope label'),
       cancel = dialog.querySelector(':scope [data-cancel]'),
-      submit = dialog.querySelector(':scope [data-submit');
+      submit = dialog.querySelector(':scope [data-submit'),
+      onFadeComplete = await FadeOut(dialog);;
 
     label.innerHTML = `<strong>Mike</strong> has requested <strong>${requestedQuantity}</strong> of <strong>${productName}</strong>, Would you like to purchase more than one?`;
     input.max = requestedQuantity;
+
     dialog.showModal();
 
-    return new Promise((res) => {
-      submit.addEventListener('click', () => {
-        onRemove();
-        res({ pledge: input.value, cancel: false });
-      });
+    onFadeComplete();
 
-      cancel.addEventListener('click', () => {
-        onRemove();
-        res({ pledge: input.value, cancel: true });
-      });
+    return new Promise((res) => {
+      submit.addEventListener('click', () => res({ pledge: input.value, cancel: false, onRemove }));
+      cancel.addEventListener('click', () => res({ pledge: input.value, cancel: true, onRemove }));
     });
   }
 
@@ -66,7 +64,9 @@ const events = {
   onAddToCart_Click: async ({ registryItemId, quantity, productName }) => {
     const
       ui = document.querySelector('.cart-qty'),
-      { cancel, pledge } = await promptUserQuantity(quantity, productName);
+      { cancel, pledge, onRemove } = await promptUserQuantity(quantity, productName);
+
+    onRemove();
 
     if (cancel) {
       return;
@@ -76,16 +76,16 @@ const events = {
       { success, data } = await Post(`${_addToCartRoute}?registryItemId=${registryItemId}&quantity=${pledge}`);
 
     if (!success) {
-      DisplayNotification("Unable to Add Item to Bag");
+      DisplayNotification("Unable to Add Item to Bag", true);
     }
 
     if (Array.isArray(data) && data.some(x => x)) {
-      DisplayNotification(data.join(','));
+      DisplayNotification(data.join(','), true);
       return;
     }
 
     ui.innerHTML = '(1)'; //TODO: will need to return actual cart count
-    DisplayNotification("Item Added to Bag");
+    DisplayNotification("Item Added to Bag", true);
   },
   onRemoveItem_Click: async ({ registryItemId }) => {
     const

@@ -15,4 +15,5 @@ public interface IAdminService
     public Task<IEnumerable<RegistryShippingOptionDTO>> GetShippingOptionsAsync();
     public Task UpsertRegistryShippingOptionAsync(RegistryShippingOptionDTO registryType);
     public Task UpdateAdminRegistryFields(AdminRegistryDTO registry);
+    public Task<RegistryEditAdminModel> GetRegistryByIdAsync(int id);
 }

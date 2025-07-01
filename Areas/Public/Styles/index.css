@@ -216,59 +216,51 @@ body:has(dialog[open]) {
       }
 
       [data-registry-item] {
-        display: none;
-      }
+        display: grid;
+        grid-template-columns: 30% repeat(3, 1fr) min-content;
+        gap: 1rem;
+        margin: 0 auto;
+        border: 1px solid var(--border);
+        padding: 1rem;
+        border-radius: 6px;
 
-      [data-registry-item]:has(aside) {
-        display: block;
+        div {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          padding-inline: 1rem;
+        }
 
-        aside {
-          display: grid;
-          grid-template-columns: 30% repeat(3, 1fr) min-content;
-          gap: 1rem;
-          margin: 0 auto;
-          border: 1px solid var(--border);
-          padding: 1rem;
-          border-radius: 6px;
+        [data-row] {
+          grid-column: span 5;
+          border-bottom: 1px solid var(--border);
+        }
 
-          div {
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            padding-inline: 1rem;
-          }
+        [data-actions] {
+          display: flex;
+          gap: 2rem;
+          align-items: center;
 
-          [data-row] {
-            grid-column: span 5;
-            border-bottom: 1px solid var(--border);
-          }
+          i {
+            cursor: pointer;
 
-          [data-actions] {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-
-            i {
-              cursor: pointer;
-
-              &:hover {
-                ::after {
-                  content: '';
-                  height: 50px;
-                  width: 50px;
-                  background-color: #4343439f;
-                }
+            &:hover {
+              ::after {
+                content: '';
+                height: 50px;
+                width: 50px;
+                background-color: #4343439f;
               }
             }
           }
+        }
 
-          .right {
-            text-align: right;
-          }
+        .right {
+          text-align: right;
+        }
 
-          .center {
-            text-align: center;
-          }
+        .center {
+          text-align: center;
         }
       }
 

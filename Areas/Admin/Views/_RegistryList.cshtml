@@ -25,7 +25,7 @@
 
     <dialog data-dialog-edit-registry>
         <header>
-            <h3></h3>
+            <h3 data-admin-update-header></h3>
             <i class="fa fa-times" data-dialog-close></i>
         </header>
         <main>
@@ -33,7 +33,7 @@
                 <label>
                     Delivery Method
                 </label>
-                <select class="form-control text-box single-line" data-admin-update-shipping>
+                <select data-admin-update-shipping class="form-control text-box single-line">
                     <option value="0">Select One...</option>
                     @{
                         foreach (var item in shippingOptions)
@@ -74,7 +74,7 @@
                 <label for="notes">
                     Admin Notes
                 </label>
-                <textarea autocomplete="off" class="form-control text-box single-line" data-admin-update-notes rows="10" multiple></textarea>
+                <textarea data-admin-update-notes autocomplete="off" class="form-control text-box single-line" rows="10" multiple></textarea>
             </section>
         </main>
         <footer>

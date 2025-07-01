@@ -40,17 +40,6 @@ body:has(dialog[open]) {
         margin: 1rem auto;
     }
 
-    /* button,
-    a {
-        outline: none;
-        border: none;
-        background-color: var(--danger);
-        border-radius: 6px;
-        color: var(--white);
-        padding: .7rem 1rem;
-        text-transform: uppercase;
-    } */
-
     input,
     textarea {
         outline: none;
@@ -110,6 +99,17 @@ body:has(dialog[open]) {
             margin: 5rem;
             font-size: 3rem;
         }
+
+        [data-column-actions] {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            i,
+            a {
+                color: var(--text);
+            }
+        }
     }
 
     [data-search] {
@@ -158,11 +158,18 @@ body:has(dialog[open]) {
             display: flex;
             justify-content: center;
             align-items: center;
+            gap: 1rem;
             position: sticky;
             top: 0;
             padding: 1rem;
             background-color: var(--dark);
             color: var(--white);
+
+            h3 {
+                text-wrap: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
+            }
 
             i {
                 margin-left: auto;

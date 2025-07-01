@@ -62,7 +62,7 @@ const
                 description = GetInputValue('[data-registry-shipping-description]', '[data-dialog-edit]');
 
             await Post(_url, { id, name, description });
-            onChangeEvent(e.target, "shipping");
+            onChangeEvent(e.target, "ship");
         },
         onDialog_Close: () => {
             const dialog = _main.querySelector('dialog');
@@ -80,7 +80,7 @@ const
                 { id, name, description } = GetDataSet(e);
 
             await Post(_url, { id, name, description, deleted: true });
-            onChangeEvent(e.target, "shipping");
+            onChangeEvent(e.target, "ship");
         }
     }
 
