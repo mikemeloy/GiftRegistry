@@ -256,8 +256,9 @@ const
         dialog = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit: ${Name}`, Sponsor, ShippingOption),
         onFadeComplete = await FadeOut(dialog);
 
-      dialog.showModal();
       generateItemRow(RegistryItems);
+
+      dialog.showModal();
 
       await onFadeComplete();
     },

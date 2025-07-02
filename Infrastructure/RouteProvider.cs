@@ -82,7 +82,7 @@ internal class RouteProvider : IRouteProvider
         );
 
         endpointRouteBuilder.MapControllerRoute(
-            name: RegistryDefaults.Get,
+            name: AdminDefaults.Get,
             pattern: "Admin/Registry/Get",
             defaults: new { controller = "Admin", action = "Registry/Get" }
         );
