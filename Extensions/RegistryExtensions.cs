@@ -19,7 +19,8 @@ public static class RegistryExtensions
             Notes = source.Notes,
             EventType = source.EventType,
             Sponsor = source.Sponsor,
-            ShippingOption = source.ShippingOption
+            ShippingOption = source.ShippingOption,
+            ConsultantId = source.ConsultantId,
         };
     }
 
@@ -60,4 +61,10 @@ public static class RegistryExtensions
             .ThenBy(ri => ri.Name)
             .ToList();
     }
+
+    public static string GetRegistryOrderEmailBody(this RegistryData source) => $"Hello {source.Consultant?.Name},<br/><br/> You are listed as the consultant for {source.RegistryName}, {source.ProductName} has been purchased on order #{source.OrderId}. ";
+
+    public static string GetRegistryOrderEmailSubject(this RegistryData source) => $"An item on {source.RegistryName} has been purchased!";
+
+    public static string GetRegistryAdminNote(this RegistryData source) => $"An item on {source.RegistryName} has been purchased!";
 }

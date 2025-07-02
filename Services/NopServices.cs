@@ -1,38 +1,51 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
-using LinqToDB.Common;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Messages;
 using Nop.Core.Domain.Stores;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
 using Nop.Services.Customers;
 using Nop.Services.Media;
+using Nop.Services.Messages;
+using Nop.Services.Orders;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Services;
 
 public class NopServices : INopServices
 {
+    private readonly ILogger_R _logger_R;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
     private readonly IPictureService _pictureService;
     private readonly IProductService _productService;
     private readonly ICustomerService _customerService;
     private readonly IGenericAttributeService _genericAttributeService;
+    private readonly IEmailSender _emailSender;
+    private readonly IOrderService _orderService;
+    private readonly IEmailAccountService _emailAccountService;
+    private readonly EmailAccountSettings _emailAccountSettings;
 
-    public NopServices(IStoreContext storeContext, IWorkContext workContext, IPictureService pictureService, IProductService productService, ICustomerService customerService, IGenericAttributeService genericAttributeService)
+    public NopServices(EmailAccountSettings emailAccountSettings, IStoreContext storeContext, IWorkContext workContext, IPictureService pictureService, IProductService productService, ICustomerService customerService, IGenericAttributeService genericAttributeService, IEmailSender emailSender, IOrderService orderService, IEmailAccountService emailAccountService, ILogger_R logger_R)
     {
-        _pictureService = pictureService;
+        _emailSender = emailSender;
+        _logger_R = logger_R;
         _workContext = workContext;
-        _productService = productService;
         _storeContext = storeContext;
+        _orderService = orderService;
+        _productService = productService;
+        _pictureService = pictureService;
+        _emailAccountService = emailAccountService;
         _productService = productService;
         _customerService = customerService;
         _genericAttributeService = genericAttributeService;
+        _emailAccountSettings = emailAccountSettings;
     }
 
     public async Task<string> GetProductImageUrlAsync(int productId)
@@ -104,5 +117,44 @@ public class NopServices : INopServices
             storeId: storeId,
             value: ""
         );
+    }
+
+    public async Task InsertOrderNoteAsync(int orderId, string note)
+    {
+        try
+        {
+            await _orderService.InsertOrderNoteAsync(new() { Note = note, OrderId = orderId, CreatedOnUtc = DateTime.UtcNow });
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(InsertOrderNoteAsync), e);
+        }
+    }
+
+    public async Task SendRegistryConsultantEmailAsync(string subject, string body, GiftRegistryConsultant consultant)
+    {
+        if (consultant.IsNull())
+        {
+            return;
+        }
+
+        try
+        {
+            var emailAccount = await _emailAccountService.GetEmailAccountByIdAsync(_emailAccountSettings.DefaultEmailAccountId);
+
+            await _emailSender.SendEmailAsync(
+                        emailAccount,
+                        subject,
+                        body,
+                        fromAddress: emailAccount.Email,
+                        fromName: emailAccount.DisplayName,
+                        toAddress: consultant.Email,
+                        toName: consultant.Name
+                    );
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(SendRegistryConsultantEmailAsync), e);
+        }
     }
 }

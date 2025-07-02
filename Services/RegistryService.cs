@@ -184,7 +184,6 @@ public class RegistryService : IRegistryService
 
     public async Task ReconcileRegistry(Order order)
     {
-
         var customer = await _nopServices.GetCustomerByIdAsync(order.CustomerId);
         var registryItemsInCart = await _nopServices.GetRegistryItemAttributeAsync(customer);
 
@@ -211,12 +210,30 @@ public class RegistryService : IRegistryService
                 continue;
             }
 
+            var registryInfo = await GetRegistryDataByRegistryItemIdAsync(registryItem, order.Id);
+
             await _registryRepository.InsertRegistryItemOrderAsync(
-                 orderId: order.Id,
-                 productId: registryItem.Id,
-                 registryId: registryItem.RegistryId,
-                 quantity: orderItem.Quantity
-             );
+                orderId: order.Id,
+                productId: registryItem.Id,
+                registryId: registryItem.RegistryId,
+                quantity: orderItem.Quantity
+            );
+
+            if (registryInfo.IsNull())
+            {
+                continue;
+            }
+
+            await _nopServices.InsertOrderNoteAsync(
+                orderId: registryInfo.OrderId,
+                note: registryInfo.GetRegistryAdminNote()
+            );
+
+            await _nopServices.SendRegistryConsultantEmailAsync(
+                subject: registryInfo.GetRegistryOrderEmailSubject(),
+                body: registryInfo.GetRegistryOrderEmailBody(),
+                consultant: registryInfo.Consultant
+            );
         }
 
         await _nopServices.ClearRegistryItemAttributeAsync(customer);
@@ -248,5 +265,14 @@ public class RegistryService : IRegistryService
             await _logger_R.LogErrorAsync(nameof(UpdateCustomerRegistryItemAsync), e);
             return false;
         }
+    }
+
+    private async Task<RegistryData> GetRegistryDataByRegistryItemIdAsync(GiftRegistryItem registryItem, int orderId)
+    {
+        var registry = await _registryRepository.GetRegistryByIdAsync(registryItem.RegistryId);
+        var product = await _nopServices.GetProductByIdAsync(registryItem.ProductId);
+        var consultant = await _registryRepository.GetConsultantByIdAsync(registry.ConsultantId);
+
+        return new(registry.Name, product.Name, consultant, orderId);
     }
 }

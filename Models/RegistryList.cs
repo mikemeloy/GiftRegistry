@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using i7MEDIA.Plugin.Widgets.Registry.Data;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Models;
 
@@ -17,3 +18,5 @@ public record RegistryListItem
     public bool CanModify { get; set; }
     public DateTime EventDate { get; set; }
 };
+
+public record RegistryData(string RegistryName, string ProductName, GiftRegistryConsultant Consultant, int OrderId);

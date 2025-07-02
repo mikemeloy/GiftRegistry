@@ -89,6 +89,9 @@ public class RegistryRepository : IRegistryRepository
         entity.Id = registry.Id;
         entity.CustomerId = registry.CustomerId;
         entity.Search = entity.GetQueryText(customer);
+        entity.CreatedDate = registry.CreatedDate;
+        entity.ConsultantId = registry.ConsultantId;
+        entity.AdminNotes = registry.AdminNotes;
 
         await _registry.UpdateAsync(entity);
     }
