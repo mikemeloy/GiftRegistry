@@ -62,9 +62,9 @@ public static class RegistryExtensions
             .ToList();
     }
 
-    public static string GetRegistryOrderEmailBody(this RegistryData source) => $"Hello {source.Consultant?.Name},<br/><br/> You are listed as the consultant for {source.RegistryName}, {source.ProductName} has been purchased on order #{source.OrderId}. ";
+    public static string GetRegistryOrderEmailBody(this RegistryData source) => $"Hello {source.Consultant?.Name},<br/><br/> You are listed as the consultant for <i>“{source.RegistryName}”</i>, <i>{source.ProductName}</i> has been purchased on order #{source.OrderId}.";
 
-    public static string GetRegistryOrderEmailSubject(this RegistryData source) => $"An item on {source.RegistryName} has been purchased!";
+    public static string GetRegistryOrderEmailSubject(this RegistryData source) => $"An item on “{source.RegistryName}” has been purchased!";
 
-    public static string GetRegistryAdminNote(this RegistryData source) => $"An item on {source.RegistryName} has been purchased!";
+    public static string GetRegistryAdminNote(this RegistryData source) => $"The item ({source.ProductName}) was purchased on behalf of the registry ({source.RegistryName})";
 }

@@ -112,16 +112,22 @@ const
 
           el.dataset.rowId = Id;
           el.innerHTML = value;
+
+          return el;
         };
+
+      const
+        cellQuantity = setValue('quantity', Quantity);
 
       setValue('name', Name);
       setValue('price', ToCurrency(Price));
-      setValue('quantity', Quantity);
       setValue('purchased', Purchased);
+
       actionRow.dataset.rowId = Id;
+      cellQuantity.dataset.min = Purchased;
 
       btnEdit.addEventListener('click', () => events.onRegistryitemEdit_Click(registryItem));
-      btnDelete.addEventListener('click', () => events.onRegistryitemDelete_Click(Id));
+      btnDelete.addEventListener('click', () => events.onRegistryitemDelete_Click(registryItem));
 
       container.appendChild(clone);
     }
@@ -193,25 +199,20 @@ const
 
       try {
         const
-          { data: success } = await Post(url, {
-            id,
-            name,
-            description,
-            eventDate,
-            eventType,
-            notes,
-            shippingOption,
-            sponsor
-          });
-
+          postData = { id, name, description, eventDate, eventType, notes, shippingOption, sponsor },
+          { data: success } = await Post(url, postData),
+          notification = success
+            ? "Registry Saved..."
+            : "Unable to Save Registry!";;
 
         if (success) {
           const
             dialog = querySelector('[data-modal-add]');
 
           dialog.close();
-          DisplayNotification("Registry Saved...");
         }
+
+        DisplayNotification(notification, success);
 
       } catch (error) {
         LogError(error);
@@ -281,9 +282,14 @@ const
       AddQueryParamToURL([{ key: 'search', value: _currentUser }]);
       setSearchByUrl();
     },
-    onRegistryitemDelete_Click: async (registryItemId) => {
+    onRegistryitemDelete_Click: async ({ Id, Purchased }) => {
+      if (Purchased > 0) {
+        DisplayNotification(`Item Has Already Been Purchased and Cannot be Deleted!`);
+        return;
+      }
+
       const
-        { success, data: deleted } = await Delete(`${_deleteItemRoute}?id=${registryItemId}`);
+        { success, data: deleted } = await Delete(`${_deleteItemRoute}?id=${Id}`);
 
       if (!success || !deleted) {
         DisplayNotification(`Unable to Delete Item From Registry`);
@@ -291,8 +297,8 @@ const
       }
 
       const
-        rows = document.querySelectorAll(`[data-row-id="${registryItemId}"]`),
-        actions = document.querySelector(`[data-actions][data-row-id="${registryItemId}"]`);
+        rows = document.querySelectorAll(`[data-row-id="${Id}"]`),
+        actions = document.querySelector(`[data-actions][data-row-id="${Id}"]`);
 
       for (const el of rows) {
         el.animate({ opacity: [1, .2] }, { duration: 300, fill: "forwards" });
@@ -302,7 +308,7 @@ const
     },
     onRegistryitemEdit_Click: (registryItem) => {
       const
-        { Id } = registryItem,
+        { Id, Purchased } = registryItem,
         quantityCell = getRowCell('quantity', Id),
         value = quantityCell.innerHTML;
 
@@ -315,12 +321,16 @@ const
       quantityCell.focus();
 
       quantityCell.onblur = async () => {
-        const newQuantity = quantityCell.innerHTML;
+        const
+          newQuantity = quantityCell.innerHTML,
+          lessThanPurchased = (newQuantity < Purchased);
 
         quantityCell.contentEditable = false;
 
-        if (isNaN(newQuantity)) {
+        if (isNaN(newQuantity) || lessThanPurchased) {
           quantityCell.innerHTML = value;
+
+          DisplayNotification(`Please enter a valid number greater than or equal to ${Purchased}`);
           return;
         }
 

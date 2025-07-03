@@ -190,6 +190,7 @@ body:has(dialog[open]) {
         input,
         textarea {
           margin: .8rem 0;
+          resize: vertical;
         }
 
         sup {

@@ -25,7 +25,7 @@ const
         [add, remove] = form.querySelectorAll('button');
 
       add.addEventListener('click', () => events.onAddToCart_Click(dataset));
-      remove.addEventListener('click', () => events.onRemoveItem_Click(dataset));
+      remove?.addEventListener('click', () => events.onRemoveItem_Click(dataset));
     });
   },
   promptUserQuantity = async (requestedQuantity, productName) => {
