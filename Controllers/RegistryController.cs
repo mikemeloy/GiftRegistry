@@ -13,10 +13,12 @@ public class RegistryController : BasePluginController
 {
     private readonly IRegistryService _registryService;
     private readonly IViewModelFactory _viewModelFactory;
-    public RegistryController(IRegistryService registryService, IViewModelFactory viewModelFactory)
+    private readonly IRegistryPdfService _registryPdfService;
+    public RegistryController(IRegistryService registryService, IViewModelFactory viewModelFactory, IRegistryPdfService registryPdfService)
     {
         _registryService = registryService;
         _viewModelFactory = viewModelFactory;
+        _registryPdfService = registryPdfService;
     }
 
     [HttpGet]
@@ -61,6 +63,19 @@ public class RegistryController : BasePluginController
         }
 
         return await _registryService.GetCustomerRegistryByIdAsync(id.Value);
+    }
+
+
+    [HttpGet("Registry/PrintGiftReceipt/{id}")]
+    [IgnoreAntiforgeryToken]
+    public async Task<FileContentResult> PrintGiftReceiptAsync(int id)
+    {
+        var pdfBytes = await _registryPdfService.GenerateGiftReceiptAsync();
+
+        return new FileContentResult(pdfBytes, "application/pdf")
+        {
+            FileDownloadName = $"GiftReceipt.{id}.pdf"
+        };
     }
 
     [HttpPost]
@@ -156,3 +171,5 @@ public class RegistryController : BasePluginController
         return await _registryService.AddRegistryItemToCartAsync(registryItemId.Value, quantity);
     }
 }
+
+public record FileReturn(byte[] ByteArray, string MimeType, string FileName);

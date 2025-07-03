@@ -28,7 +28,7 @@ internal static class Extensions
     }
     public static TResult GetValueOrDefault<TSource, TResult>(this TSource obj, Func<TSource, TResult> selector)
     {
-        if (obj is null)
+        if (obj.IsNull())
         {
             return default;
         }
@@ -49,5 +49,14 @@ internal static class Extensions
             _ = int.TryParse(s, out var n);
             return n;
         }).Distinct().ToArray();
+    }
+    public static TResult Cast<TSource, TResult>(this TSource source) where TResult : class
+    {
+        if (source.IsNull())
+        {
+            return null;
+        }
+
+        return source as TResult;
     }
 }

@@ -32,6 +32,7 @@ public class PluginNopStartup : INopStartup
         services.AddScoped<IRegistryRepository, RegistryRepository>();
         services.AddScoped<IViewModelFactory, ViewModelFactory>();
         services.AddScoped<IAdminService, AdminService>();
+        services.AddScoped<IRegistryPdfService, PdfService>();
     }
 
     private static void AddNopServices(IServiceCollection services)

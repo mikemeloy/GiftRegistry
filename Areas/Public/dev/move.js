@@ -24,6 +24,7 @@ const
         '/Views/_AddDialog.cshtml',
         '/Views/_RegistryNotification.cshtml',
         '/Views/_Quantity.cshtml',
+        '/Views/GiftReceiptLink.cshtml',
 
         '../modules/utils.js'
     ]

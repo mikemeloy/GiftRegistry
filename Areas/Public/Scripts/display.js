@@ -1,8 +1,7 @@
 import {
   QuerySelector, QuerySelectorAll,
   Post, Delete, DisplayNotification,
-  UseTemplateTag, FadeOut,
-  LogError
+  UseTemplateTag, FadeOut
 } from '../../modules/utils.js';
 
 let

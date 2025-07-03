@@ -66,6 +66,11 @@ internal class RouteProvider : IRouteProvider
            pattern: "Registry/AddToCart/{id?}",
            defaults: new { controller = "Registry", action = "AddToCart" }
         );
+        endpointRouteBuilder.MapControllerRoute(
+            name: RegistryDefaults.PrintGiftReceipt,
+            pattern: "Registry/PrintGiftReceipt",
+            defaults: new { controller = "Registry", action = "PrintGiftReceipt" }
+        );
     }
     private static void RegisterAdminRoutes(IEndpointRouteBuilder endpointRouteBuilder)
     {

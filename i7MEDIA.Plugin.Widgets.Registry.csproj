@@ -37,6 +37,7 @@
     <None Remove="Areas\Public\Styles\display.css" />
     <None Remove="Areas\Public\Styles\index.css" />
     <None Remove="Areas\Public\Styles\product.css" />
+    <None Remove="Areas\Public\Views\GiftReceiptLink.cshtml" />
     <None Remove="Areas\Public\Views\Index.cshtml" />
     <None Remove="Areas\Public\Views\List.cshtml" />
     <None Remove="Areas\Public\Views\ProductLink.cshtml" />
@@ -125,6 +126,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Styles\product.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Public\Views\GiftReceiptLink.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Views\Index.cshtml">

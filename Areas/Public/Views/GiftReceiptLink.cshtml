@@ -1,0 +1,37 @@
+﻿@using i7MEDIA.Plugin.Widgets.Registry
+
+@{
+    Layout = "";
+
+    var printPdfRoute = Url.RouteUrl(RegistryDefaults.PrintGiftReceipt);
+}
+
+<script type="module">
+    const
+        btn = document.querySelector('[data-registry-print-gift-reciept]');
+
+    btn.addEventListener('click', () => {
+        $.ajax({
+            type: "GET",
+            url: `@printPdfRoute/1`,
+            xhrFields: {
+                responseType: 'blob'
+            },
+            success: (data) => {
+                const
+                    a = document.createElement('a'),
+                    url = window.URL.createObjectURL(data);
+
+                a.href = url;
+                a.download = 'GiftReciept.pdf';
+                document.body.append(a);
+                a.click();
+                a.remove();
+                window.URL.revokeObjectURL(url);
+            },
+            error: (_, status, errorThrown) => console.dir(errorThrown)
+        });
+    }) 
+</script>
+
+<button data-registry-print-gift-reciept>Print Gift Receipt</button>
