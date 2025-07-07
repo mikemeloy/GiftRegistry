@@ -27,7 +27,7 @@ const
       remove?.addEventListener('click', () => events.onRemoveItem_Click(dataset));
     });
   },
-  promptUserQuantity = async (requestedQuantity, productName) => {
+  promptUserQuantity = async (requestedQuantity, productName, owner) => {
 
     if (+requestedQuantity <= 1) {
       return Promise.resolve({ cancel: false, pledge: 1, onRemove: () => { } });
@@ -46,7 +46,7 @@ const
       submit = dialog.querySelector(':scope [data-submit'),
       onFadeComplete = await FadeOut(dialog);;
 
-    label.innerHTML = `<strong>Mike</strong> has requested <strong>${requestedQuantity}</strong> of <strong>${productName}</strong>, Would you like to purchase more than one?`;
+    label.innerHTML = `<strong>${owner}</strong> has requested <strong>${requestedQuantity}</strong> of <strong>${productName}</strong>, Would you like to purchase more than one?`;
     input.max = requestedQuantity;
 
     dialog.showModal();
@@ -60,10 +60,10 @@ const
   }
 
 const events = {
-  onAddToCart_Click: async ({ registryItemId, quantity, productName }) => {
+  onAddToCart_Click: async ({ registryItemId, quantity, productName, owner }) => {
     const
       ui = document.querySelector('.cart-qty'),
-      { cancel, pledge, onRemove } = await promptUserQuantity(quantity, productName);
+      { cancel, pledge, onRemove } = await promptUserQuantity(quantity, productName, owner);
 
     onRemove();
 

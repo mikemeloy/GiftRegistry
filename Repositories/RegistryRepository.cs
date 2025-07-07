@@ -157,7 +157,7 @@ public class RegistryRepository : IRegistryRepository
         await _registryItem.UpdateAsync(entity);
     }
 
-    public async Task<bool> GetRegistryOwnerAssociationAsync(int registryId)
+    public async Task<(bool IamOwner, string OwnerName)> GetRegistryOwnerAssociationAsync(int registryId)
     {
         var currentCustomer = await _workContext.GetCurrentCustomerAsync();
         var customer = (from reg in _registry.Table
@@ -167,10 +167,10 @@ public class RegistryRepository : IRegistryRepository
 
         if (customer.IsNull() || currentCustomer.IsNull())
         {
-            return false;
+            return (IamOwner: false, OwnerName: "");
         }
 
-        return customer.IsEqual(currentCustomer);
+        return (IamOwner: customer.IsEqual(currentCustomer), OwnerName: customer.FullName());
     }
 
     public async Task<IList<RegistryViewModel>> AdminQueryAsync(string q)

@@ -18,7 +18,7 @@ public interface IRegistryRepository
     public Task InsertRegistryItemAsync(int registryId, int productId, int quantity);
     public Task UpdateRegistryItemAsync(RegistryItemDTO item);
     public Task DeleteRegistryItemAsync(int registryItemId);
-    public Task<bool> GetRegistryOwnerAssociationAsync(int registryId);
+    public Task<(bool IamOwner, string OwnerName)> GetRegistryOwnerAssociationAsync(int registryId);
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
     public Task UpdateRegistryAsync(RegistryDTO registryDTO);
     public Task UpdateRegistryAsync(AdminRegistryDTO registryDTO);

@@ -22,6 +22,7 @@ public class RegistryItemViewModel
 public class RegistryViewModel
 {
     public int Id { get; set; }
+    public string OwnerName { get; set; }
     public bool IamOwner { get; set; }
     public string Name { get; set; }
     public DateTime EventDate { get; set; }

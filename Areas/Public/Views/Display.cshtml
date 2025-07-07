@@ -33,7 +33,7 @@
     @{
         foreach (var item in items)
         {
-            <form data-quantity="@item.Quantity" data-registry-item-id="@item.Id" data-fulfilled="@item.Fulfilled" data-product-name="@item.Name">
+            <form data-owner="@Model.OwnerName" data-quantity="@item.Quantity" data-registry-item-id="@item.Id" data-fulfilled="@item.Fulfilled" data-product-name="@item.Name">
                 <header>
                     <img src="@item.ImageUrl" alt="@item.Name">
                 </header>

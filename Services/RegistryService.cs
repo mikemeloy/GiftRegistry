@@ -77,7 +77,7 @@ public class RegistryService : IRegistryService
         {
             var registry = await _registryRepository.GetRegistryByIdAsync(registryId);
             var items = await _registryRepository.GetRegistryItemsByIdAsync(registryId);
-            var iAmOwner = await _registryRepository.GetRegistryOwnerAssociationAsync(registryId);
+            var (iAmOwner, registryOwnerName) = await _registryRepository.GetRegistryOwnerAssociationAsync(registryId);
             var consultant = await _registryRepository.GetConsultantByIdAsync(registry.GetValueOrDefault(r => r.ConsultantId));
 
             foreach (var item in items)
@@ -89,6 +89,7 @@ public class RegistryService : IRegistryService
             {
                 Id = registryId,
                 Name = registry.GetValueOrDefault(r => r.Name),
+                OwnerName = registryOwnerName,
                 Description = registry.GetValueOrDefault(r => r.Description),
                 EventDate = registry.GetValueOrDefault(r => r.EventDate),
                 EventType = registry.GetValueOrDefault(r => r.EventType),
