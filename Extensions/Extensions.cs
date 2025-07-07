@@ -50,13 +50,4 @@ internal static class Extensions
             return n;
         }).Distinct().ToArray();
     }
-    public static TResult Cast<TSource, TResult>(this TSource source) where TResult : class
-    {
-        if (source.IsNull())
-        {
-            return null;
-        }
-
-        return source as TResult;
-    }
 }

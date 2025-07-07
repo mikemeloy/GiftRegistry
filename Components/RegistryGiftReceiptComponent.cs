@@ -1,4 +1,4 @@
-﻿using i7MEDIA.Plugin.Widgets.Registry.Extensions;
+﻿using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Framework.Components;
 
@@ -12,10 +12,16 @@ public interface IOrderDetails
 
 public class RegistryGiftReceiptComponent : NopViewComponent
 {
-    public IViewComponentResult Invoke(string widgetZone, object additionalData)
+    private readonly IViewModelFactory _viewModelFactory;
+    public RegistryGiftReceiptComponent(IViewModelFactory viewModelFactory)
     {
-        var orderDetails = additionalData.Cast<object, IOrderDetails>();
+        _viewModelFactory = viewModelFactory;
+    }
 
-        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/GiftReceiptLink.cshtml");
+    public IViewComponentResult Invoke(string widgetZone, dynamic additionalData)
+    {
+        var model = _viewModelFactory.GetRegistryGiftReceiptViewModel(additionalData.CustomOrderNumber);
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/GiftReceiptLink.cshtml", model);
     }
 }

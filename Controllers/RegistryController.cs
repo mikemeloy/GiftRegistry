@@ -65,12 +65,11 @@ public class RegistryController : BasePluginController
         return await _registryService.GetCustomerRegistryByIdAsync(id.Value);
     }
 
-
     [HttpGet("Registry/PrintGiftReceipt/{id}")]
     [IgnoreAntiforgeryToken]
     public async Task<FileContentResult> PrintGiftReceiptAsync(int id)
     {
-        var pdfBytes = await _registryPdfService.GenerateGiftReceiptAsync();
+        var pdfBytes = await _registryPdfService.GenerateGiftReceiptAsync(id);
 
         return new FileContentResult(pdfBytes, "application/pdf")
         {
@@ -171,5 +170,3 @@ public class RegistryController : BasePluginController
         return await _registryService.AddRegistryItemToCartAsync(registryItemId.Value, quantity);
     }
 }
-
-public record FileReturn(byte[] ByteArray, string MimeType, string FileName);

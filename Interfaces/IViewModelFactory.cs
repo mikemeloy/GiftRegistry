@@ -12,4 +12,5 @@ public interface IViewModelFactory
     public Task<RegistryTypePartialViewModel> GetRegistryTypePartialViewModelAsync();
     public Task<RegistryShippingPartialViewModel> GetRegistryShippingOptionViewModelAsync();
     public Task<RegistryAdminRowViewModel> GetRegistryRowPartialViewModelAsync(string query);
+    public RegistryGiftReceiptViewModel GetRegistryGiftReceiptViewModel(string orderId);
 }

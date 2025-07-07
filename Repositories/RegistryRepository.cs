@@ -12,6 +12,7 @@ using LinqToDB;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
+using Nop.Core.Domain.Orders;
 using Nop.Data;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Repositories;
@@ -24,16 +25,18 @@ public class RegistryRepository : IRegistryRepository
     private readonly IRepository<GiftRegistryItemOrder> _registryItemOrder;
     private readonly IRepository<GiftRegistryConsultant> _registryConsultant;
     private readonly IRepository<GiftRegistryShippingOption> _registryShippingOption;
+    private readonly IRepository<OrderItem> _orderItem;
     private readonly IRepository<Customer> _customer;
     private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType)
+    public RegistryRepository(IRepository<OrderItem> orderItem, IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType)
     {
         _product = product;
         _registry = registry;
         _customer = customer;
+        _orderItem = orderItem;
         _workContext = workContext;
         _registryItem = registryItem;
         _storeContext = storeContext;
@@ -359,5 +362,15 @@ public class RegistryRepository : IRegistryRepository
 
 
         return new RegistryEditAdminModel(registry.ShippingOption, registry.EventType, registry.ConsultantId, registry.AdminNotes);
+    }
+
+    public async Task<List<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId)
+    {
+        var query = from oi in _orderItem.Table
+                    join p in _product.Table on oi.ProductId equals p.Id
+                    where oi.OrderId == orderId
+                    select new GiftReceiptOrderItem(oi.Quantity, p.Name, p.Sku);
+
+        return await query.ToListAsync();
     }
 }

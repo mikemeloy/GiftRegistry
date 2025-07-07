@@ -44,6 +44,7 @@ body:has(dialog[open]) {
     textarea {
         outline: none;
         border-radius: 4px;
+        field-sizing: content;
     }
 
     input[type="date"] {

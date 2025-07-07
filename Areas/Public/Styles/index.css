@@ -51,6 +51,11 @@ body:has(dialog[open]) {
     text-transform: uppercase;
   }
 
+  textarea {
+    field-sizing: content;
+    min-height: 100px;
+  }
+
   input,
   textarea {
     outline: none;

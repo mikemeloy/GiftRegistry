@@ -15,13 +15,11 @@ public class AdminController : BasePluginController
 {
     private readonly IViewModelFactory _viewModelFactory;
     private readonly IAdminService _adminService;
-    private readonly IRegistryService _registryService;
 
-    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService, IRegistryService registryService)
+    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService)
     {
         _viewModelFactory = viewModelFactory;
         _adminService = adminService;
-        _registryService = registryService;
     }
 
     [HttpGet]

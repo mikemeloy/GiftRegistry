@@ -1,5 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
+using i7MEDIA.Plugin.Widgets.Registry.Models;
+using Nop.Core;
+using Nop.Core.Domain.Stores;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
@@ -8,44 +13,113 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Services;
 
 public class PdfService : IRegistryPdfService
 {
-    public async Task<byte[]> GenerateGiftReceiptAsync()
+    private readonly IRegistryService _registry;
+    private readonly IStoreContext _storeContext;
+
+    public IEnumerable<GiftReceiptOrderItem> OrderItems { get; set; }
+    public Store Store { get; set; }
+
+    public PdfService(IRegistryService registry, IStoreContext storeContext)
     {
-        var doc = Document.Create(container =>
+        _registry = registry;
+        _storeContext = storeContext;
+    }
+
+    public async Task<byte[]> GenerateGiftReceiptAsync(int id)
+    {
+        Store = _storeContext.GetCurrentStore();
+        OrderItems = await _registry.GetGiftReceiptOrderItemsAsync(id);
+
+        var receipt = Document.Create(document =>
            {
-               container.Page(page =>
+               document.Page(page =>
                {
                    page.Size(PageSizes.A4);
-                   page.Margin(2, Unit.Centimetre);
+                   page.Margin(1, Unit.Centimetre);
                    page.PageColor(Colors.White);
-                   page.DefaultTextStyle(x => x.FontSize(20));
+                   page.DefaultTextStyle(x => x.FontSize(16));
 
-                   page.Header()
-                       .Text("Hello PDF!")
-                       .SemiBold().FontSize(36).FontColor(Colors.Blue.Medium);
+                   page.Header().Element(ComposeHeader);
+                   page.Content().Element(ComposeContent);
+                   page.Footer().Element(ComposeFooter);
 
-                   page.Content()
-                       .PaddingVertical(1, Unit.Centimetre)
-                       .Column(x =>
-                       {
-                           x.Spacing(20);
+                   page.Background()
+                      .AlignTop()
+                      .AlignLeft()
+                      .Padding(10)
+                      .Text($"Order#: {id}");
 
-                           x.Item().Text(Placeholders.LoremIpsum());
-                           x.Item().Image(Placeholders.Image(200, 100));
-                       });
-
-                   page.Footer()
-                       .AlignCenter()
-                       .Text(x =>
-                       {
-                           x.Span("Page ");
-                           x.CurrentPageNumber();
-                       });
+                   page.Foreground()
+                      .AlignTop()
+                      .ExtendHorizontal()
+                      .AlignRight()
+                      .Padding(10)
+                      .Text(DateTime.Now.ToShortDateString());
                });
            });
 
+        return receipt.GeneratePdf();
+    }
 
-        var x = doc.GeneratePdf();
+    private void ComposeHeader(IContainer container)
+    {
+        container.Column(column =>
+        {
+            column.Item()
+                 .Table(table =>
+                 {
+                     table.ColumnsDefinition(column =>
+                      {
+                          column.RelativeColumn();
+                      });
 
-        return x;
+                     table.Cell().AlignCenter().Text(Store.CompanyName).FontSize(24).FontColor("#621d20");
+                     table.Cell().AlignCenter().Text(Store.CompanyAddress).FontSize(10).ExtraLight();
+                     table.Cell().AlignCenter().Text(Store.CompanyPhoneNumber).FontSize(10).ExtraLight();
+                 });
+        });
+    }
+
+    private void ComposeContent(IContainer container)
+    {
+        container
+           .PaddingTop(50)
+           .Column(column =>
+           {
+               column.Item()
+                 .Table(table =>
+                 {
+                     table.ColumnsDefinition(column =>
+                     {
+                         column.RelativeColumn();
+                         column.ConstantColumn(150);
+                         column.ConstantColumn(100);
+                     });
+
+                     table.Header(header =>
+                     {
+                         header.Cell().BorderBottom(2).Padding(8).Text("Description");
+                         header.Cell().BorderBottom(2).Padding(8).AlignCenter().Text("SKU");
+                         header.Cell().BorderBottom(2).Padding(8).AlignCenter().Text("Quantity");
+                     });
+
+                     foreach (var orderItem in OrderItems)
+                     {
+                         table.Cell().Padding(6).Text(orderItem.Description);
+                         table.Cell().AlignCenter().Padding(6).Text(orderItem.Sku);
+                         table.Cell().AlignCenter().Padding(6).Text(orderItem.Quantity);
+                     }
+                 });
+           });
+    }
+
+    private void ComposeFooter(IContainer container)
+    {
+
+        container
+            .AlignCenter().Text(x =>
+                {
+                    x.Span("Gift Receipt");
+                });
     }
 }

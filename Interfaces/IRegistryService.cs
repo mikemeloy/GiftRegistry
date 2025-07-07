@@ -20,4 +20,5 @@ public interface IRegistryService
     public Task ReconcileRegistry(Order order);
     public Task<bool> UpdateCustomerRegistryAsync(RegistryDTO registryDTO);
     public Task<bool> UpdateCustomerRegistryItemAsync(RegistryItemDTO registryItemDTO);
+    public Task<IEnumerable<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId);
 }

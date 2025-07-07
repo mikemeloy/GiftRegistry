@@ -34,4 +34,5 @@ public interface IRegistryRepository
     public Task<IEnumerable<RegistryShippingOptionDTO>> GetRegistryShippingOptionsAsync();
     public Task<GiftRegistryConsultant> GetConsultantByIdAsync(int consultantId);
     public Task<RegistryEditAdminModel> GetAdminFieldsAsync(int id);
+    public Task<List<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId);
 }

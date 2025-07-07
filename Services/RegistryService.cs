@@ -267,6 +267,20 @@ public class RegistryService : IRegistryService
         }
     }
 
+    public async Task<IEnumerable<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId)
+    {
+        try
+        {
+            return await _registryRepository.GetGiftReceiptOrderItemsAsync(orderId);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetGiftReceiptOrderItemsAsync), e);
+        }
+
+        return Enumerable.Empty<GiftReceiptOrderItem>();
+    }
+
     private async Task<RegistryData> GetRegistryDataByRegistryItemIdAsync(GiftRegistryItem registryItem, int orderId)
     {
         var registry = await _registryRepository.GetRegistryByIdAsync(registryItem.RegistryId);

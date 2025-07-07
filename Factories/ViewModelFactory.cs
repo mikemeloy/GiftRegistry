@@ -70,4 +70,11 @@ public class ViewModelFactory : IViewModelFactory
 
         return new RegistryAdminRowViewModel(registryItems);
     }
+
+    public RegistryGiftReceiptViewModel GetRegistryGiftReceiptViewModel(string orderId)
+    {
+        _ = int.TryParse(orderId, out var x);
+
+        return new RegistryGiftReceiptViewModel("test.pdf", x);
+    }
 }

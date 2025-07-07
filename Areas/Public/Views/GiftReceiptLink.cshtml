@@ -1,19 +1,32 @@
-﻿@using i7MEDIA.Plugin.Widgets.Registry
+﻿@model i7MEDIA.Plugin.Widgets.Registry.Models.RegistryGiftReceiptViewModel
+@using i7MEDIA.Plugin.Widgets.Registry
 
 @{
     Layout = "";
 
     var printPdfRoute = Url.RouteUrl(RegistryDefaults.PrintGiftReceipt);
+    var fileName = Model.FileName;
+    var orderId = Model.OrderId;
 }
+
+<style>
+    [data-registry-print-gift-reciept] {
+        margin-right: 1rem;
+    }
+</style>
 
 <script type="module">
     const
+        container = document.querySelector('.order-details-page .controls'),
         btn = document.querySelector('[data-registry-print-gift-reciept]');
+
+
+    container.prepend(btn);
 
     btn.addEventListener('click', () => {
         $.ajax({
             type: "GET",
-            url: `@printPdfRoute/1`,
+            url: `@printPdfRoute/@orderId`,
             xhrFields: {
                 responseType: 'blob'
             },
@@ -23,7 +36,7 @@
                     url = window.URL.createObjectURL(data);
 
                 a.href = url;
-                a.download = 'GiftReciept.pdf';
+                a.download = '@fileName';
                 document.body.append(a);
                 a.click();
                 a.remove();
@@ -34,4 +47,4 @@
     }) 
 </script>
 
-<button data-registry-print-gift-reciept>Print Gift Receipt</button>
+<button data-registry-print-gift-reciept class="btn btn-primary pdf-order-button">Gift Receipt</button>
