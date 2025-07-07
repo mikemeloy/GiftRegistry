@@ -30,7 +30,7 @@ const
   promptUserQuantity = async (requestedQuantity, productName) => {
 
     if (+requestedQuantity <= 1) {
-      return Promise.resolve({ cancel: false, pledge: 1 });
+      return Promise.resolve({ cancel: false, pledge: 1, onRemove: () => { } });
     }
 
     const { component: dialog, onRemove } = UseTemplateTag(

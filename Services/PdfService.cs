@@ -82,12 +82,21 @@ public class PdfService : IRegistryPdfService
 
     private void ComposeContent(IContainer container)
     {
-        container
+
+        var size = PageSizes.Letter.Landscape();
+
+        container.Layers(layer =>
+        {
+            layer.Layer()
+             .AlignMiddle()
+             .AlignCenter()
+             .Text("Gift Receipts")
+             .FontSize(75)
+             .FontColor("#d1d1d1");
+
+            layer.PrimaryLayer()
            .PaddingTop(50)
-           .Column(column =>
-           {
-               column.Item()
-                 .Table(table =>
+           .Table(table =>
                  {
                      table.ColumnsDefinition(column =>
                      {
@@ -98,9 +107,9 @@ public class PdfService : IRegistryPdfService
 
                      table.Header(header =>
                      {
-                         header.Cell().BorderBottom(2).Padding(8).Text("Description");
-                         header.Cell().BorderBottom(2).Padding(8).AlignCenter().Text("SKU");
-                         header.Cell().BorderBottom(2).Padding(8).AlignCenter().Text("Quantity");
+                         header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).Text("Description");
+                         header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("SKU");
+                         header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("Quantity");
                      });
 
                      foreach (var orderItem in OrderItems)
@@ -110,7 +119,8 @@ public class PdfService : IRegistryPdfService
                          table.Cell().AlignCenter().Padding(6).Text(orderItem.Quantity);
                      }
                  });
-           });
+
+        });
     }
 
     private void ComposeFooter(IContainer container)
@@ -119,7 +129,7 @@ public class PdfService : IRegistryPdfService
         container
             .AlignCenter().Text(x =>
                 {
-                    x.Span("Gift Receipt");
+                    x.Span("Thank You For Your Purchase");
                 });
     }
 }
