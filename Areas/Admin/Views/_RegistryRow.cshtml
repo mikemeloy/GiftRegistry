@@ -19,7 +19,9 @@
     <span>@registry.EventDate.ToString("MMMM d, yyyy")</span>
     <span>@registry.ConsultantName</span>
     <span>@registry.ShippingMethod</span>
-    <span>@registry.Deleted</span>
+    <span data-admin-update-deleted>
+        <input data-registry-id="@registry.Id" type="checkbox" class="form-control" checked="@registry.Deleted">
+    </span>
     <span data-column-actions>
         <i data-action-edit class="fa fa-pen" data-registry-name="@registry.Name" data-registry-id="@registry.Id" title="Edit"></i>
         <a href="/registry/@registry.Id" target="_blank"><i data-action-view class="fas fa-external-link-alt" title="View Public Registry Page"></i></a>

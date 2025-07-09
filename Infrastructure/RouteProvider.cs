@@ -129,9 +129,9 @@ internal class RouteProvider : IRouteProvider
         );
 
         endpointRouteBuilder.MapControllerRoute(
-            name: AdminDefaults.DeleteItem,
-            pattern: "Registry/Item/{id?}",
-            defaults: new { controller = "Registry", action = "DeleteItem" }
+            name: AdminDefaults.RegistryItem,
+            pattern: "Admin/Registry/Item/{id?}",
+            defaults: new { controller = "Admin", action = "DeleteItem" }
         );
     }
 }

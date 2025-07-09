@@ -149,7 +149,7 @@ public class RegistryRepository : IRegistryRepository
     public async Task DeleteRegistryAsync(int registryId)
     {
         var entity = await _registry.GetByIdAsync(registryId);
-        entity.Deleted = true;
+        entity.Deleted = !entity.Deleted;
         await _registry.UpdateAsync(entity);
     }
 

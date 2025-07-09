@@ -101,6 +101,15 @@ body:has(dialog[open]) {
             font-size: 3rem;
         }
 
+        [data-admin-update-deleted] {
+            display: flex;
+            justify-content: center;
+
+            >input[type="checkbox"] {
+                height: 1.5rem;
+            }
+        }
+
         [data-column-actions] {
             display: flex;
             align-items: center;

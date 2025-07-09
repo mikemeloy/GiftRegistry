@@ -136,6 +136,20 @@ public class AdminController : BasePluginController
         await _adminService.UpdateAdminRegistryFields(registry);
     }
 
+    [HttpPost("Admin/Registry/Item")]
+    [IgnoreAntiforgeryToken]
+    public async Task<bool> UpdateAsync([FromBody] RegistryItemDTO registryItemDTO)
+    {
+        if (registryItemDTO.IsNull())
+        {
+            return false;
+        }
+
+        var success = await _registryService.UpdateCustomerRegistryItemAsync(registryItemDTO);
+
+        return success;
+    }
+
     [HttpPost]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
@@ -158,6 +172,20 @@ public class AdminController : BasePluginController
     public async Task ShippingOptionAsync([FromBody] RegistryShippingOptionDTO registryType)
     {
         await _adminService.UpsertRegistryShippingOptionAsync(registryType);
+    }
+
+    [HttpDelete("/Admin/Registry")]
+    [IgnoreAntiforgeryToken]
+    public async Task<bool> DeleteAsync(int? id)
+    {
+        if (id.IsNull())
+        {
+            return false;
+        }
+
+        var success = await _registryService.DeleteRegistryAsync(id.Value);
+
+        return success;
     }
 
     [HttpDelete]

@@ -173,9 +173,11 @@ const
                     rsltWindow.insertAdjacentHTML('afterbegin', data);
 
                     const
-                        editBtns = rsltWindow.querySelectorAll('[data-action-edit]');
+                        editBtns = rsltWindow.querySelectorAll('[data-action-edit]'),
+                        deleteBtns = rsltWindow.querySelectorAll('[data-admin-update-deleted] input');
 
                     editBtns.forEach(btn => btn.addEventListener('click', events.onEdit_Click));
+                    deleteBtns.forEach(btn => btn.addEventListener('change', events.onDelete_Change))
 
                     await onComplete();
 
@@ -231,6 +233,14 @@ const
 
             await FadeOut(dialog);
             dialog.close();
+        },
+        onDelete_Change: async (e) => {
+            const
+                { registryId } = GetDataSet(e),
+                success = await Delete(`${_url}?id=${registryId}`),
+                notification = success ? 'Saved' : 'An Error Has Occurred';
+
+            DisplayNotification(notification);
         },
         onClose_Click: async ({ target }) => {
             const
@@ -294,7 +304,7 @@ const
 
                 registryItem.Quantity = newQuantity;
 
-                const { success, data } = await Post(`${_updateRoute}/item`, registryItem);
+                const { success, data } = await Post(`${_deleteUrl}`, registryItem);
 
                 if (!success) {
                     DisplayNotification("Unable to Save Changes");
