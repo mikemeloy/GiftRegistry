@@ -91,7 +91,6 @@ body:has(dialog[open]) {
 
       &[data-header-row] {
         text-align: center;
-        border-bottom: 1px solid var(--border, #434343);
         font-weight: 600;
       }
     }
@@ -114,6 +113,11 @@ body:has(dialog[open]) {
       grid-column-end: 6;
       margin: 5rem;
       font-size: 3rem;
+    }
+
+    [data-line-break] {
+      grid-column: span 5;
+      border-bottom: 1px solid var(--border, gray);
     }
   }
 

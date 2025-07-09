@@ -21,7 +21,7 @@
             <span></span>
         </header>
 
-        <div data-row></div>
+        <div data-line-break></div>
 
         @foreach (var item in shippingOptions)
         {
@@ -32,7 +32,7 @@
                 <i data-edit-shipping-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-edit"></i>
                 <i data-delete-shipping-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-trash"></i>
             </span>
-            <div data-row></div>
+            <div data-line-break></div>
         }
 
         <span></span>

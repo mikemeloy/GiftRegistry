@@ -63,7 +63,7 @@ const
   },
   querySelector = (selector) => QuerySelector(selector, '[data-registry]'),
   getInputValue = (selector, options) => GetInputValue(selector, '[data-registry]', options),
-  prepareModal = (name = '', desc = '', date = '', note = '', id = '', eventType = '0', title = 'Create a New Registry', sponsor = '', shipping = '0') => {
+  prepareModal = (name = '', desc = '', date = '', note = '', id = '', eventType = '0', title = 'Create a New Registry', sponsor = '', shipping = '0', registryItems = []) => {
     const
       set = (selector, val) => SetInputValue(`[${selector}]`, '[data-modal-add]', val),
       header = querySelector('[data-modal-add] h4');
@@ -77,6 +77,8 @@ const
     set('data-add-sponsor', sponsor);
     set('data-add-event-shipping-method', shipping);
     header.innerHTML = title;
+
+    generateItemRow(registryItems);
 
     return querySelector('[data-modal-add]');
   },
@@ -256,10 +258,8 @@ const
           Description, Notes, Sponsor,
           ShippingOption, RegistryItems
         } = data,
-        dialog = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit: ${Name}`, Sponsor, ShippingOption),
+        dialog = prepareModal(Name, Description, EventDate, Notes, Id, EventType, `Edit: ${Name}`, Sponsor, ShippingOption, RegistryItems),
         onFadeComplete = await FadeOut(dialog);
-
-      generateItemRow(RegistryItems);
 
       dialog.showModal();
 

@@ -110,12 +110,13 @@ public class RegistryRepository : IRegistryRepository
 
         var oldConsultant = registry.ConsultantId;
 
+        registry.Name = source.Name;
+        registry.Description = source.Summary;
         registry.ConsultantId = source.ConsultantId;
         registry.AdminNotes = source.AdminNotes;
         registry.ShippingOption = source.DeliveryMethodId;
         registry.EventType = source.EventTypeId;
         registry.EventDate = source.EventDate;
-        registry.Name = source.Name;
         registry.Notes = source.ClientNotes;
         registry.Sponsor = source.Sponsor;
 

@@ -110,6 +110,7 @@ body:has(dialog[open]) {
 
             >input[type="checkbox"] {
                 height: 1.5rem;
+                accent-color: var(--gray, #5f5f5f);
             }
         }
 
@@ -232,7 +233,7 @@ body:has(dialog[open]) {
                         padding-inline: 1rem;
                     }
 
-                    >[data-row] {
+                    >[data-line-break] {
                         grid-column: span 5;
                         border-bottom: 1px solid var(--border);
                     }

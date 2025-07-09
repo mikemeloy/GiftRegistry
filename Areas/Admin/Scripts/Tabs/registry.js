@@ -222,6 +222,7 @@ const
             await Post(_url, {
                 id,
                 name,
+                summary,
                 adminNotes,
                 deliveryMethodId,
                 consultantId,

@@ -10,6 +10,7 @@ public class ViewModelFactory : IViewModelFactory
     private readonly IRegistryRepository _registryRepository;
     private readonly IAdminService _adminService;
     private readonly INopServices _nopServices;
+    private readonly string _version = "1.0.2";
 
     public ViewModelFactory(IRegistryRepository registryRepository, IAdminService adminService, INopServices nopServices)
     {
@@ -31,7 +32,7 @@ public class ViewModelFactory : IViewModelFactory
 
     public AdminViewModel GetAdminViewModelAsync()
     {
-        return new("1.0.1");
+        return new(_version);
     }
 
     public async Task<RegistryPartialViewModel> GetRegistryPartialViewModelAsync()
@@ -40,7 +41,7 @@ public class ViewModelFactory : IViewModelFactory
         var registryTypes = await _adminService.GetRegistryTypesAsync();
         var shippingOptions = await _adminService.GetShippingOptionsAsync();
 
-        return new RegistryPartialViewModel("1.0.0.0", consultants, registryTypes, shippingOptions);
+        return new RegistryPartialViewModel(_version, consultants, registryTypes, shippingOptions);
     }
 
     public async Task<ConsultantPartialViewModel> GetConsultantPartialViewModelAsync()
@@ -75,6 +76,6 @@ public class ViewModelFactory : IViewModelFactory
     {
         _ = int.TryParse(orderId, out var x);
 
-        return new RegistryGiftReceiptViewModel("test.pdf", x);
+        return new RegistryGiftReceiptViewModel("gift receipt.pdf", x);
     }
 }

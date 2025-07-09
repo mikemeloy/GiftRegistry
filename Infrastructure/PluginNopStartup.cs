@@ -3,6 +3,7 @@ using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Repositories;
 using i7MEDIA.Plugin.Widgets.Registry.Services;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -39,5 +40,6 @@ public class PluginNopStartup : INopStartup
     {
         services.TryAddScoped<IProductService, ProductService>();
         services.TryAddScoped<IShoppingCartService, ShoppingCartService>();
+        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
     }
 }

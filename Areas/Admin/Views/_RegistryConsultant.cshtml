@@ -21,7 +21,7 @@
             <span></span>
         </header>
 
-        <div data-row></div>
+        <div data-line-break></div>
 
         @{
             foreach (var item in consultants)
@@ -33,7 +33,7 @@
                     <i data-edit-consultant-option data-name="@item.Name" data-Email="@item.Email" data-id="@item.Id" class="fa fa-edit"></i>
                     <i data-delete-consultant-option data-name="@item.Name" data-Email="@item.Email" data-id="@item.Id" class="fa fa-trash"></i>
                 </span>
-                <div data-row></div>
+                <div data-line-break></div>
             }
         }
         <span></span>

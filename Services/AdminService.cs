@@ -6,6 +6,7 @@ using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Services;
 
@@ -14,12 +15,14 @@ public class AdminService : IAdminService
     private readonly ILogger_R _logger_R;
     private readonly IRegistryRepository _registryRepository;
     private readonly INopServices _nopServices;
+    private readonly IHttpContextAccessor _httpContext;
 
-    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices)
+    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices, IHttpContextAccessor httpContext)
     {
         _registryRepository = registryRepository;
         _logger_R = logger_R;
         _nopServices = opServices;
+        _httpContext = httpContext;
     }
 
     public async Task UpsertConsultantAsync(RegistryConsultantDTO consultant)
@@ -183,7 +186,7 @@ public class AdminService : IAdminService
         {
             var (oldConsultant, newConsultant) = await _registryRepository.UpdateRegistryAsync(registry);
 
-            await NotifyConsultantsOfChangeAsync(oldConsultant, newConsultant, registry.Name);
+            await NotifyConsultantsOfChangeAsync(oldConsultant, newConsultant, registry);
         }
         catch (Exception e)
         {
@@ -205,7 +208,7 @@ public class AdminService : IAdminService
         }
     }
 
-    private async Task NotifyConsultantsOfChangeAsync(int? oldConsultant, int? newConsultant, string registryName)
+    private async Task NotifyConsultantsOfChangeAsync(int? oldConsultant, int? newConsultant, RegistryEditAdminModel registry)
     {
         if (oldConsultant == newConsultant)
         {
@@ -220,9 +223,13 @@ public class AdminService : IAdminService
             return;
         }
 
+        var request = _httpContext.HttpContext.Request;
+        var domain = $"{request.Scheme}://{request.Host}";
+        var registryPublicLink = $"<a href=\"{domain}/registry/{registry.Id}\" target=\"_blank\">{registry.Name}</a>";
+
         await _nopServices.SendRegistryConsultantEmailAsync(
                     subject: "You have been added to a Registry!",
-                    body: $"Hello {consultant.Name},<br><br> You have been added as the consultant for {registryName}!",
+                    body: $"Hello {consultant.Name},<br><br> You have been added as the consultant for {registryPublicLink}!",
                     consultant: consultant
                 );
 
@@ -234,8 +241,8 @@ public class AdminService : IAdminService
         }
 
         await _nopServices.SendRegistryConsultantEmailAsync(
-                    subject: $"You have been removed from {registryName}",
-                    body: $"Hello {consultantOld.Name}, ",
+                    subject: $"You have been removed from {registry.Name}",
+                    body: $"Hello {consultantOld.Name},<br><br>You have been removed as the consultant for {registryPublicLink}",
                     consultant: consultantOld
                 );
     }

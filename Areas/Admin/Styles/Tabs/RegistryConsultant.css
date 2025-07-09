@@ -38,12 +38,12 @@ main {
                 text-align: center;
             }
 
-            [data-row] {
+            [data-line-break] {
                 grid-column: span 4;
                 border-bottom: 1px solid;
             }
 
-            [data-row]:last-of-type {
+            [data-line-break]:last-of-type {
                 display: none;
             }
 

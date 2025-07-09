@@ -22,7 +22,7 @@
             <span></span>
         </header>
 
-        <div data-row></div>
+        <div data-line-break></div>
 
         @{
             foreach (var item in registryTypes)
@@ -34,7 +34,7 @@
                     <i data-edit-type-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-edit"></i>
                     <i data-delete-type-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-trash"></i>
                 </span>
-                <div data-row></div>
+                <div data-line-break></div>
             }
         }
         <span></span>
