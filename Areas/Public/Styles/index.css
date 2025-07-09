@@ -221,7 +221,7 @@ body:has(dialog[open]) {
         }
       }
 
-      [data-registry-item] {
+      [data-registry-item]:has(div) {
         display: grid;
         grid-template-columns: 30% repeat(3, 1fr) min-content;
         gap: 1rem;

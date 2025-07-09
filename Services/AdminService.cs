@@ -228,7 +228,7 @@ public class AdminService : IAdminService
 
         var consultantOld = await _registryRepository.GetConsultantByIdAsync(oldConsultant);
 
-        if (!consultantOld.IsNull())
+        if (consultantOld.IsNull())
         {
             return;
         }

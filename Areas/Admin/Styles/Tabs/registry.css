@@ -62,6 +62,10 @@ body:has(dialog[open]) {
         margin: 1rem;
         color: var(--gray-dark, #434343);
 
+        a {
+            all: revert;
+        }
+
         &>span {
             color: var(--text);
             font-size: clamp(17px, 1.2rem, 20px);
@@ -76,7 +80,6 @@ body:has(dialog[open]) {
 
             &[data-header-row] {
                 text-align: center;
-                border-bottom: 1px solid var(--border, #434343);
                 font-weight: 600;
             }
         }
@@ -119,6 +122,11 @@ body:has(dialog[open]) {
             a {
                 color: var(--text);
             }
+        }
+
+        [data-line-break] {
+            grid-column: span 6;
+            border-bottom: 1px solid var(--border, #434343);
         }
     }
 
@@ -208,7 +216,7 @@ body:has(dialog[open]) {
                     min-height: 100px;
                 }
 
-                &[data-registry-item] {
+                &[data-registry-item]:has(div) {
                     display: grid;
                     grid-template-columns: 30% repeat(3, 1fr) min-content;
                     gap: 1rem;
@@ -224,7 +232,7 @@ body:has(dialog[open]) {
                         padding-inline: 1rem;
                     }
 
-                    [data-row] {
+                    >[data-row] {
                         grid-column: span 5;
                         border-bottom: 1px solid var(--border);
                     }

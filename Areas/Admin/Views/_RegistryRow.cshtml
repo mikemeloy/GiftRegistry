@@ -11,11 +11,13 @@
 <span data-header-row>Consultant</span>
 <span data-header-row>Shipping Method</span>
 <span data-header-row>Deleted</span>
-<span data-header-row style="border: none;"></span>
+<div data-line-break></div>
 
 @foreach (var registry in registries)
 {
-    <span>@registry.Name</span>
+    <span>
+        <a href="/registry/@registry.Id" target="_blank">@registry.Name</a>
+    </span>
     <span>@registry.EventDate.ToString("MMMM d, yyyy")</span>
     <span>@registry.ConsultantName</span>
     <span>@registry.ShippingMethod</span>
@@ -24,6 +26,6 @@
     </span>
     <span data-column-actions>
         <i data-action-edit class="fa fa-pen" data-registry-name="@registry.Name" data-registry-id="@registry.Id" title="Edit"></i>
-        <a href="/registry/@registry.Id" target="_blank"><i data-action-view class="fas fa-external-link-alt" title="View Public Registry Page"></i></a>
     </span>
+    <div data-line-break></div>
 }
