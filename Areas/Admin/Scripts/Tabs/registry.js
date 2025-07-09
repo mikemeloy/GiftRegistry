@@ -1,19 +1,24 @@
 import {
     AddQueryParamToURL, QuerySelector,
     LogError, GetInputValue, GetDataSet,
-    FadeOut, Post, Get,
-    SetInputValue, GetQueryParam
+    FadeOut, Post, Get, DateToInputString,
+    SetInputValue, GetQueryParam,
+    DisplayNotification, Delete,
+    IsEmpty, ToCurrency
 } from '../../../modules/utils.js';
 
 let
     _main,
     _url,
+    _deleteUrl,
     _debounce;
 
 const
-    init = async (el, url) => {
+    init = async (el, url, deleteUrl) => {
         _main = el;
         _url = url;
+        _deleteUrl = deleteUrl;
+
         setFormEvents();
         setSearchByUrl();
     },
@@ -46,9 +51,8 @@ const
         clearTimeout(_debounce);
         _debounce = setTimeout(async () => await el?.(), 400);
     },
-    setEditorFields = async (dialog, registryId, registryName) => {
+    setEditorFields = async (registryId, registryName) => {
         const
-            header = dialog.querySelector('header h3'),
             setValue = (key, value) => setInputValue(`[data-admin-update-${key}]`, value),
             { success, data } = await Get(`${_url}/Get?id=${registryId}`);
 
@@ -60,17 +64,89 @@ const
             DeliveryMethodId,
             EventTypeId,
             AdminNotes,
-            ConsultantId
+            ConsultantId,
+            RegistryItems,
+            Name,
+            ClientNotes,
+            EventDate,
+            Sponsor,
+            Summary
         } = data;
 
         setValue('header', registryName);
         setValue('id', registryId);
-        setValue('notes', AdminNotes);
+        setValue('admin-notes', AdminNotes);
         setValue('shipping', DeliveryMethodId);
         setValue('consultant', ConsultantId);
         setValue('type', EventTypeId);
+        setValue('name', Name);
+        setValue('summary', Summary);
+        setValue('event-date', DateToInputString(EventDate));
+        setValue('sponsor', Sponsor);
+        setValue('client-notes', ClientNotes);
+
+
+        generateItemRow(RegistryItems);
 
         return true;
+    },
+    generateItemRow = (registryItems) => {
+        const
+            container = querySelector('[data-registry-item]');
+
+        if (IsEmpty(registryItems)) {
+            container.replaceChildren()
+            return;
+        }
+
+        const
+            headerTemplate = querySelector('[data-template-registry-item-header]'),
+            headerClone = headerTemplate.content.cloneNode(true),
+            rowTemplate = querySelector('[data-template-registry-item-row]');
+
+        container.replaceChildren(headerClone)
+
+        for (const registryItem of registryItems) {
+            const
+                { Id, Name, Price, Quantity, Purchased } = registryItem,
+                clone = rowTemplate.content.cloneNode(true),
+                btnDelete = clone.querySelector('[data-action-delete]'),
+                btnEdit = clone.querySelector('[data-action-edit]'),
+                actionRow = clone.querySelector('[data-actions]'),
+                setValue = (selector, value) => {
+                    const el = clone.querySelector(`[data-${selector}]`);
+
+                    if (!el) {
+                        return;
+                    }
+
+                    el.dataset.rowId = Id;
+                    el.innerHTML = value;
+
+                    return el;
+                };
+
+            const
+                cellQuantity = setValue('quantity', Quantity);
+
+            setValue('name', Name);
+            setValue('price', ToCurrency(Price));
+            setValue('purchased', Purchased);
+
+            actionRow.dataset.rowId = Id;
+            cellQuantity.dataset.min = Purchased;
+
+            btnEdit.addEventListener('click', () => events.onRegistryitemEdit_Click(registryItem));
+            btnDelete.addEventListener('click', () => events.onRegistryitemDelete_Click(registryItem));
+
+            container.appendChild(clone);
+        }
+    },
+    getRowCell = (cellName = '', id = 0) => {
+        const
+            container = querySelector('[data-registry-item]');
+
+        return container.querySelector(`[data-${cellName}][data-row-id="${id}"]`);
     };
 
 const
@@ -112,8 +188,15 @@ const
             const
                 { registryId, registryName } = GetDataSet(e),
                 dialog = _main.querySelector('[data-dialog-edit-registry]'),
-                onFadeComplete = await FadeOut(dialog),
-                finished = setEditorFields(dialog, registryId, registryName);
+                success = setEditorFields(registryId, registryName);
+
+            if (!success) {
+                DisplayNotification("Unable to Edit Registry");
+                return;
+            }
+
+            const
+                onFadeComplete = await FadeOut(dialog);
 
             dialog.showModal();
 
@@ -124,12 +207,27 @@ const
                 dialog = _main.querySelector('[data-dialog-edit-registry]'),
                 getValueFor = (selector, options) => getInputValue(`[data-admin-update-${selector}]`, options),
                 id = getValueFor('id', { isNumeric: true }),
-                notes = getValueFor('notes'),
-                shipping = getValueFor('shipping', { isNumeric: true }),
-                consultant = getValueFor('consultant', { isNumeric: true }),
-                eventType = getValueFor('type', { isNumeric: true });
+                name = getValueFor('name'),
+                summary = getValueFor('summary'),
+                adminNotes = getValueFor('admin-notes'),
+                deliveryMethodId = getValueFor('shipping', { isNumeric: true }),
+                consultantId = getValueFor('consultant', { isNumeric: true }),
+                eventTypeId = getValueFor('type', { isNumeric: true }),
+                clientNotes = getValueFor('client-notes'),
+                sponsor = getValueFor('sponsor'),
+                eventDate = getValueFor('event-date');
 
-            await Post(_url, { id, notes, shipping, consultant, eventType });
+            await Post(_url, {
+                id,
+                name,
+                adminNotes,
+                deliveryMethodId,
+                consultantId,
+                eventTypeId,
+                clientNotes,
+                sponsor,
+                eventDate
+            });
 
             await FadeOut(dialog);
             dialog.close();
@@ -141,6 +239,70 @@ const
 
             dialog?.close();
             await onFadeComplete();
+        },
+        onRegistryitemDelete_Click: async ({ Id, Purchased }) => {
+            if (Purchased > 0) {
+                DisplayNotification(`Item Has Already Been Purchased and Cannot be Deleted!`);
+                return;
+            }
+
+            const
+                { success, data: deleted } = await Delete(`${_deleteUrl}?id=${Id}`);
+
+            if (!success || !deleted) {
+                DisplayNotification(`Unable to Delete Item From Registry`);
+                return;
+            }
+
+            const
+                rows = document.querySelectorAll(`[data-row-id="${Id}"]`),
+                actions = document.querySelector(`[data-actions][data-row-id="${Id}"]`);
+
+            for (const el of rows) {
+                el.animate({ opacity: [1, .2] }, { duration: 300, fill: "forwards" });
+            }
+
+            actions?.remove();
+        },
+        onRegistryitemEdit_Click: (registryItem) => {
+            const
+                { Id, Purchased } = registryItem,
+                quantityCell = getRowCell('quantity', Id),
+                value = quantityCell.innerHTML;
+
+            if (!quantityCell) {
+                console.error(`Edit Cell not found`);
+                return;
+            }
+
+            quantityCell.contentEditable = true;
+            quantityCell.focus();
+
+            quantityCell.onblur = async () => {
+                const
+                    newQuantity = quantityCell.innerHTML,
+                    lessThanPurchased = (newQuantity < Purchased);
+
+                quantityCell.contentEditable = false;
+
+                if (isNaN(newQuantity) || lessThanPurchased) {
+                    quantityCell.innerHTML = value;
+
+                    DisplayNotification(`Please enter a valid number greater than or equal to ${Purchased}`);
+                    return;
+                }
+
+                registryItem.Quantity = newQuantity;
+
+                const { success, data } = await Post(`${_updateRoute}/item`, registryItem);
+
+                if (!success) {
+                    DisplayNotification("Unable to Save Changes");
+                    return;
+                }
+
+                DisplayNotification("Changes Save");
+            };
         }
     }
 

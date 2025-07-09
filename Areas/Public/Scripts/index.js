@@ -243,7 +243,9 @@ const
 
       const
         { success, data } = await Get(`${_getRoute}?id=${registryId}`);
+
       onLoadComplete();
+
       if (!success) {
         alert('An Error has Occurred');
       }

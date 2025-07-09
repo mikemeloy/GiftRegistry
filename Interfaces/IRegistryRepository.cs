@@ -8,6 +8,7 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 
 public interface IRegistryRepository
 {
+
     public Task<IList<RegistryViewModel>> AdminQueryAsync(string q);
     public Task<IList<RegistryListItem>> QueryAsync(string query);
     public Task<RegistryDTO> GetRegistryByIdAsync(int registryId);
@@ -21,7 +22,7 @@ public interface IRegistryRepository
     public Task<(bool IamOwner, string OwnerName)> GetRegistryOwnerAssociationAsync(int registryId);
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
     public Task UpdateRegistryAsync(RegistryDTO registryDTO);
-    public Task UpdateRegistryAsync(AdminRegistryDTO registryDTO);
+    public Task<(int? OldConsultant, int? NewConsultant)> UpdateRegistryAsync(RegistryEditAdminModel source);
     public Task<IEnumerable<RegistryTypeDTO>> GetRegistryTypesAsync();
     public Task InsertRegistryItemOrderAsync(int orderId, int registryId, int productId, int quantity);
     public Task InsertConsultantAsync(string name, string email);
@@ -32,7 +33,7 @@ public interface IRegistryRepository
     public Task InsertShippingOptionAsync(string name, string description);
     public Task UpdateShippingOptionAsync(int? id, string name, string description, bool deleted);
     public Task<IEnumerable<RegistryShippingOptionDTO>> GetRegistryShippingOptionsAsync();
-    public Task<GiftRegistryConsultant> GetConsultantByIdAsync(int consultantId);
+    public Task<GiftRegistryConsultant> GetConsultantByIdAsync(int? consultantId);
     public Task<RegistryEditAdminModel> GetAdminFieldsAsync(int id);
     public Task<List<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId);
 }

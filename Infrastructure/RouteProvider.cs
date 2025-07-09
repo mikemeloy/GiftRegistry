@@ -127,5 +127,11 @@ internal class RouteProvider : IRouteProvider
            pattern: "Admin/ShippingOption/List",
            defaults: new { controller = "Admin", action = "ShippingOption/List", area = AreaNames.Admin }
         );
+
+        endpointRouteBuilder.MapControllerRoute(
+            name: AdminDefaults.DeleteItem,
+            pattern: "Registry/Item/{id?}",
+            defaults: new { controller = "Registry", action = "DeleteItem" }
+        );
     }
 }

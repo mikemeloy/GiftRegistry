@@ -13,11 +13,13 @@ public class AdminService : IAdminService
 {
     private readonly ILogger_R _logger_R;
     private readonly IRegistryRepository _registryRepository;
+    private readonly INopServices _nopServices;
 
-    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R)
+    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices)
     {
         _registryRepository = registryRepository;
         _logger_R = logger_R;
+        _nopServices = opServices;
     }
 
     public async Task UpsertConsultantAsync(RegistryConsultantDTO consultant)
@@ -175,11 +177,13 @@ public class AdminService : IAdminService
         }
     }
 
-    public async Task UpdateAdminRegistryFields(AdminRegistryDTO registry)
+    public async Task UpdateAdminRegistryFields(RegistryEditAdminModel registry)
     {
         try
         {
-            await _registryRepository.UpdateRegistryAsync(registry);
+            var (oldConsultant, newConsultant) = await _registryRepository.UpdateRegistryAsync(registry);
+
+            await NotifyConsultantsOfChangeAsync(oldConsultant, newConsultant, registry.Name);
         }
         catch (Exception e)
         {
@@ -199,5 +203,40 @@ public class AdminService : IAdminService
             await _logger_R.LogErrorAsync(nameof(GetRegistryByIdAsync), e);
             return null;
         }
+    }
+
+    private async Task NotifyConsultantsOfChangeAsync(int? oldConsultant, int? newConsultant, string registryName)
+    {
+        if (oldConsultant == newConsultant)
+        {
+            return;
+        }
+
+        var consultant = await _registryRepository.GetConsultantByIdAsync(newConsultant);
+
+        if (consultant.IsNull())
+        {
+            await _logger_R.LogWarningAsync($"Unable to find a registry Consultant with the id of {newConsultant.Value}");
+            return;
+        }
+
+        await _nopServices.SendRegistryConsultantEmailAsync(
+                    subject: "You have been added to a Registry!",
+                    body: $"Hello {consultant.Name},<br><br> You have been added as the consultant for {registryName}!",
+                    consultant: consultant
+                );
+
+        var consultantOld = await _registryRepository.GetConsultantByIdAsync(oldConsultant);
+
+        if (!consultantOld.IsNull())
+        {
+            return;
+        }
+
+        await _nopServices.SendRegistryConsultantEmailAsync(
+                    subject: $"You have been removed from {registryName}",
+                    body: $"Hello {consultantOld.Name}, ",
+                    consultant: consultantOld
+                );
     }
 }

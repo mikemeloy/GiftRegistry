@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
@@ -9,7 +8,6 @@ using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 using Nop.Core.Domain.Messages;
-using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Stores;
 using Nop.Services.Catalog;
 using Nop.Services.Common;
@@ -158,13 +156,5 @@ public class NopServices : INopServices
         {
             await _logger_R.LogErrorAsync(nameof(SendRegistryConsultantEmailAsync), e);
         }
-    }
-
-    public async Task<IList<OrderItem>> GetCustomerOrderByIdAsync(int orderId)
-    {
-        var order = await _orderService.GetOrderByIdAsync(orderId);
-        var items = await _orderService.GetOrderItemsAsync(orderId);
-
-        return items;
     }
 }

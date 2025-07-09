@@ -25,6 +25,7 @@
     <None Remove="Areas\Admin\Views\Index.cshtml" />
     <None Remove="Areas\Admin\Views\_RegistryConsultant.cshtml" />
     <None Remove="Areas\Admin\Views\_RegistryList.cshtml" />
+    <None Remove="Areas\Admin\Views\_RegistryNotification.cshtml" />
     <None Remove="Areas\Admin\Views\_RegistryRow.cshtml" />
     <None Remove="Areas\Admin\Views\_RegistryShippingOption.cshtml" />
     <None Remove="Areas\Admin\Views\_RegistryType.cshtml" />
@@ -90,6 +91,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Admin\Views\_RegistryList.cshtml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Areas\Admin\Views\_RegistryNotification.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Admin\Views\_RegistryRow.cshtml">

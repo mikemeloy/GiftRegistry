@@ -14,6 +14,7 @@ const
         '/Views/index.cshtml',
         '/Views/_RegistryShippingOption.cshtml',
         '/Views/_RegistryRow.cshtml',
+        '/Views/_RegistryNotification.cshtml',
 
         '/Scripts/Tabs/registry.js',
         '/Scripts/Tabs/registryConsultant.js',

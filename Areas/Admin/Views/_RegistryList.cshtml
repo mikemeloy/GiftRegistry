@@ -29,19 +29,26 @@
             <i class="fa fa-times" data-dialog-close></i>
         </header>
         <main>
+
             <section>
-                <label>
-                    Delivery Method
+                <label for="name">
+                    Name
                 </label>
-                <select data-admin-update-shipping class="form-control text-box single-line">
-                    <option value="0">Select One...</option>
-                    @{
-                        foreach (var item in shippingOptions)
-                        {
-                            <option title="@item.Description" value="@item.Id">@item.Name</option>
-                        }
-                    }
-                </select>
+                <input data-admin-update-name type="text" class="form-control text-box single-line">
+            </section>
+
+            <section>
+                <label for="summary">
+                    Summary
+                </label>
+                <textarea data-admin-update-summary class="form-control text-box"></textarea>
+            </section>
+
+            <section>
+                <label for="eventdate">
+                    Event Date
+                </label>
+                <input data-admin-update-event-date type="date" class="form-control text-box single-line">
             </section>
 
             <section>
@@ -58,6 +65,13 @@
             </section>
 
             <section>
+                <label for="sponsor">
+                    Partner / Co-Sponsor
+                </label>
+                <input data-admin-update-sponsor type="text" class="form-control text-box single-line">
+            </section>
+
+            <section>
                 <label>
                     Consultant
                 </label>
@@ -71,15 +85,64 @@
             </section>
 
             <section>
+                <label>
+                    Delivery Method
+                </label>
+                <select data-admin-update-shipping class="form-control text-box single-line">
+                    <option value="0">Select One...</option>
+                    @{
+                        foreach (var item in shippingOptions)
+                        {
+                            <option title="@item.Description" value="@item.Id">@item.Name</option>
+                        }
+                    }
+                </select>
+            </section>
+
+            <section>
+                <label for="notes">
+                    Client Notes
+                </label>
+                <textarea data-admin-update-client-notes class="form-control text-box"></textarea>
+            </section>
+
+            <section>
                 <label for="notes">
                     Admin Notes
                 </label>
-                <textarea data-admin-update-notes autocomplete="off" class="form-control text-box single-line" rows="10" multiple></textarea>
+                <textarea data-admin-update-admin-notes autocomplete="off" class="form-control text-box single line" rows="10" multiple></textarea>
             </section>
+
+            <section data-registry-item>
+                @*dynamic content*@
+            </section>
+
         </main>
         <footer>
             <input type="hidden" data-admin-update-id>
             <button type="button" class="btn btn-success" data-admin-update-save>Save</button>
         </footer>
     </dialog>
+    <template data-template-registry-item-header>
+        <div class="center">Name</div>
+        <div class="center">Price</div>
+        <div data-editable class="center">Requested</div>
+        <div class="center">Purchased</div>
+        <div class="center"></div>
+        <div data-row></div>
+    </template>
+
+    <template data-template-registry-item-row>
+        <div data-name></div>
+        <div data-price class="right"></div>
+        <div data-quantity class="center"></div>
+        <div data-purchased class="center"></div>
+        <div data-actions>
+            <i data-action-edit class="fa fa-pen"></i>
+            <i data-action-delete class="fa fa-trash"></i>
+        </div>
+        <div data-row></div>
+    </template>
 </div>
+
+@await Html.PartialAsync("_RegistryNotification.cshtml")

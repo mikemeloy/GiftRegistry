@@ -15,11 +15,13 @@ public class AdminController : BasePluginController
 {
     private readonly IViewModelFactory _viewModelFactory;
     private readonly IAdminService _adminService;
+    private readonly IRegistryService _registryService;
 
-    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService)
+    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService, IRegistryService registryService)
     {
         _viewModelFactory = viewModelFactory;
         _adminService = adminService;
+        _registryService = registryService;
     }
 
     [HttpGet]
@@ -129,7 +131,7 @@ public class AdminController : BasePluginController
     [HttpPost]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public async Task RegistryAsync([FromBody] AdminRegistryDTO registry)
+    public async Task RegistryAsync([FromBody] RegistryEditAdminModel registry)
     {
         await _adminService.UpdateAdminRegistryFields(registry);
     }
@@ -156,5 +158,19 @@ public class AdminController : BasePluginController
     public async Task ShippingOptionAsync([FromBody] RegistryShippingOptionDTO registryType)
     {
         await _adminService.UpsertRegistryShippingOptionAsync(registryType);
+    }
+
+    [HttpDelete]
+    [IgnoreAntiforgeryToken]
+    public async Task<bool> DeleteItemAsync(int? id)
+    {
+        if (id.IsNull())
+        {
+            return false;
+        }
+
+        var success = await _registryService.DeleteRegistryItemAsync(id.Value);
+
+        return success;
     }
 }

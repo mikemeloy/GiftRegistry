@@ -99,21 +99,29 @@ public class RegistryRepository : IRegistryRepository
         await _registry.UpdateAsync(entity);
     }
 
-    public async Task UpdateRegistryAsync(AdminRegistryDTO source)
+    public async Task<(int? OldConsultant, int? NewConsultant)> UpdateRegistryAsync(RegistryEditAdminModel source)
     {
         var registry = await _registry.GetByIdAsync(source.Id);
 
         if (registry.IsNull())
         {
-            return;
+            return (0, 0);
         }
 
-        registry.ConsultantId = source.Consultant;
-        registry.AdminNotes = source.Notes;
-        registry.ShippingOption = source.Shipping;
-        registry.EventType = source.EventType;
+        var oldConsultant = registry.ConsultantId;
+
+        registry.ConsultantId = source.ConsultantId;
+        registry.AdminNotes = source.AdminNotes;
+        registry.ShippingOption = source.DeliveryMethodId;
+        registry.EventType = source.EventTypeId;
+        registry.EventDate = source.EventDate;
+        registry.Name = source.Name;
+        registry.Notes = source.ClientNotes;
+        registry.Sponsor = source.Sponsor;
 
         await _registry.UpdateAsync(registry);
+
+        return (oldConsultant, source.ConsultantId);
     }
 
     public async Task InsertRegistryItemAsync(int registryId, int productId, int quantity)
@@ -351,7 +359,7 @@ public class RegistryRepository : IRegistryRepository
         return await query.ToListAsync();
     }
 
-    public async Task<GiftRegistryConsultant> GetConsultantByIdAsync(int consultantId)
+    public async Task<GiftRegistryConsultant> GetConsultantByIdAsync(int? consultantId)
     {
         return await _registryConsultant.GetByIdAsync(consultantId);
     }
@@ -359,9 +367,21 @@ public class RegistryRepository : IRegistryRepository
     public async Task<RegistryEditAdminModel> GetAdminFieldsAsync(int id)
     {
         var registry = await _registry.GetByIdAsync(id);
+        var items = await GetRegistryItemsByIdAsync(id);
 
-
-        return new RegistryEditAdminModel(registry.ShippingOption, registry.EventType, registry.ConsultantId, registry.AdminNotes);
+        return new RegistryEditAdminModel(
+                Id: id,
+                DeliveryMethodId: registry.ShippingOption,
+                EventTypeId: registry.EventType,
+                ConsultantId: registry.ConsultantId,
+                AdminNotes: registry.AdminNotes,
+                ClientNotes: registry.Notes,
+                Name: registry.Name,
+                Summary: registry.Description,
+                EventDate: registry.EventDate,
+                Sponsor: registry.Sponsor,
+                RegistryItems: items
+            );
     }
 
     public async Task<List<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId)
