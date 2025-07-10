@@ -114,8 +114,8 @@ public class RegistryRepository : IRegistryRepository
         registry.Description = source.Summary;
         registry.ConsultantId = source.ConsultantId;
         registry.AdminNotes = source.AdminNotes;
-        registry.ShippingOption = source.DeliveryMethodId;
-        registry.EventType = source.EventTypeId;
+        registry.ShippingOptionId = source.DeliveryMethodId;
+        registry.EventTypeId = source.EventTypeId;
         registry.EventDate = source.EventDate;
         registry.Notes = source.ClientNotes;
         registry.Sponsor = source.Sponsor;
@@ -188,7 +188,7 @@ public class RegistryRepository : IRegistryRepository
                     join cust in _customer.Table on reg.CustomerId equals cust.Id
                     join con in _registryConsultant.Table on reg.ConsultantId equals con.Id into consultantGroup
                     from consultant in consultantGroup.DefaultIfEmpty()
-                    join del in _registryShippingOption.Table on reg.ShippingOption equals del.Id into shippingOptionGroup
+                    join del in _registryShippingOption.Table on reg.ShippingOptionId equals del.Id into shippingOptionGroup
                     from shippingOption in shippingOptionGroup.DefaultIfEmpty()
                     where reg.Search.Contains(q)
                     select new RegistryViewModel
@@ -214,6 +214,7 @@ public class RegistryRepository : IRegistryRepository
         return (from reg in _registry.Table
                 join cust in _customer.Table on reg.CustomerId equals cust.Id
                 where reg.Deleted == false && reg.Search.Contains(query)
+                orderby reg.Name ascending
                 select new RegistryListItem
                 {
                     Id = reg.Id,
@@ -337,6 +338,7 @@ public class RegistryRepository : IRegistryRepository
     {
         var query = from ty in _registryType.Table
                     where ty.Deleted == false
+                    orderby ty.SortOrder descending, ty.Name
                     select new RegistryTypeDTO(ty.Id, ty.Name, ty.Description, ty.Deleted);
 
         return await query.ToListAsync();
@@ -346,6 +348,8 @@ public class RegistryRepository : IRegistryRepository
     {
         var query = from c in _registryConsultant.Table
                     where c.Deleted == false
+                    orderby c.SortOrder descending, c.Name
+
                     select new RegistryConsultantDTO(c.Id, c.Name, c.Email, c.Deleted);
 
         return await query.ToListAsync();
@@ -355,6 +359,7 @@ public class RegistryRepository : IRegistryRepository
     {
         var query = from c in _registryShippingOption.Table
                     where c.Deleted == false
+                    orderby c.SortOrder descending, c.Name
                     select new RegistryShippingOptionDTO(c.Id, c.Name, c.Description, c.Deleted);
 
         return await query.ToListAsync();
@@ -372,8 +377,8 @@ public class RegistryRepository : IRegistryRepository
 
         return new RegistryEditAdminModel(
                 Id: id,
-                DeliveryMethodId: registry.ShippingOption,
-                EventTypeId: registry.EventType,
+                DeliveryMethodId: registry.ShippingOptionId,
+                EventTypeId: registry.EventTypeId,
                 ConsultantId: registry.ConsultantId,
                 AdminNotes: registry.AdminNotes,
                 ClientNotes: registry.Notes,

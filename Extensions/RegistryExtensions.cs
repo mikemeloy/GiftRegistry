@@ -17,9 +17,9 @@ public static class RegistryExtensions
             Description = source.Description,
             EventDate = source.EventDate,
             Notes = source.Notes,
-            EventType = source.EventType,
+            EventTypeId = source.EventType,
             Sponsor = source.Sponsor,
-            ShippingOption = source.ShippingOption,
+            ShippingOptionId = source.ShippingOption,
             ConsultantId = source.ConsultantId,
         };
     }
@@ -37,9 +37,9 @@ public static class RegistryExtensions
             Description: source.Description,
             EventDate: source.EventDate,
             Notes: source.Notes,
-            EventType: source.EventType,
+            EventType: source.EventTypeId,
             Sponsor: source.Sponsor,
-            ShippingOption: source.ShippingOption,
+            ShippingOption: source.ShippingOptionId,
             ConsultantId: source.ConsultantId
         );
     }
