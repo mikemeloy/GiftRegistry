@@ -1,5 +1,7 @@
 main {
     [data-registry-option] {
+        max-width: 55rem;
+        margin: 0 auto;
 
         form {
             display: inline-flex;

@@ -52,7 +52,8 @@ i {
 }
 
 [data-registry-admin-main] {
-    margin: 1rem;
+    max-width: 70rem;
+    margin: 1rem auto;
     user-select: none;
 }
 

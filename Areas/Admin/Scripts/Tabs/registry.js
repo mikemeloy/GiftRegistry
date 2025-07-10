@@ -27,6 +27,8 @@ const
             searchParam = GetQueryParam('search'),
             searchInput = querySelector('form input');
 
+        searchInput.focus();
+
         if (!searchParam || !searchInput) {
             return;
         }
