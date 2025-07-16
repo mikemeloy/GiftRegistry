@@ -90,7 +90,7 @@ public class PdfService : IRegistryPdfService
             layer.Layer()
              .AlignMiddle()
              .AlignCenter()
-             .Text("Gift Receipts")
+             .Text("Gift Receipt")
              .FontSize(75)
              .FontColor("#d1d1d1");
 
@@ -131,5 +131,24 @@ public class PdfService : IRegistryPdfService
                 {
                     x.Span("Thank You For Your Purchase");
                 });
+    }
+
+    public async Task<byte[]> GenerateRegistryReportAsync(string name)
+    {
+        var data = await _registry.GetReportDataAsync();
+
+        var receipt = Document.Create(document =>
+           {
+               document.Page(page =>
+               {
+                   page.Size(PageSizes.A4);
+                   page.Margin(1, Unit.Centimetre);
+                   page.PageColor(Colors.White);
+                   page.DefaultTextStyle(x => x.FontSize(16));
+
+               });
+           });
+
+        return receipt.GeneratePdf();
     }
 }

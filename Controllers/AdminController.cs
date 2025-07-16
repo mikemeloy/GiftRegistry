@@ -16,12 +16,14 @@ public class AdminController : BasePluginController
     private readonly IViewModelFactory _viewModelFactory;
     private readonly IAdminService _adminService;
     private readonly IRegistryService _registryService;
+    private readonly IRegistryPdfService _registryPdfService;
 
-    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService, IRegistryService registryService)
+    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService, IRegistryService registryService, IRegistryPdfService registryPdfService)
     {
         _viewModelFactory = viewModelFactory;
         _adminService = adminService;
         _registryService = registryService;
+        _registryPdfService = registryPdfService;
     }
 
     [HttpGet]
@@ -200,5 +202,17 @@ public class AdminController : BasePluginController
         var success = await _registryService.DeleteRegistryItemAsync(id.Value);
 
         return success;
+    }
+
+    [IgnoreAntiforgeryToken]
+    [HttpGet]
+    public async Task<FileContentResult> ReportAsync(ReportRequestDTO request)
+    {
+        var pdfBytes = await _registryPdfService.GenerateRegistryReportAsync("");
+
+        return new FileContentResult(pdfBytes, "application/pdf")
+        {
+            FileDownloadName = $"Report.pdf"
+        };
     }
 }

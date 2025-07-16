@@ -133,5 +133,11 @@ internal class RouteProvider : IRouteProvider
             pattern: "Admin/Registry/Item/{id?}",
             defaults: new { controller = "Admin", action = "DeleteItem" }
         );
+
+        endpointRouteBuilder.MapControllerRoute(
+            name: AdminDefaults.RegistryAdminReport,
+            pattern: "Admin/Report",
+            defaults: new { controller = "Admin", action = "Report" }
+        );
     }
 }

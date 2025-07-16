@@ -5,15 +5,17 @@ let
     _consultantRoute,
     _registryTypeRoute,
     _registryShippingRoute,
-    _deleteItemRoute;
+    _deleteItemRoute,
+    _reportGenerationRoute;
 
 const
-    init = (registryRoute, consultantRoute, registryTypeRoute, registryShippingRoute, deleteItemRoute) => {
+    init = (registryRoute, consultantRoute, registryTypeRoute, registryShippingRoute, deleteItemRoute, reportGenerationRoute) => {
         _consultantRoute = consultantRoute;
         _registryRoute = registryRoute;
         _registryTypeRoute = registryTypeRoute;
         _registryShippingRoute = registryShippingRoute;
         _deleteItemRoute = deleteItemRoute;
+        _reportGenerationRoute = reportGenerationRoute;
 
         setupFormEvents();
         initTab();
@@ -57,7 +59,7 @@ const events = {
             el = await appendPartial(data),
             { init } = await import('./Tabs/registry.js');
 
-        init?.(el, _registryRoute, _deleteItemRoute);
+        init?.(el, _registryRoute, _deleteItemRoute, _reportGenerationRoute);
         setTabQuery('home');
     },
     onConsultant_Click: async () => {

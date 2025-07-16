@@ -85,6 +85,15 @@ header[data-registry-header] {
             }
         }
 
+        ins {
+            display: flex;
+            justify-content: center;
+            margin: 1rem;
+            font-size: 3rem;
+            text-decoration: none;
+            color: var(--primary);
+        }
+
         footer {
             min-height: 1rem;
             display: flex;

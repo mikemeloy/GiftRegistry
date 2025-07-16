@@ -46,23 +46,32 @@
                 <section data-currency>
                     Price: @item.Price.ToString("C", CultureInfo.CurrentCulture)
                 </section>
-                <section>
-                    Purchased: @item.Purchased of @item.Quantity
-                </section>
-                <footer>
-                    <button data-add type="button">
-                        <i class="fal fa-plus"></i>
-                        Add to Cart
-                    </button>
 
-                    @if (Model.IamOwner)
-                    {
-                        <button data-delete type="button">
-                            <i class="fal fa-trash"></i>
-                            Delete
+                @if (item.Fulfilled)
+                {
+                    <ins>Item Fulfilled</ins>
+                }
+                else
+                {
+                    <section>
+                        Purchased: @item.Purchased of @item.Quantity
+                    </section>
+                    <footer>
+                        <button data-add type="button">
+                            <i class="fal fa-plus"></i>
+                            Add to Cart
                         </button>
-                    }
-                </footer>
+
+                        @if (Model.IamOwner)
+                        {
+                            <button data-delete type="button">
+                                <i class="fal fa-trash"></i>
+                                Delete
+                            </button>
+                        }
+                    </footer>
+                }
+
             </form>
         }
     }

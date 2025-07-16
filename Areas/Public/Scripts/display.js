@@ -44,7 +44,7 @@ const
       label = dialog.querySelector(':scope label'),
       cancel = dialog.querySelector(':scope [data-cancel]'),
       submit = dialog.querySelector(':scope [data-submit'),
-      onFadeComplete = await FadeOut(dialog);;
+      onFadeComplete = await FadeOut(dialog);
 
     label.innerHTML = `<strong>${owner}</strong> has requested <strong>${requestedQuantity}</strong> of <strong>${productName}</strong>, Would you like to purchase more than one?`;
     input.max = requestedQuantity;

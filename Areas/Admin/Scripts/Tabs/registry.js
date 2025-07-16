@@ -4,20 +4,22 @@ import {
     FadeOut, Post, Get, DateToInputString,
     SetInputValue, GetQueryParam,
     DisplayNotification, Delete,
-    IsEmpty, ToCurrency
+    IsEmpty, ToCurrency, UseTemplateTag
 } from '../../../modules/utils.js';
 
 let
     _main,
     _url,
     _deleteUrl,
+    _reportUrl,
     _debounce;
 
 const
-    init = async (el, url, deleteUrl) => {
+    init = async (el, url, deleteUrl, reportUrl) => {
         _main = el;
         _url = url;
         _deleteUrl = deleteUrl;
+        _reportUrl = reportUrl;
 
         setFormEvents();
         setSearchByUrl();
@@ -41,13 +43,15 @@ const
     setInputValue = (selector, value) => SetInputValue(selector, '[data-registry]', value),
     setFormEvents = () => {
         const
+            report = querySelector('[data-action-report]'),
             form = querySelector('[data-search]'),
             save = querySelector('[data-admin-update-save]'),
             close = querySelector('[data-dialog-close]');
 
         form.addEventListener('keyup', events.onSearch_KeyUp);
         save.addEventListener('click', events.onSave_Click);
-        close.addEventListener('click', events.onClose_Click)
+        close.addEventListener('click', events.onClose_Click);
+        report.addEventListener('click', events.onReport_Click)
     },
     debounce = (el) => {
         clearTimeout(_debounce);
@@ -149,6 +153,29 @@ const
             container = querySelector('[data-registry-item]');
 
         return container.querySelector(`[data-${cellName}][data-row-id="${id}"]`);
+    },
+    getReportParams = async () => {
+        const { component: dialog, onRemove } = UseTemplateTag(
+            '[data-template-report-dialog]',
+            '[data-registry]',
+            '[data-dialog-report]'
+        );
+
+        const
+            submit = dialog.querySelector(':scope [data-dialog-report-submit]'),
+            name = dialog.querySelector(':scope [data-report-query-name]'),
+            onFadeComplete = await FadeOut(dialog);
+
+        dialog.showModal();
+
+        onFadeComplete();
+
+        return new Promise((res) => submit.addEventListener('click', () => res({
+            value: {
+                name: name.value
+            },
+            onRemove
+        })));
     };
 
 const
@@ -316,6 +343,13 @@ const
 
                 DisplayNotification("Changes Save");
             };
+        },
+        onReport_Click: async () => {
+            const { data, onRemove } = await getReportParams();
+
+            onRemove();
+
+            await Get(_reportUrl, data);
         }
     }
 

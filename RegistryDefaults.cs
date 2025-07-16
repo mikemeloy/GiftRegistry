@@ -18,6 +18,7 @@ public static class RegistryDefaults
 
 public static class AdminDefaults
 {
+    public static string RegistryAdminReport => "Plugin.Widget.Registry.Admin.Registry.Report";
     public static string RegistryItem => "Plugin.Widget.Registry.Admin.Registry.Item";
     public static string Get => "Plugin.Widget.Registry.Admin.Get";
     public static string Index => "Plugin.Widget.Registry.Admin.Index";

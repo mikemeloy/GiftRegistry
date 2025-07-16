@@ -12,7 +12,7 @@
     var firstReg = registries.FirstOrDefault();
 }
 
-@if (firstReg != null)
+@if (firstReg.NotNull())
 {
     <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/product.css?v=@version" />
 

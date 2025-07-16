@@ -18,6 +18,7 @@
             <input type="text" autocomplete="off" placeholder="Search Registries..." aria-label="Search registries" autofocus>
             <i class="fa fa-search" title="Search by Name, Date, Month or by Person"></i>
         </form>
+        <i data-action-report class="fa fa-table" title="Generate Report"></i>
     </header>
     <section data-result>
         <h2>Perform a Search to See Results...</h2>
@@ -85,7 +86,7 @@
 
             <section>
                 <label>
-                    Delivery Method
+                    Collection Method
                 </label>
                 <select data-admin-update-shipping class="form-control text-box single-line">
                     <option value="0">Select One...</option>
@@ -122,6 +123,20 @@
             <button type="button" class="btn btn-success" data-admin-update-save>Save</button>
         </footer>
     </dialog>
+
+    <template data-template-report-dialog>
+        <dialog data-dialog-report>
+            <input data-report-query-name type="text" class="form-control text-box" />
+            <input data-report-query-start-date type="date" class="form-control text-box" />
+            <input data-report-query-end-date type="date" class="form-control text-box" />
+            <fieldset>
+                <input checked type="radio" value="1" name="active">
+                <input type="radio" value="2" name="active">
+            </fieldset>
+            <button data-dialog-report-submit>Submit</button>
+        </dialog>
+    </template>
+
     <template data-template-registry-item-header>
         <div class="center">Name</div>
         <div class="center">Price</div>

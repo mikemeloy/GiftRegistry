@@ -290,4 +290,11 @@ public class RegistryService : IRegistryService
 
         return new(registry.Name, product.Name, consultant, orderId);
     }
+
+    public async Task<bool> GetReportDataAsync()
+    {
+        var registry = await _registryRepository.GetRegistryByIdAsync(1);
+
+        return true;
+    }
 }

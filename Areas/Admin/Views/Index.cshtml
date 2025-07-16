@@ -8,6 +8,7 @@
     var TypeRoute = Url.RouteUrl(AdminDefaults.RegistryType);
     var shippingRoute = Url.RouteUrl(AdminDefaults.RegistryShipping);
     var deleteItemRoute = Url.RouteUrl(AdminDefaults.RegistryItem);
+    var reportRoute = Url.RouteUrl(AdminDefaults.RegistryAdminReport);
 }
 
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Styles/index.css?v=@version" />
@@ -15,7 +16,7 @@
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Scripts/index.js?v=@version';
 
-    init('@registryRoute', '@consultantRoute', '@TypeRoute', '@shippingRoute', '@deleteItemRoute');
+    init('@registryRoute', '@consultantRoute', '@TypeRoute', '@shippingRoute', '@deleteItemRoute', '@reportRoute');
 </!script>
 
 <header data-registry-admin-header>
@@ -23,7 +24,7 @@
         <button type="button">Search Registries</button>
         <button type="button">Consultants</button>
         <button type="button">Types</button>
-        <button type="button" data-nav-shipping>Shipping Options</button>
+        <button type="button" data-nav-shipping>Collection Method</button>
     </nav>
 </header>
 <main data-registry-admin-main>
