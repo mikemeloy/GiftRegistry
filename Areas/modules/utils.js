@@ -40,7 +40,21 @@ const
         data: params,
         url,
         success: (data) => resolve({ success: true, data }),
-        error: (_, status, errorThrown) => resolve({ success: false, data: null, error: errorThrown })
+        error: (_, status, error) => resolve({ success: false, data: null, error: error })
+      });
+    });
+  },
+  GetFile = (url, params) => {
+    return new Promise((resolve, _) => {
+      $.ajax({
+        type: "GET",
+        data: params,
+        url,
+        xhrFields: {
+          responseType: 'blob'
+        },
+        success: (data) => resolve({ success: true, data }),
+        error: (_, status, error) => resolve({ success: false, data: null, error })
       });
     });
   },
@@ -53,7 +67,7 @@ const
         data: JSON.stringify(params),
         url,
         success: (data) => resolve({ success: true, data }),
-        error: (_, status, errorThrown) => resolve({ success: false, data: null, error: errorThrown })
+        error: (_, status, error) => resolve({ success: false, data: null, error: error })
       });
     });
   },
@@ -66,7 +80,7 @@ const
         data: params,
         url,
         success: (data) => resolve({ success: true, data }),
-        error: (_, status, errorThrown) => resolve({ success: false, data: null, error: errorThrown })
+        error: (_, status, error) => resolve({ success: false, data: null, error: error })
       });
     });
   },
@@ -222,7 +236,19 @@ const
     el.animate({ opacity: [0, 1] }, { duration, fill: "forwards" })
       .addEventListener('finish', (e) => res());
   }),
-  Delay = (milisecond = 300) => new Promise((res) => setTimeout(() => res(), milisecond))
+  Delay = (milisecond = 300) => new Promise((res) => setTimeout(() => res(), milisecond)),
+  SaveAsFile = (data, fileName) => {
+    const
+      a = document.createElement('a'),
+      url = window.URL.createObjectURL(data);
+
+    a.href = url;
+    a.download = fileName;
+    document.body.append(a);
+    a.click();
+    a.remove();
+    window.URL.revokeObjectURL(url);
+  }
 
 export {
   Get,
@@ -242,5 +268,7 @@ export {
   GetDataSet,
   ToCurrency,
   FadeOut,
-  IsEmpty
+  IsEmpty,
+  GetFile,
+  SaveAsFile
 }

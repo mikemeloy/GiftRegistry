@@ -74,8 +74,13 @@ public class ViewModelFactory : IViewModelFactory
 
     public RegistryGiftReceiptViewModel GetRegistryGiftReceiptViewModel(string orderId)
     {
-        _ = int.TryParse(orderId, out var x);
+        _ = int.TryParse(orderId, out var id);
 
-        return new RegistryGiftReceiptViewModel("gift receipt.pdf", x);
+        return new RegistryGiftReceiptViewModel(
+                FileName: "gift receipt.pdf",
+                OrderId: id,
+                PluginPath: RegistryDefaults.PluginPath,
+                Version: "1.0.0"
+            );
     }
 }

@@ -4,7 +4,8 @@ import {
     FadeOut, Post, Get, DateToInputString,
     SetInputValue, GetQueryParam,
     DisplayNotification, Delete,
-    IsEmpty, ToCurrency, UseTemplateTag
+    IsEmpty, ToCurrency, UseTemplateTag,
+    SaveAsFile, GetFile
 } from '../../../modules/utils.js';
 
 let
@@ -171,10 +172,10 @@ const
         onFadeComplete();
 
         return new Promise((res) => submit.addEventListener('click', () => res({
-            value: {
+            params: {
                 name: name.value
             },
-            onRemove
+            closeParamDialog: onRemove
         })));
     };
 
@@ -345,11 +346,17 @@ const
             };
         },
         onReport_Click: async () => {
-            const { data, onRemove } = await getReportParams();
+            const { params, closeParamDialog } = await getReportParams(),
+                { success, data, error } = await GetFile(_reportUrl, params);
 
-            onRemove();
+            if (!success) {
+                alert('Unable to Download Report');
+                console.dir(error);
+                return;
+            }
 
-            await Get(_reportUrl, data);
+            closeParamDialog();
+            SaveAsFile(data, params.name);
         }
     }
 

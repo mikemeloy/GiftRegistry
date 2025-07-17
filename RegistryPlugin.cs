@@ -39,6 +39,11 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
             return typeof(RegistryGiftReceiptComponent);
         }
 
+        if (widgetZone == AdminWidgetZones.OrderDetailsButtons)
+        {
+            return typeof(RegistryGiftReceiptComponent);
+        }
+
         return typeof(RegistryLinkComponent);
     }
 
@@ -47,7 +52,8 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
         return Task.FromResult<IList<string>>(new List<string> {
             PublicWidgetZones.ProductPriceTop,
             PublicWidgetZones.HeaderAfter,
-            PublicWidgetZones.OrderDetailsPageTop
+            PublicWidgetZones.OrderDetailsPageTop,
+            AdminWidgetZones.OrderDetailsButtons
         });
     }
 

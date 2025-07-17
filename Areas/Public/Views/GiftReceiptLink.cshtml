@@ -7,6 +7,8 @@
     var printPdfRoute = Url.RouteUrl(RegistryDefaults.PrintGiftReceipt);
     var fileName = Model.FileName;
     var orderId = Model.OrderId;
+    var path = Model.PluginPath;
+    var version = Model.Version;
 }
 
 <style>
@@ -16,35 +18,26 @@
 </style>
 
 <script type="module">
+    import { SaveAsFile, GetFile } from '@path/modules/utils.js?v=@version';
+
     const
         container = document.querySelector('.order-details-page .controls'),
-        btn = document.querySelector('[data-registry-print-gift-reciept]');
+        btn = document.querySelector('[data-registry-print-gift-reciept]'),
+        pdfDownloadUrl = `@printPdfRoute/@orderId`;
 
+    container?.prepend(btn);
 
-    container.prepend(btn);
+    btn.addEventListener('click', async () => {
 
-    btn.addEventListener('click', () => {
-        $.ajax({
-            type: "GET",
-            url: `@printPdfRoute/@orderId`,
-            xhrFields: {
-                responseType: 'blob'
-            },
-            success: (data) => {
-                const
-                    a = document.createElement('a'),
-                    url = window.URL.createObjectURL(data);
+        const { success, data, error } = await GetFile(pdfDownloadUrl);
 
-                a.href = url;
-                a.download = '@fileName';
-                document.body.append(a);
-                a.click();
-                a.remove();
-                window.URL.revokeObjectURL(url);
-            },
-            error: (_, status, errorThrown) => console.dir(errorThrown)
-        });
+        if (!success) {
+            alert(error);
+            return;
+        }
+
+        SaveAsFile(data, '@fileName');
     }) 
 </script>
 
-<button data-registry-print-gift-reciept class="btn btn-primary pdf-order-button">Gift Receipt</button>
+<button type="button" data-registry-print-gift-reciept class="btn btn-primary pdf-order-button">Gift Receipt</button>
