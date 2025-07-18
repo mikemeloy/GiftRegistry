@@ -45,7 +45,7 @@
     <None Remove="Areas\Public\Views\RegistryLink.cshtml" />
     <None Remove="Areas\Public\Views\_AddDialog.cshtml" />
     <None Remove="Areas\Public\Views\_loading.cshtml" />
-    <None Remove="Areas\Public\Views\_quantity.cshtml" />
+    <None Remove="Areas\Public\Views\_Quantity.cshtml" />
     <None Remove="Areas\Public\Views\_RegistryNotification.cshtml" />
     <None Remove="plugin.json" />
   </ItemGroup>
@@ -156,7 +156,7 @@
     <Content Include="Areas\Public\Views\_Loading.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Areas\Public\Views\_quantity.cshtml">
+    <Content Include="Areas\Public\Views\_Quantity.cshtml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\Public\Views\_RegistryNotification.cshtml">

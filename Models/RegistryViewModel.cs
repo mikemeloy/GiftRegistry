@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Models;
 
+public class RegistryOrderViewModel
+{
+    public int RegistryId { get; set; }
+    public int OrderId { get; set; }
+    public decimal OrderTotal { get; set; }
+    public string FullName { get; set; }
+}
 
 public class RegistryItemViewModel
 {

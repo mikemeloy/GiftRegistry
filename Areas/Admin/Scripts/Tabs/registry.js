@@ -73,6 +73,7 @@ const
             AdminNotes,
             ConsultantId,
             RegistryItems,
+            RegistryOrders,
             Name,
             ClientNotes,
             EventDate,
@@ -92,10 +93,54 @@ const
         setValue('sponsor', Sponsor);
         setValue('client-notes', ClientNotes);
 
-
         generateItemRow(RegistryItems);
+        generateOrderRow(RegistryOrders);
 
         return true;
+    },
+    generateOrderRow = (orders) => {
+        const
+            container = querySelector('[data-registry-order]');
+
+        if (IsEmpty(orders)) {
+            container.replaceChildren();
+            return;
+        }
+
+        const
+            headerTemplate = querySelector('[data-template-registry-order-header]'),
+            headerClone = headerTemplate.content.cloneNode(true),
+            rowTemplate = querySelector('[data-template-registry-order-row]');
+
+        container.replaceChildren(headerClone);
+
+        for (const order of orders) {
+            const
+                clone = rowTemplate.content.cloneNode(true),
+                { RegistryId, OrderId, OrderTotal, FullName } = order,
+                setValue = (selector, value, fn) => {
+                    const el = clone.querySelector(`[data-${selector}]`);
+
+                    if (!el) {
+                        return;
+                    }
+
+                    el.dataset.rowId = RegistryId;
+                    el.innerHTML = value;
+
+                    if (fn) {
+                        el.addEventListener('click', fn);
+                    }
+
+                    return el;
+                };
+
+            setValue('order-id', OrderId, () => window.open(`${location.origin}/Admin/Order/Edit/${OrderId}`, '_blank'));
+            setValue('order-total', ToCurrency(OrderTotal));
+            setValue('order-customer', FullName);
+
+            container.appendChild(clone);
+        }
     },
     generateItemRow = (registryItems) => {
         const

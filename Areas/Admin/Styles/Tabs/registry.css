@@ -65,14 +65,10 @@ body:has(dialog[open]) {
     section[data-result] {
         display: grid;
         align-items: center;
-        grid-template-columns: repeat(1, min-content) repeat(4, 1fr) repeat(2, min-content);
+        grid-template-columns: repeat(4, 1fr) repeat(2, min-content);
         color: var(--gray-dark, #434343);
         overflow: hidden auto;
         max-height: 50vh;
-
-        a {
-            all: revert;
-        }
 
         &>span {
             color: var(--text);
@@ -138,7 +134,7 @@ body:has(dialog[open]) {
         }
 
         [data-line-break] {
-            grid-column: span 7;
+            grid-column: span 6;
             border-bottom: 1px solid var(--border, #434343);
         }
     }
@@ -277,6 +273,56 @@ body:has(dialog[open]) {
                         text-align: center;
                     }
                 }
+
+                &[data-registry-order]:has(div) {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 1rem;
+                    margin: 0 auto;
+                    border: 1px solid var(--border);
+                    padding: 1rem;
+                    border-radius: 6px;
+                    width: 100%;
+
+                    div {
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                        padding-inline: 1rem;
+                    }
+
+                    >[data-line-break] {
+                        grid-column: span 5;
+                        border-bottom: 1px solid var(--border);
+                    }
+
+                    [data-actions] {
+                        display: flex;
+                        gap: 2rem;
+                        align-items: center;
+
+                        i {
+                            cursor: pointer;
+                            color: var(--text, #2f2f30);
+
+                            &:hover ::after {
+                                content: '';
+                                height: 50px;
+                                width: 50px;
+                                background-color: #4343439f;
+                            }
+
+                        }
+                    }
+
+                    .right {
+                        text-align: right;
+                    }
+
+                    .center {
+                        text-align: center;
+                    }
+                }
             }
         }
 
@@ -296,4 +342,16 @@ body:has(dialog[open]) {
 
 .round {
     border-radius: 6px;
+}
+
+.nop-link {
+    color: var(--blue-link);
+    text-decoration: underline;
+    cursor: pointer;
+    transition: opacity 500ms;
+
+    &:hover {
+        opacity: .8;
+        text-decoration: underline;
+    }
 }

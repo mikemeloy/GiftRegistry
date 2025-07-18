@@ -1,6 +1,5 @@
 ﻿@using i7MEDIA.Plugin.Widgets.Registry
 @using System.Text.Json
-@using i7MEDIA.Plugin.Widgets.Registry.Extensions
 @model i7MEDIA.Plugin.Widgets.Registry.Models.ProductLinkViewModel
 
 @{
@@ -12,7 +11,7 @@
     var firstReg = registries.FirstOrDefault();
 }
 
-@if (firstReg.NotNull())
+@if (firstReg is not null)
 {
     <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/product.css?v=@version" />
 

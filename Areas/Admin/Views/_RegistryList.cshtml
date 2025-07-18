@@ -19,9 +19,7 @@
             <i class="fa fa-search" title="Search by Name, Date, Month or by Person"></i>
         </form>
         <div data-report-actions>
-            <i data-action-items class="fa fa-file" title="Generate Report"></i>
-            <i data-action-orders class="fa fa-file-code" title="Generate Report"></i>
-            <i data-action-report class="fa fa-table" title="Generate Report"></i>
+            <i data-action-report class="fa fa-download" title="Generate Report"></i>
         </div>
     </header>
     <section data-result>
@@ -121,6 +119,10 @@
                 @*dynamic content*@
             </section>
 
+            <section data-registry-order>
+                @*dynamic content*@
+            </section>
+
         </main>
         <footer>
             <input type="hidden" data-admin-update-id>
@@ -146,7 +148,9 @@
         <div class="center">Price</div>
         <div data-editable class="center">Requested</div>
         <div class="center">Purchased</div>
-        <div class="center"></div>
+        <div class="center">
+            <i data-action-item-report class="fa fa-download" title="Generate Report"></i>
+        </div>
         <div data-line-break></div>
     </template>
 
@@ -160,6 +164,22 @@
             <i data-action-delete class="fa fa-trash"></i>
         </div>
         <div data-line-break></div>
+    </template>
+
+    <template data-template-registry-order-header>
+        <div class="center">Order Id</div>
+        <div class="right">Order Total</div>
+        <div data-editable class="center">Customer</div>
+        <div class="center">
+            <i data-action-order-report class="fa fa-download" title="Generate Report"></i>
+        </div>
+        <div data-line-break></div>
+    </template>
+
+    <template data-template-registry-order-row>
+        <div data-order-id class="center nop-link"></div>
+        <div data-order-total class="right"></div>
+        <div data-order-customer class="center"></div>
     </template>
 </div>
 

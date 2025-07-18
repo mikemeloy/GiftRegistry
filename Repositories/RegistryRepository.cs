@@ -26,17 +26,19 @@ public class RegistryRepository : IRegistryRepository
     private readonly IRepository<GiftRegistryConsultant> _registryConsultant;
     private readonly IRepository<GiftRegistryShippingOption> _registryShippingOption;
     private readonly IRepository<OrderItem> _orderItem;
+    private readonly IRepository<Order> _order;
     private readonly IRepository<Customer> _customer;
     private readonly IRepository<Product> _product;
     private readonly IStoreContext _storeContext;
     private readonly IWorkContext _workContext;
 
-    public RegistryRepository(IRepository<OrderItem> orderItem, IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType)
+    public RegistryRepository(IRepository<OrderItem> orderItem, IRepository<GiftRegistryType> registryType, IStoreContext storeContext, IWorkContext workContext, IRepository<GiftRegistry> registry, IRepository<GiftRegistryItem> registryItem, IRepository<Customer> customer, IRepository<Product> product, IRepository<GiftRegistryItemOrder> registryItemOrder, IRepository<GiftRegistryConsultant> registryConsultant, IRepository<GiftRegistryShippingOption> registryShippingType, IRepository<Order> order)
     {
         _product = product;
         _registry = registry;
         _customer = customer;
         _orderItem = orderItem;
+        _order = order;
         _workContext = workContext;
         _registryItem = registryItem;
         _storeContext = storeContext;
@@ -269,6 +271,24 @@ public class RegistryRepository : IRegistryRepository
         return await query.ToListAsync();
     }
 
+    public async Task<List<RegistryOrderViewModel>> GetRegistryOrdersByIdAsync(int registryId)
+    {
+        var query = from reg in _registryItem.Table
+                    join itemOrder in _registryItemOrder.Table on reg.Id equals itemOrder.RegistryItemId
+                    join order in _order.Table on itemOrder.OrderId equals order.Id
+                    join cust in _customer.Table on order.CustomerId equals cust.Id
+                    where reg.RegistryId == registryId && !reg.Deleted
+                    select new RegistryOrderViewModel()
+                    {
+                        RegistryId = reg.Id,
+                        OrderId = order.Id,
+                        OrderTotal = order.OrderTotal,
+                        FullName = cust.FullName()
+                    };
+
+        return await query.ToListAsync();
+    }
+
     public async Task InsertRegistryItemOrderAsync(int orderId, int registryId, int productId, int quantity)
     {
         await _registryItemOrder.InsertAsync(new GiftRegistryItemOrder()
@@ -394,6 +414,7 @@ public class RegistryRepository : IRegistryRepository
     {
         var registry = await _registry.GetByIdAsync(id);
         var items = await GetRegistryItemsByIdAsync(id);
+        var orders = await GetRegistryOrdersByIdAsync(id);
 
         return new RegistryEditAdminModel(
                 Id: id,
@@ -406,7 +427,8 @@ public class RegistryRepository : IRegistryRepository
                 Summary: registry.Description,
                 EventDate: registry.EventDate,
                 Sponsor: registry.Sponsor,
-                RegistryItems: items
+                RegistryItems: items,
+                RegistryOrders: orders
             );
     }
 

@@ -5,7 +5,6 @@
 
     var registries = Model.Registries;
 }
-<span data-header-row></span>
 <span data-header-row>Name</span>
 <span data-header-row>EventDate</span>
 <span data-header-row>Consultant</span>
@@ -16,22 +15,16 @@
 @foreach (var registry in registries)
 {
     <span>
-        <input type="radio" name="select">
+        <a href="/registry/@registry.Id" target="_blank" class="nop-link">@registry.Name</a>
     </span>
-
-    <span>
-        <a href="/registry/@registry.Id" target="_blank">@registry.Name</a>
-    </span>
-
     <span>@registry.EventDate.ToString("MMMM d, yyyy")</span>
     <span>@registry.ConsultantName</span>
     <span>@registry.ShippingMethod</span>
-
     <span data-admin-update-deleted>
         <input data-registry-id="@registry.Id" type="checkbox" class="form-control" checked="@registry.Deleted">
     </span>
     <span data-column-actions>
-        <i data-action-edit class="fa fa-pen" data-registry-name="@registry.Name" data-registry-id="@registry.Id" title="Edit"></i>
+        <i data-action-edit class="fa fa-eye" data-registry-name="@registry.Name" data-registry-id="@registry.Id" title="Edit"></i>
     </span>
     <div data-line-break></div>
 }
