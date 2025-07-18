@@ -156,15 +156,16 @@ const
         return container.querySelector(`[data-${cellName}][data-row-id="${id}"]`);
     },
     getReportParams = async () => {
-        const { component: dialog, onRemove } = UseTemplateTag(
-            '[data-template-report-dialog]',
-            '[data-registry]',
-            '[data-dialog-report]'
-        );
-
         const
-            submit = dialog.querySelector(':scope [data-dialog-report-submit]'),
+            { component: dialog, onRemove } = UseTemplateTag(
+                '[data-template-report-dialog]',
+                '[data-registry]',
+                '[data-dialog-report]'
+            ),
             name = dialog.querySelector(':scope [data-report-query-name]'),
+            start = dialog.querySelector(':scope [data-report-query-start-date]'),
+            end = dialog.querySelector(':scope [data-report-query-end-date]'),
+            submit = dialog.querySelector(':scope [data-dialog-report-submit]'),
             onFadeComplete = await FadeOut(dialog);
 
         dialog.showModal();
@@ -173,7 +174,9 @@ const
 
         return new Promise((res) => submit.addEventListener('click', () => res({
             params: {
-                name: name.value
+                name: name.value,
+                startDate: start.value,
+                endDate: end.value
             },
             closeParamDialog: onRemove
         })));
@@ -346,7 +349,8 @@ const
             };
         },
         onReport_Click: async () => {
-            const { params, closeParamDialog } = await getReportParams(),
+            const
+                { params, closeParamDialog } = await getReportParams(),
                 { success, data, error } = await GetFile(_reportUrl, params);
 
             if (!success) {

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
@@ -11,6 +12,7 @@ public interface IRegistryRepository
 
     public Task<IList<RegistryViewModel>> AdminQueryAsync(string q);
     public Task<IList<RegistryListItem>> QueryAsync(string query);
+    public Task<IList<RegistryListItem>> QueryAsync(string query, DateTime? start, DateTime? end);
     public Task<RegistryDTO> GetRegistryByIdAsync(int registryId);
     public Task InsertRegistryAsync(RegistryDTO registry);
     public Task DeleteRegistryAsync(int registryId);

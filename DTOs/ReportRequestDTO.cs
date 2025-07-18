@@ -1,3 +1,5 @@
-﻿namespace i7MEDIA.Plugin.Widgets.Registry.DTOs;
+﻿using System;
 
-public record ReportRequestDTO(string Name);
+namespace i7MEDIA.Plugin.Widgets.Registry.DTOs;
+
+public record ReportRequestDTO(string Name, DateTime StartDate, DateTime EndDate);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 using Nop.Core;
@@ -16,8 +17,7 @@ public class PdfService : IRegistryPdfService
     private readonly IRegistryService _registry;
     private readonly IStoreContext _storeContext;
 
-    public IEnumerable<GiftReceiptOrderItem> OrderItems { get; set; }
-    public Store Store { get; set; }
+    private Store Store { get; set; }
 
     public PdfService(IRegistryService registry, IStoreContext storeContext)
     {
@@ -28,7 +28,7 @@ public class PdfService : IRegistryPdfService
     public async Task<byte[]> GenerateGiftReceiptAsync(int id)
     {
         Store = _storeContext.GetCurrentStore();
-        OrderItems = await _registry.GetGiftReceiptOrderItemsAsync(id);
+        var orderItems = await _registry.GetGiftReceiptOrderItemsAsync(id);
 
         var receipt = Document.Create(document =>
            {
@@ -40,7 +40,7 @@ public class PdfService : IRegistryPdfService
                    page.DefaultTextStyle(x => x.FontSize(16));
 
                    page.Header().Element(ComposeHeader);
-                   page.Content().Element(ComposeContent);
+                   page.Content().Element((IContainer container) => ComposeContent(container, orderItems));
                    page.Footer().Element(ComposeFooter);
 
                    page.Background()
@@ -80,9 +80,8 @@ public class PdfService : IRegistryPdfService
         });
     }
 
-    private void ComposeContent(IContainer container)
+    private static void ComposeContent(IContainer container, IEnumerable<GiftReceiptOrderItem> orderItems)
     {
-
         var size = PageSizes.Letter.Landscape();
 
         container.Layers(layer =>
@@ -112,7 +111,7 @@ public class PdfService : IRegistryPdfService
                          header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("Quantity");
                      });
 
-                     foreach (var orderItem in OrderItems)
+                     foreach (var orderItem in orderItems)
                      {
                          table.Cell().Padding(6).Text(orderItem.Description);
                          table.Cell().AlignCenter().Padding(6).Text(orderItem.Sku);
@@ -133,9 +132,9 @@ public class PdfService : IRegistryPdfService
                 });
     }
 
-    public async Task<byte[]> GenerateRegistryReportAsync(string name)
+    public async Task<byte[]> GenerateRegistryReportAsync(ReportRequestDTO request)
     {
-        var data = await _registry.GetReportDataAsync();
+        var data = await _registry.GetReportDataAsync(request.Name, request.StartDate, request.EndDate);
 
         var receipt = Document.Create(document =>
            {
@@ -144,11 +143,45 @@ public class PdfService : IRegistryPdfService
                    page.Size(PageSizes.A4);
                    page.Margin(1, Unit.Centimetre);
                    page.PageColor(Colors.White);
-                   page.DefaultTextStyle(x => x.FontSize(16));
+                   page.DefaultTextStyle(x => x.FontSize(10));
 
+                   page.Content().Element((IContainer container) => ComposeReportContent(container, data));
                });
            });
 
         return receipt.GeneratePdf();
+    }
+
+    private static void ComposeReportContent(IContainer container, IList<RegistryListItem> registries)
+    {
+        container.Layers(layer =>
+                {
+                    layer.PrimaryLayer()
+                   .PaddingTop(25)
+                   .Table(table =>
+                         {
+                             table.ColumnsDefinition(column =>
+                             {
+                                 column.RelativeColumn();
+                                 column.RelativeColumn();
+                                 column.RelativeColumn();
+                             });
+
+                             table.Header(header =>
+                             {
+                                 header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).Text("Name");
+                                 header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("Description");
+                                 header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("Event Date");
+                             });
+
+                             foreach (var orderItem in registries)
+                             {
+                                 table.Cell().AlignCenter().Padding(6).Text(orderItem.Owner);
+                                 table.Cell().Padding(6).Text(orderItem.Description);
+                                 table.Cell().AlignCenter().Padding(6).Text(orderItem.EventDate.ToShortDateString());
+                             }
+                         });
+
+                });
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 
 public interface IRegistryPdfService
 {
     public Task<byte[]> GenerateGiftReceiptAsync(int id);
-    public Task<byte[]> GenerateRegistryReportAsync(string name);
+    public Task<byte[]> GenerateRegistryReportAsync(ReportRequestDTO request);
 }

@@ -208,7 +208,7 @@ public class AdminController : BasePluginController
     [HttpGet]
     public async Task<FileContentResult> ReportAsync(ReportRequestDTO request)
     {
-        var pdfBytes = await _registryPdfService.GenerateRegistryReportAsync("");
+        var pdfBytes = await _registryPdfService.GenerateRegistryReportAsync(request);
 
         return new FileContentResult(pdfBytes, "application/pdf")
         {

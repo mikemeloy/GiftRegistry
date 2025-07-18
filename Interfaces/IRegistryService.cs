@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
@@ -21,5 +22,5 @@ public interface IRegistryService
     public Task<bool> UpdateCustomerRegistryAsync(RegistryDTO registryDTO);
     public Task<bool> UpdateCustomerRegistryItemAsync(RegistryItemDTO registryItemDTO);
     public Task<IEnumerable<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId);
-    public Task<bool> GetReportDataAsync();
+    public Task<IList<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end);
 }

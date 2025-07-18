@@ -291,10 +291,10 @@ public class RegistryService : IRegistryService
         return new(registry.Name, product.Name, consultant, orderId);
     }
 
-    public async Task<bool> GetReportDataAsync()
+    public async Task<IList<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end)
     {
-        var registry = await _registryRepository.GetRegistryByIdAsync(1);
+        var registries = await _registryRepository.QueryAsync(name, start, end);
 
-        return true;
+        return registries;
     }
 }

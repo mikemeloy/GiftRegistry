@@ -226,6 +226,26 @@ public class RegistryRepository : IRegistryRepository
                 }).Take(20).ToList();
     }
 
+    public async Task<IList<RegistryListItem>> QueryAsync(string query, DateTime? start, DateTime? end)
+    {
+        var currentCustomer = await _workContext.GetCurrentCustomerAsync();
+
+        return (from reg in _registry.Table
+                join cust in _customer.Table on reg.CustomerId equals cust.Id
+                where reg.Search.Contains(query)
+                && (reg.EventDate >= start && reg.EventDate <= end)
+                orderby reg.Name ascending
+                select new RegistryListItem
+                {
+                    Id = reg.Id,
+                    Owner = cust.FullName(),
+                    Name = reg.Name,
+                    Description = reg.Description,
+                    EventDate = reg.EventDate,
+                    CanModify = cust.IsEqual(currentCustomer),
+                }).ToList();
+    }
+
     public async Task<List<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId)
     {
         var query = from reg in _registryItem.Table

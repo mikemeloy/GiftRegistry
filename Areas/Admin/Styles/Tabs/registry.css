@@ -21,7 +21,6 @@ body:has(dialog[open]) {
 
 .registry-wrapper {
     min-height: 30rem;
-    height: 50vh;
     border: 1px solid var(--border, #434343);
     margin: 2rem auto;
     user-select: none;
@@ -32,6 +31,14 @@ body:has(dialog[open]) {
         padding: 1rem;
         border-bottom: 1px solid var(--border, #434343);
         align-items: center;
+
+        [data-report-actions] {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
     }
 
     hr {
@@ -58,10 +65,10 @@ body:has(dialog[open]) {
     section[data-result] {
         display: grid;
         align-items: center;
-        grid-template-columns: repeat(4, 1fr) repeat(2, min-content);
-        gap: 1rem;
-        margin: 1rem;
+        grid-template-columns: repeat(1, min-content) repeat(4, 1fr) repeat(2, min-content);
         color: var(--gray-dark, #434343);
+        overflow: hidden auto;
+        max-height: 50vh;
 
         a {
             all: revert;
@@ -70,18 +77,22 @@ body:has(dialog[open]) {
         &>span {
             color: var(--text);
             font-size: clamp(17px, 1.2rem, 20px);
-            ;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            padding: 1rem;
 
             &:nth-last-child(-n+5) {
                 border: none;
             }
 
             &[data-header-row] {
+                background-color: #ecf0f5;
                 text-align: center;
                 font-weight: 600;
+                position: sticky;
+                top: 0;
+                height: 100%;
             }
         }
 
@@ -127,7 +138,7 @@ body:has(dialog[open]) {
         }
 
         [data-line-break] {
-            grid-column: span 6;
+            grid-column: span 7;
             border-bottom: 1px solid var(--border, #434343);
         }
     }
