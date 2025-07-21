@@ -6,16 +6,20 @@ let
     _registryTypeRoute,
     _registryShippingRoute,
     _deleteItemRoute,
-    _reportGenerationRoute;
+    _registryReportRoute,
+    _orderReportRoute,
+    _itemReportRoute;
 
 const
-    init = (registryRoute, consultantRoute, registryTypeRoute, registryShippingRoute, deleteItemRoute, reportGenerationRoute) => {
+    init = (registryRoute, consultantRoute, registryTypeRoute, registryShippingRoute, deleteItemRoute, reportGenerationRoute, orderReportRoute, itemReportRoute) => {
         _consultantRoute = consultantRoute;
         _registryRoute = registryRoute;
         _registryTypeRoute = registryTypeRoute;
         _registryShippingRoute = registryShippingRoute;
         _deleteItemRoute = deleteItemRoute;
-        _reportGenerationRoute = reportGenerationRoute;
+        _registryReportRoute = reportGenerationRoute;
+        _orderReportRoute = orderReportRoute;
+        _itemReportRoute = itemReportRoute;
 
         setupFormEvents();
         initTab();
@@ -53,49 +57,50 @@ const
         events.onRefresh_Click({ detail: param })
     };
 
-const events = {
-    onRegistry_Click: async () => {
-        const { data } = await Get(`${_registryRoute}/List`),
-            el = await appendPartial(data),
-            { init } = await import('./Tabs/registry.js');
+const
+    events = {
+        onRegistry_Click: async () => {
+            const { data } = await Get(`${_registryRoute}/List`),
+                el = await appendPartial(data),
+                { init } = await import('./Tabs/registry.js');
 
-        init?.(el, _registryRoute, _deleteItemRoute, _reportGenerationRoute);
-        setTabQuery('home');
-    },
-    onConsultant_Click: async () => {
-        const { data } = await Get(`${_consultantRoute}/List`),
-            el = await appendPartial(data),
-            { init } = await import('./Tabs/registryConsultant.js');
+            init?.(el, _registryRoute, _deleteItemRoute, _registryReportRoute, _orderReportRoute, _itemReportRoute);
+            setTabQuery('home');
+        },
+        onConsultant_Click: async () => {
+            const { data } = await Get(`${_consultantRoute}/List`),
+                el = await appendPartial(data),
+                { init } = await import('./Tabs/registryConsultant.js');
 
-        init?.(el, _consultantRoute);
-        setTabQuery('consultant');
-    },
-    onRegistryType_Click: async () => {
-        const { data } = await Get(`${_registryTypeRoute}/List`),
-            el = await appendPartial(data),
-            { init } = await import('./Tabs/registryType.js');
+            init?.(el, _consultantRoute);
+            setTabQuery('consultant');
+        },
+        onRegistryType_Click: async () => {
+            const { data } = await Get(`${_registryTypeRoute}/List`),
+                el = await appendPartial(data),
+                { init } = await import('./Tabs/registryType.js');
 
-        init?.(el, _registryTypeRoute);
-        setTabQuery('type');
-    },
-    onShippingType_Click: async () => {
-        const { data } = await Get(`${_registryShippingRoute}/List`),
-            el = await appendPartial(data),
-            { init } = await import('./Tabs/registryShippingOption.js');
+            init?.(el, _registryTypeRoute);
+            setTabQuery('type');
+        },
+        onShippingType_Click: async () => {
+            const { data } = await Get(`${_registryShippingRoute}/List`),
+                el = await appendPartial(data),
+                { init } = await import('./Tabs/registryShippingOption.js');
 
-        init?.(el, _registryShippingRoute);
-        setTabQuery('ship');
-    },
-    onRefresh_Click: async ({ detail = 'home' }) => {
-        var fn = {
-            home: events.onRegistry_Click,
-            ship: events.onShippingType_Click,
-            consultant: events.onConsultant_Click,
-            type: events.onRegistryType_Click
-        }[detail];
+            init?.(el, _registryShippingRoute);
+            setTabQuery('ship');
+        },
+        onRefresh_Click: async ({ detail = 'home' }) => {
+            var fn = {
+                home: events.onRegistry_Click,
+                ship: events.onShippingType_Click,
+                consultant: events.onConsultant_Click,
+                type: events.onRegistryType_Click
+            }[detail];
 
-        fn?.();
+            fn?.();
+        }
     }
-}
 
 export { init }

@@ -189,13 +189,16 @@ body:has(dialog[open]) {
             position: sticky;
             top: 0;
             padding: 1rem;
-            background-color: var(--dark);
-            color: var(--white);
+            background-color: var(--white);
+            color: var(--gray-dark);
+            box-shadow: 0 -2px 18px var(--gray-dark);
 
             h3 {
                 text-wrap: nowrap;
                 text-overflow: ellipsis;
                 overflow: hidden;
+                flex: 1;
+                text-align: center;
             }
 
             i {

@@ -184,4 +184,17 @@ public class PdfService : IRegistryPdfService
 
                 });
     }
+
+    public async Task<byte[]> GenerateRegistryItemReport(int registryId)
+    {
+        var data = await _registry.GetRegistryItemsById(registryId);
+
+    }
+
+    public Task<byte[]> GenerateRegistryOrderReport(int registryId)
+    {
+        var data = await _registry.GetRegistryOrdersById(registryId);
+
+        throw new NotImplementedException();
+    }
 }

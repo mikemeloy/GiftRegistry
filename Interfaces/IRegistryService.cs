@@ -23,4 +23,5 @@ public interface IRegistryService
     public Task<bool> UpdateCustomerRegistryItemAsync(RegistryItemDTO registryItemDTO);
     public Task<IEnumerable<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId);
     public Task<IList<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end);
+    Task GetRegistryItemsById(int registryId);
 }

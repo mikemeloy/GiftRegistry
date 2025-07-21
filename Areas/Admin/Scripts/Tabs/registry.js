@@ -12,15 +12,19 @@ let
     _main,
     _url,
     _deleteUrl,
-    _reportUrl,
+    _registryReportUrl,
+    _itemReportUrl,
+    _orderReportUrl,
     _debounce;
 
 const
-    init = async (el, url, deleteUrl, reportUrl) => {
+    init = async (el, url, deleteUrl, registryReportUrl, orderReportUrl, itemReportUrl) => {
         _main = el;
         _url = url;
         _deleteUrl = deleteUrl;
-        _reportUrl = reportUrl;
+        _registryReportUrl = registryReportUrl;
+        _itemReportUrl = itemReportUrl;
+        _orderReportUrl = orderReportUrl;
 
         setFormEvents();
         setSearchByUrl();
@@ -52,7 +56,7 @@ const
         form.addEventListener('keyup', events.onSearch_KeyUp);
         save.addEventListener('click', events.onSave_Click);
         close.addEventListener('click', events.onClose_Click);
-        report.addEventListener('click', events.onReport_Click)
+        report.addEventListener('click', events.onReport_Click);
     },
     debounce = (el) => {
         clearTimeout(_debounce);
@@ -93,12 +97,12 @@ const
         setValue('sponsor', Sponsor);
         setValue('client-notes', ClientNotes);
 
-        generateItemRow(RegistryItems);
-        generateOrderRow(RegistryOrders);
+        generateItemRow(RegistryItems, registryId);
+        generateOrderRow(RegistryOrders, registryId);
 
         return true;
     },
-    generateOrderRow = (orders) => {
+    generateOrderRow = (orders, registryId) => {
         const
             container = querySelector('[data-registry-order]');
 
@@ -110,9 +114,11 @@ const
         const
             headerTemplate = querySelector('[data-template-registry-order-header]'),
             headerClone = headerTemplate.content.cloneNode(true),
-            rowTemplate = querySelector('[data-template-registry-order-row]');
+            rowTemplate = querySelector('[data-template-registry-order-row]'),
+            orderReport = headerClone.querySelector('[data-action-order-report]');
 
         container.replaceChildren(headerClone);
+        orderReport.addEventListener('click', () => events.onOrderReport_Click(registryId));
 
         for (const order of orders) {
             const
@@ -142,7 +148,7 @@ const
             container.appendChild(clone);
         }
     },
-    generateItemRow = (registryItems) => {
+    generateItemRow = (registryItems, registryId) => {
         const
             container = querySelector('[data-registry-item]');
 
@@ -154,9 +160,11 @@ const
         const
             headerTemplate = querySelector('[data-template-registry-item-header]'),
             headerClone = headerTemplate.content.cloneNode(true),
-            rowTemplate = querySelector('[data-template-registry-item-row]');
+            rowTemplate = querySelector('[data-template-registry-item-row]'),
+            itemReport = headerClone.querySelector('[data-action-item-report]');
 
-        container.replaceChildren(headerClone)
+        container.replaceChildren(headerClone);
+        itemReport.addEventListener('click', () => events.onItemReport_Click(registryId));
 
         for (const registryItem of registryItems) {
             const
@@ -396,7 +404,7 @@ const
         onReport_Click: async () => {
             const
                 { params, closeParamDialog } = await getReportParams(),
-                { success, data, error } = await GetFile(_reportUrl, params);
+                { success, data, error } = await GetFile(_registryReportUrl, params);
 
             if (!success) {
                 alert('Unable to Download Report');
@@ -406,6 +414,30 @@ const
 
             closeParamDialog();
             SaveAsFile(data, params.name);
+        },
+        onOrderReport_Click: async (registryId) => {
+            const
+                { success, data, error } = await GetFile(_orderReportUrl, { registryId });
+
+            if (!success) {
+                alert('Unable to Download Registry Order Report');
+                console.dir(error);
+                return;
+            }
+
+            SaveAsFile(data, 'test.pdf');
+        },
+        onItemReport_Click: async (registryId) => {
+            const
+                { success, data, error } = await GetFile(_itemReportUrl, { registryId });
+
+            if (!success) {
+                alert('Unable to Download Registry Item Report');
+                console.dir(error);
+                return;
+            }
+
+            SaveAsFile(data, 'test.pdf');
         }
     }
 

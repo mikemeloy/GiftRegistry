@@ -139,5 +139,17 @@ internal class RouteProvider : IRouteProvider
             pattern: "Admin/Report",
             defaults: new { controller = "Admin", action = "Report" }
         );
+
+        endpointRouteBuilder.MapControllerRoute(
+            name: AdminDefaults.RegistryAdminOrderReport,
+            pattern: "Admin/OrderReport",
+            defaults: new { controller = "Admin", action = "OrderReport" }
+        );
+
+        endpointRouteBuilder.MapControllerRoute(
+            name: AdminDefaults.RegistryAdminItemReport,
+            pattern: "Admin/ItemReport",
+            defaults: new { controller = "Admin", action = "ItemReport" }
+        );
     }
 }

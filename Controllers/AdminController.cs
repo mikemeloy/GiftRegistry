@@ -215,4 +215,28 @@ public class AdminController : BasePluginController
             FileDownloadName = $"Report.pdf"
         };
     }
+
+    [IgnoreAntiforgeryToken]
+    [HttpGet]
+    public async Task<FileContentResult> OrderReportAsync(int registryId)
+    {
+        var pdfBytes = await _registryPdfService.GenerateRegistryOrderReport(registryId);
+
+        return new FileContentResult(pdfBytes, "application/pdf")
+        {
+            FileDownloadName = $"Report.pdf"
+        };
+    }
+
+    [IgnoreAntiforgeryToken]
+    [HttpGet]
+    public async Task<FileContentResult> ItemReportAsync(int registryId)
+    {
+        var pdfBytes = await _registryPdfService.GenerateRegistryItemReport(registryId);
+
+        return new FileContentResult(pdfBytes, "application/pdf")
+        {
+            FileDownloadName = $"Report.pdf"
+        };
+    }
 }
