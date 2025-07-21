@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Nop.Core.Domain.Customers;
 
@@ -49,5 +50,14 @@ internal static class Extensions
             _ = int.TryParse(s, out var n);
             return n;
         }).Distinct().ToArray();
+    }
+    public static bool IsMinDate(this DateTime source)
+    {
+        return source == DateTime.MinValue;
+    }
+
+    public static string ToCurrency(this decimal source)
+    {
+        return source.ToString("C", CultureInfo.CurrentCulture);
     }
 }

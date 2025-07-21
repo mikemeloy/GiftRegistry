@@ -228,13 +228,23 @@ public class RegistryRepository : IRegistryRepository
                 }).Take(20).ToList();
     }
 
-    public async Task<IList<RegistryListItem>> QueryAsync(string query, DateTime? start, DateTime? end)
+    public async Task<IList<RegistryListItem>> QueryAsync(string query, DateTime start, DateTime end)
     {
         var currentCustomer = await _workContext.GetCurrentCustomerAsync();
 
+        if (start.IsMinDate())
+        {
+            start = DateTime.MinValue;
+        }
+
+        if (end.IsMinDate())
+        {
+            end = DateTime.MaxValue;
+        }
+
         return (from reg in _registry.Table
                 join cust in _customer.Table on reg.CustomerId equals cust.Id
-                where reg.Search.Contains(query)
+                where (string.IsNullOrWhiteSpace(query) || reg.Search.Contains(query))
                 && (reg.EventDate >= start && reg.EventDate <= end)
                 orderby reg.Name ascending
                 select new RegistryListItem
@@ -283,7 +293,8 @@ public class RegistryRepository : IRegistryRepository
                         RegistryId = reg.Id,
                         OrderId = order.Id,
                         OrderTotal = order.OrderTotal,
-                        FullName = cust.FullName()
+                        FullName = cust.FullName(),
+                        OrderDate = order.CreatedOnUtc
                     };
 
         return await query.ToListAsync();

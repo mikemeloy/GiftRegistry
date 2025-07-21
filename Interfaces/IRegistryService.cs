@@ -22,6 +22,7 @@ public interface IRegistryService
     public Task<bool> UpdateCustomerRegistryAsync(RegistryDTO registryDTO);
     public Task<bool> UpdateCustomerRegistryItemAsync(RegistryItemDTO registryItemDTO);
     public Task<IEnumerable<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId);
-    public Task<IList<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end);
-    Task GetRegistryItemsById(int registryId);
+    public Task<IEnumerable<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end);
+    public Task<IEnumerable<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId);
+    public Task<IEnumerable<RegistryOrderViewModel>> GetRegistryOrdersByIdAsync(int registryId);
 }

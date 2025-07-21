@@ -8,6 +8,7 @@ public class RegistryOrderViewModel
     public int RegistryId { get; set; }
     public int OrderId { get; set; }
     public decimal OrderTotal { get; set; }
+    public DateTime OrderDate { get; set; }
     public string FullName { get; set; }
 }
 

@@ -160,84 +160,100 @@ public class RegistryService : IRegistryService
 
     public async Task<IEnumerable<string>> AddRegistryItemToCartAsync(int registryItemId, int? quantity)
     {
-        var customer = await _nopServices.GetCurrentCustomerAsync();
-        var store = await _nopServices.GetStoreAsync();
-        var item = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
-        var product = await _nopServices.GetProductByIdAsync(item.ProductId);
-
-        var addToCartWarnings = await _shoppingCartService.AddToCartAsync(
-                customer: customer,
-                product: product,
-                shoppingCartType: ShoppingCartType.ShoppingCart,
-                storeId: store.Id,
-                attributesXml: null, //TODO:will need for complex products 
-                quantity: quantity ?? 1
-            );
-
-        if (addToCartWarnings.Any())
+        try
         {
-            return addToCartWarnings;
-        }
+            var customer = await _nopServices.GetCurrentCustomerAsync();
+            var store = await _nopServices.GetStoreAsync();
+            var item = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
+            var product = await _nopServices.GetProductByIdAsync(item.ProductId);
 
-        await _nopServices.AddRegistryItemAttributeAsync(customer, registryItemId);
-        return Enumerable.Empty<string>();
+            var addToCartWarnings = await _shoppingCartService.AddToCartAsync(
+                    customer: customer,
+                    product: product,
+                    shoppingCartType: ShoppingCartType.ShoppingCart,
+                    storeId: store.Id,
+                    attributesXml: null, //TODO:will need for complex products 
+                    quantity: quantity ?? 1
+                );
+
+            if (addToCartWarnings.Any())
+            {
+                return addToCartWarnings;
+            }
+
+            await _nopServices.AddRegistryItemAttributeAsync(customer, registryItemId);
+            return Enumerable.Empty<string>();
+
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(AddRegistryItemToCartAsync), e);
+            return Enumerable.Empty<string>();
+        }
     }
 
     public async Task ReconcileRegistry(Order order)
     {
-        var customer = await _nopServices.GetCustomerByIdAsync(order.CustomerId);
-        var registryItemsInCart = await _nopServices.GetRegistryItemAttributeAsync(customer);
-
-        if (registryItemsInCart.Length == 0)
+        try
         {
-            return;
+            var customer = await _nopServices.GetCustomerByIdAsync(order.CustomerId);
+            var registryItemsInCart = await _nopServices.GetRegistryItemAttributeAsync(customer);
+
+            if (registryItemsInCart.Length == 0)
+            {
+                return;
+            }
+
+            var orderItems = await _orderService.GetOrderItemsAsync(order.Id);
+
+            foreach (var registryItemId in registryItemsInCart)
+            {
+                var registryItem = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
+
+                if (registryItem.IsNull())
+                {
+                    continue;
+                }
+
+                var orderItem = orderItems.FirstOrDefault(oi => oi.ProductId == registryItem.ProductId);
+
+                if (orderItem.IsNull())
+                {
+                    continue;
+                }
+
+                var registryInfo = await GetRegistryDataByRegistryItemIdAsync(registryItem, order.Id);
+
+                await _registryRepository.InsertRegistryItemOrderAsync(
+                    orderId: order.Id,
+                    productId: registryItem.Id,
+                    registryId: registryItem.RegistryId,
+                    quantity: orderItem.Quantity
+                );
+
+                if (registryInfo.IsNull())
+                {
+                    continue;
+                }
+
+                await _nopServices.InsertOrderNoteAsync(
+                    orderId: registryInfo.OrderId,
+                    note: registryInfo.GetRegistryAdminNote()
+                );
+
+                await _nopServices.SendRegistryConsultantEmailAsync(
+                    subject: registryInfo.GetRegistryOrderEmailSubject(),
+                    body: registryInfo.GetRegistryOrderEmailBody(),
+                    consultant: registryInfo.Consultant
+                );
+            }
+
+            await _nopServices.ClearRegistryItemAttributeAsync(customer);
         }
-
-        var orderItems = await _orderService.GetOrderItemsAsync(order.Id);
-
-        foreach (var registryItemId in registryItemsInCart)
+        catch (Exception e)
         {
-            var registryItem = await _registryRepository.GetRegistryItemByIdAsync(registryItemId);
-
-            if (registryItem.IsNull())
-            {
-                continue;
-            }
-
-            var orderItem = orderItems.FirstOrDefault(oi => oi.ProductId == registryItem.ProductId);
-
-            if (orderItem.IsNull())
-            {
-                continue;
-            }
-
-            var registryInfo = await GetRegistryDataByRegistryItemIdAsync(registryItem, order.Id);
-
-            await _registryRepository.InsertRegistryItemOrderAsync(
-                orderId: order.Id,
-                productId: registryItem.Id,
-                registryId: registryItem.RegistryId,
-                quantity: orderItem.Quantity
-            );
-
-            if (registryInfo.IsNull())
-            {
-                continue;
-            }
-
-            await _nopServices.InsertOrderNoteAsync(
-                orderId: registryInfo.OrderId,
-                note: registryInfo.GetRegistryAdminNote()
-            );
-
-            await _nopServices.SendRegistryConsultantEmailAsync(
-                subject: registryInfo.GetRegistryOrderEmailSubject(),
-                body: registryInfo.GetRegistryOrderEmailBody(),
-                consultant: registryInfo.Consultant
-            );
+            await _logger_R.LogErrorAsync(nameof(ReconcileRegistry), e);
         }
-
-        await _nopServices.ClearRegistryItemAttributeAsync(customer);
     }
 
     public async Task<bool> UpdateCustomerRegistryAsync(RegistryDTO registryDTO)
@@ -249,7 +265,7 @@ public class RegistryService : IRegistryService
         }
         catch (Exception e)
         {
-            await _logger_R.LogErrorAsync($"Unable to update registry with the id of {registryDTO.Id}", e);
+            await _logger_R.LogErrorAsync(nameof(UpdateCustomerRegistryAsync), e);
             return false;
         }
     }
@@ -284,17 +300,57 @@ public class RegistryService : IRegistryService
 
     private async Task<RegistryData> GetRegistryDataByRegistryItemIdAsync(GiftRegistryItem registryItem, int orderId)
     {
-        var registry = await _registryRepository.GetRegistryByIdAsync(registryItem.RegistryId);
-        var product = await _nopServices.GetProductByIdAsync(registryItem.ProductId);
-        var consultant = await _registryRepository.GetConsultantByIdAsync(registry.ConsultantId);
+        try
+        {
+            var registry = await _registryRepository.GetRegistryByIdAsync(registryItem.RegistryId);
+            var product = await _nopServices.GetProductByIdAsync(registryItem.ProductId);
+            var consultant = await _registryRepository.GetConsultantByIdAsync(registry.ConsultantId);
 
-        return new(registry.Name, product.Name, consultant, orderId);
+            return new(registry.Name, product.Name, consultant, orderId);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetRegistryDataByRegistryItemIdAsync), e);
+            return new(string.Empty, string.Empty, new(), 0);
+        }
     }
 
-    public async Task<IList<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end)
+    public async Task<IEnumerable<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end)
     {
-        var registries = await _registryRepository.QueryAsync(name, start, end);
+        try
+        {
+            return await _registryRepository.QueryAsync(name, start, end);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetReportDataAsync), e);
+            return Enumerable.Empty<RegistryListItem>();
+        }
+    }
 
-        return registries;
+    public async Task<IEnumerable<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId)
+    {
+        try
+        {
+            return await _registryRepository.GetRegistryItemsByIdAsync(registryId);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetRegistryItemsByIdAsync), e);
+            return Enumerable.Empty<RegistryItemViewModel>();
+        }
+    }
+
+    public async Task<IEnumerable<RegistryOrderViewModel>> GetRegistryOrdersByIdAsync(int registryId)
+    {
+        try
+        {
+            return await _registryRepository.GetRegistryOrdersByIdAsync(registryId);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetRegistryOrdersByIdAsync), e);
+            return Enumerable.Empty<RegistryOrderViewModel>();
+        }
     }
 }
