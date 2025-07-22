@@ -26,6 +26,11 @@ input {
 
 i {
     cursor: pointer;
+    transition: opacity 200ms;
+}
+
+i:hover {
+    opacity: .8;
 }
 
 [data-registry-admin-header] {

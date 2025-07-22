@@ -187,8 +187,8 @@ body:has(dialog[open]) {
             position: sticky;
             top: 0;
             padding: 1rem;
-            background-color: var(--white);
-            color: var(--gray-dark);
+            background-color: var(--secondary);
+            color: var(--white);
 
             h3 {
                 text-wrap: nowrap;

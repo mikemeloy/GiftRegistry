@@ -115,7 +115,10 @@ const
       component,
       onRemove: (duration = 200) => {
         component.animate([{ opacity: 0 }], { duration, fill: "forwards" });
-        setTimeout(() => component.remove(), duration - 3);
+        setTimeout(() => {
+          component.remove();
+          return Promise.resolve();
+        }, duration - 3);
       }
     }
   },

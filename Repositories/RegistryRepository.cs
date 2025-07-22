@@ -104,6 +104,7 @@ public class RegistryRepository : IRegistryRepository
     public async Task<(int? OldConsultant, int? NewConsultant)> UpdateRegistryAsync(RegistryEditAdminModel source)
     {
         var registry = await _registry.GetByIdAsync(source.Id);
+        var customer = await _workContext.GetCurrentCustomerAsync();
 
         if (registry.IsNull())
         {
@@ -121,6 +122,7 @@ public class RegistryRepository : IRegistryRepository
         registry.EventDate = source.EventDate;
         registry.Notes = source.ClientNotes;
         registry.Sponsor = source.Sponsor;
+        registry.Search = registry.GetQueryText(customer);
 
         await _registry.UpdateAsync(registry);
 

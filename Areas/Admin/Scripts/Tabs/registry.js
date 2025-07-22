@@ -247,7 +247,13 @@ const
             debounce(async () => {
                 try {
                     const
-                        query = getInputValue('[data-search] input'),
+                        query = getInputValue('[data-search] input');
+
+                    if (!query) {
+                        return;
+                    }
+
+                    const
                         { success, data, error } = await Get(`${_url}/Query`, { query }),
                         rsltWindow = querySelector('[data-result]');
 
@@ -418,7 +424,7 @@ const
                 return;
             }
 
-            closeParamDialog();
+            await closeParamDialog();
             SaveAsFile(data, params.name);
         },
         onOrderReport_Click: async (registryId) => {
@@ -431,7 +437,7 @@ const
                 return;
             }
 
-            SaveAsFile(data, 'test.pdf');
+            SaveAsFile(data, 'Registry Orders.pdf');
         },
         onItemReport_Click: async (registryId) => {
             const
@@ -443,7 +449,7 @@ const
                 return;
             }
 
-            SaveAsFile(data, 'test.pdf');
+            SaveAsFile(data, 'Registry Items.pdf');
         }
     }
 
