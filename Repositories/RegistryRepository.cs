@@ -228,7 +228,7 @@ public class RegistryRepository : IRegistryRepository
                 }).Take(20).ToList();
     }
 
-    public async Task<IList<RegistryListItem>> QueryAsync(string query, DateTime start, DateTime end)
+    public async Task<IList<RegistryListItem>> QueryAsync(string query, DateTime start, DateTime end, bool? status)
     {
         var currentCustomer = await _workContext.GetCurrentCustomerAsync();
 
@@ -246,6 +246,7 @@ public class RegistryRepository : IRegistryRepository
                 join cust in _customer.Table on reg.CustomerId equals cust.Id
                 where (string.IsNullOrWhiteSpace(query) || reg.Search.Contains(query))
                 && (reg.EventDate >= start && reg.EventDate <= end)
+                && (status.IsNull() || reg.Deleted == status.Value)
                 orderby reg.Name ascending
                 select new RegistryListItem
                 {
@@ -270,6 +271,7 @@ public class RegistryRepository : IRegistryRepository
                         Description = prod.ShortDescription,
                         Price = prod.Price,
                         Quantity = reg.Quantity,
+                        StockQuantity = prod.StockQuantity,
                         ProductId = prod.Id,
                         CartItemId = reg.CartItemId,
                         Purchased = (from order in _registryItemOrder.Table

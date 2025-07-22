@@ -132,25 +132,54 @@
 
     <template data-template-report-dialog>
         <dialog data-dialog-report>
-            <input data-report-query-name type="text" class="form-control text-box" />
-            <input data-report-query-start-date type="date" class="form-control text-box" />
-            <input data-report-query-end-date type="date" class="form-control text-box" />
-            <fieldset>
-                <input checked type="radio" value="1" name="active">
-                <input type="radio" value="2" name="active">
-            </fieldset>
-            <button data-dialog-report-submit>Submit</button>
+            <header>
+                Export Options
+            </header>
+            <main>
+                <section>
+                    <label>Search</label>
+                    <input data-report-query-name type="text" class="form-control text-box" />
+                </section>
+                <section>
+                    <label>Start Date</label>
+                    <input data-report-query-start-date type="date" class="form-control text-box" />
+                </section>
+                <section>
+                    <label>End Date</label>
+                    <input data-report-query-end-date type="date" class="form-control text-box" />
+                </section>
+                <section>
+                    <label>Status</label>
+                    <div>
+                        <input data-report-query-status type="radio" value="1" name="active" checked>
+                        <label>Active</label>
+                    </div>
+                    <div>
+                        <input data-report-query-status type="radio" value="0" name="active">
+                        <label>Inactive</label>
+                    </div>
+                    <div>
+                        <input data-report-query-status type="radio" value="-1" name="active">
+                        <label>All</label>
+                    </div>
+                </section>
+            </main>
+            <footer>
+                <button data-dialog-report-submit class="btn btn-success">Export</button>
+            </footer>
         </dialog>
     </template>
 
     <template data-template-registry-item-header>
+        <div data-grid-header>
+            <label>Items</label>
+            <i data-action-item-report class="fa fa-download" title="Generate Report"></i>
+        </div>
+        <div data-line-break></div>
         <div class="center">Name</div>
         <div class="center">Price</div>
         <div data-editable class="center">Requested</div>
         <div class="center">Purchased</div>
-        <div class="center">
-            <i data-action-item-report class="fa fa-download" title="Generate Report"></i>
-        </div>
         <div data-line-break></div>
     </template>
 
@@ -167,19 +196,21 @@
     </template>
 
     <template data-template-registry-order-header>
-        <div class="center">Order Id</div>
-        <div class="right">Order Total</div>
-        <div data-editable class="center">Customer</div>
-        <div class="center">
+        <div data-grid-header>
+            <label>Orders</label>
             <i data-action-order-report class="fa fa-download" title="Generate Report"></i>
         </div>
         <div data-line-break></div>
+        <div data-header-row class="center">Order Id</div>
+        <div data-header-row data-editable class="center">Customer</div>
+        <div data-header-row class="right">Order Total</div>
+        <div data-header-row data-line-break></div>
     </template>
 
     <template data-template-registry-order-row>
         <div data-order-id class="center nop-link"></div>
-        <div data-order-total class="right"></div>
         <div data-order-customer class="center"></div>
+        <div data-order-total class="right"></div>
     </template>
 </div>
 

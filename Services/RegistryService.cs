@@ -315,11 +315,11 @@ public class RegistryService : IRegistryService
         }
     }
 
-    public async Task<IEnumerable<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end)
+    public async Task<IEnumerable<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end, bool? status)
     {
         try
         {
-            return await _registryRepository.QueryAsync(name, start, end);
+            return await _registryRepository.QueryAsync(name, start, end, status);
         }
         catch (Exception e)
         {

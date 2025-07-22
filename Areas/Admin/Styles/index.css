@@ -11,6 +11,9 @@ dialog {
     &[open] {
         display: flex;
         flex-direction: column;
+        box-shadow: 3px 3px 15px var(--gray);
+        overflow: hidden;
+        min-width: 40vw;
     }
 }
 
@@ -87,4 +90,26 @@ i {
 
 [data-success] {
     color: var(--success, #4db806);
+}
+
+[data-dialog-report] {
+    min-width: 30vw;
+    gap: .5rem;
+
+    header {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+
+    footer {
+        display: flex;
+        flex-direction: row-reverse;
+    }
 }

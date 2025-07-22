@@ -210,16 +210,21 @@ const
     },
     getReportParams = async () => {
         const
+            selector = '[data-template-report-dialog]',
             { component: dialog, onRemove } = UseTemplateTag(
-                '[data-template-report-dialog]',
+                selector,
                 '[data-registry]',
                 '[data-dialog-report]'
             ),
-            name = dialog.querySelector(':scope [data-report-query-name]'),
-            start = dialog.querySelector(':scope [data-report-query-start-date]'),
-            end = dialog.querySelector(':scope [data-report-query-end-date]'),
             submit = dialog.querySelector(':scope [data-dialog-report-submit]'),
-            onFadeComplete = await FadeOut(dialog);
+            onFadeComplete = await FadeOut(dialog),
+            radioValue = (dataSelector) => {
+                const val = getInputValue(`input[${dataSelector}]:checked`, { isNumeric: true });
+
+                return (val < 0)
+                    ? undefined
+                    : Boolean(val);
+            };
 
         dialog.showModal();
 
@@ -227,9 +232,10 @@ const
 
         return new Promise((res) => submit.addEventListener('click', () => res({
             params: {
-                name: name.value,
-                startDate: start.value,
-                endDate: end.value
+                name: getInputValue('[data-report-query-name]'),
+                startDate: getInputValue('[data-report-query-start-date]'),
+                endDate: getInputValue('[data-report-query-end-date]'),
+                status: radioValue('data-report-query-status')
             },
             closeParamDialog: onRemove
         })));

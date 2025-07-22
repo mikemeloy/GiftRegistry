@@ -119,21 +119,25 @@ const
       }
     }
   },
-  GetInputValue = (selector, parent, options = { isNumeric: false }) => {
+  GetInputValue = (selector, parent, options = { isNumeric: false, isBoolean: false }) => {
     const
-      { isNumeric } = options,
+      { isNumeric, isBoolean } = options,
       input = QuerySelector(selector, parent);
 
     if (!input) {
       LogError(`no element with the selector`, { selector, parent });
-      return isNumeric
-        ? 0
-        : "";
+      return isNumeric ? 0 : isBoolean ? false : "";
     }
 
-    return isNumeric
-      ? Number(input.value)
-      : input.value;
+    if (isNumeric) {
+      return Number(input.value)
+    }
+
+    if (isBoolean) {
+      return Boolean(input.value);
+    }
+
+    return input.value;
   },
   SetInputValue = (selector, parent, value) => {
     const

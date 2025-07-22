@@ -64,7 +64,7 @@ public class PdfService : IRegistryPdfService
 
     public async Task<byte[]> GenerateRegistryReportAsync(ReportRequestDTO request)
     {
-        var data = await _registry.GetReportDataAsync(request.Name, request.StartDate, request.EndDate);
+        var data = await _registry.GetReportDataAsync(request.Name, request.StartDate, request.EndDate, request.Status);
 
         var doc = Document.Create(document =>
            {
@@ -137,6 +137,7 @@ public class PdfService : IRegistryPdfService
                                              column.RelativeColumn();
                                              column.RelativeColumn();
                                              column.RelativeColumn();
+                                             column.RelativeColumn();
                                          });
 
                                          table.Header(header =>
@@ -145,19 +146,20 @@ public class PdfService : IRegistryPdfService
                                              header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("Price");
                                              header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("Quantity");
                                              header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("Purchased");
+                                             header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("In Stock");
                                              header.Cell().BorderBottom(2).BorderColor("#621520").Padding(8).AlignCenter().Text("Fulfilled");
                                          });
 
                                          foreach (var registryItem in registryItems)
                                          {
-                                             table.Cell().AlignCenter().Padding(6).Text(registryItem.Name);
-                                             table.Cell().Padding(6).Text(registryItem.Price.ToCurrency());
-                                             table.Cell().AlignCenter().Padding(6).Text(registryItem.Quantity);
-                                             table.Cell().AlignCenter().Padding(6).Text(registryItem.Purchased);
-                                             table.Cell().AlignCenter().Padding(6).Text(registryItem.Fulfilled ? "Yes" : "No");
+                                             table.Cell().BorderBottom(1).AlignCenter().Padding(6).Text(registryItem.Name);
+                                             table.Cell().BorderBottom(1).Padding(6).Text(registryItem.Price.ToCurrency());
+                                             table.Cell().BorderBottom(1).AlignCenter().Padding(6).Text(registryItem.Quantity);
+                                             table.Cell().BorderBottom(1).AlignCenter().Padding(6).Text(registryItem.Purchased);
+                                             table.Cell().BorderBottom(1).AlignCenter().Padding(6).Text(registryItem.StockQuantity);
+                                             table.Cell().BorderBottom(1).AlignCenter().Padding(6).Text(registryItem.Fulfilled ? "Yes" : "No");
                                          }
                                      });
-
                             });
     }
 
@@ -207,6 +209,7 @@ public class PdfService : IRegistryPdfService
                          {
                              table.ColumnsDefinition(column =>
                              {
+                                 column.RelativeColumn();
                                  column.RelativeColumn();
                                  column.RelativeColumn();
                                  column.RelativeColumn();

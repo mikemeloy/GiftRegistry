@@ -12,7 +12,7 @@ public interface IRegistryRepository
 
     public Task<IList<RegistryViewModel>> AdminQueryAsync(string q);
     public Task<IList<RegistryListItem>> QueryAsync(string query);
-    public Task<IList<RegistryListItem>> QueryAsync(string query, DateTime start, DateTime end);
+    public Task<IList<RegistryListItem>> QueryAsync(string query, DateTime start, DateTime end, bool? status);
     public Task<RegistryDTO> GetRegistryByIdAsync(int registryId);
     public Task InsertRegistryAsync(RegistryDTO registry);
     public Task DeleteRegistryAsync(int registryId);
