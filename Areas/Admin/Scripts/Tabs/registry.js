@@ -332,6 +332,7 @@ const
 
             await FadeOut(dialog);
             dialog.close();
+            await events.onSearch_KeyUp();
         },
         onDelete_Change: async (e) => {
             const
