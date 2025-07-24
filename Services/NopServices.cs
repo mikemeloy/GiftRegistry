@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Data;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
+using i7MEDIA.Plugin.Widgets.Registry.Models;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
@@ -30,9 +32,10 @@ public class NopServices : INopServices
     private readonly IEmailSender _emailSender;
     private readonly IOrderService _orderService;
     private readonly IEmailAccountService _emailAccountService;
+    private readonly IProductAttributeService _productAttributeService;
     private readonly EmailAccountSettings _emailAccountSettings;
 
-    public NopServices(EmailAccountSettings emailAccountSettings, IStoreContext storeContext, IWorkContext workContext, IPictureService pictureService, IProductService productService, ICustomerService customerService, IGenericAttributeService genericAttributeService, IEmailSender emailSender, IOrderService orderService, IEmailAccountService emailAccountService, ILogger_R logger_R)
+    public NopServices(EmailAccountSettings emailAccountSettings, IStoreContext storeContext, IWorkContext workContext, IPictureService pictureService, IProductService productService, ICustomerService customerService, IGenericAttributeService genericAttributeService, IEmailSender emailSender, IOrderService orderService, IEmailAccountService emailAccountService, ILogger_R logger_R, IProductAttributeService productAttributeService)
     {
         _emailSender = emailSender;
         _logger_R = logger_R;
@@ -46,6 +49,7 @@ public class NopServices : INopServices
         _customerService = customerService;
         _genericAttributeService = genericAttributeService;
         _emailAccountSettings = emailAccountSettings;
+        _productAttributeService = productAttributeService;
     }
 
     public async Task<string> GetProductImageUrlAsync(int productId)
@@ -156,5 +160,18 @@ public class NopServices : INopServices
         {
             await _logger_R.LogErrorAsync(nameof(SendRegistryConsultantEmailAsync), e);
         }
+    }
+
+    public async Task<IEnumerable<RegistryProductAttribute>> GetProductAttributesByProductIdAsync(int productId)
+    {
+        var attr = await _productAttributeService.GetProductAttributeMappingsByProductIdAsync(productId);
+
+        return attr
+            .Select(attr => new RegistryProductAttribute(
+                AttributeId: attr.Id,
+                AttributeValue: attr.DefaultValue,
+                IsRequired: attr.IsRequired,
+                ControlTypeId: attr.AttributeControlTypeId
+            ));
     }
 }

@@ -123,11 +123,13 @@ public class RegistryService : IRegistryService
         }
     }
 
-    public async Task<bool> InsertRegistryItemAsync(int registryId, int productId, int quantity)
+    public async Task<bool> InsertRegistryItemAsync(int registryId, int productId, int quantity, IEnumerable<RegistryProductAttribute> attributes)
     {
         try
         {
-            await _registryRepository.InsertRegistryItemAsync(registryId, productId, quantity);
+            var attributeXML = attributes.ToProductAttributeXml();
+
+            await _registryRepository.InsertRegistryItemAsync(registryId, productId, quantity, attributeXML);
             return true;
         }
         catch (Exception e)
@@ -172,7 +174,7 @@ public class RegistryService : IRegistryService
                     product: product,
                     shoppingCartType: ShoppingCartType.ShoppingCart,
                     storeId: store.Id,
-                    attributesXml: null, //TODO:will need for complex products 
+                    attributesXml: item.AttributesXml,
                     quantity: quantity ?? 1
                 );
 
@@ -351,6 +353,19 @@ public class RegistryService : IRegistryService
         {
             await _logger_R.LogErrorAsync(nameof(GetRegistryOrdersByIdAsync), e);
             return Enumerable.Empty<RegistryOrderViewModel>();
+        }
+    }
+
+    public async Task<IEnumerable<RegistryProductAttribute>> GetProductAttributesByProductIdAsync(int productId)
+    {
+        try
+        {
+            return await _nopServices.GetProductAttributesByProductIdAsync(productId);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetProductAttributesByProductIdAsync), e);
+            return Enumerable.Empty<RegistryProductAttribute>();
         }
     }
 }

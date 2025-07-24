@@ -19,7 +19,8 @@ public class ProductAddComponent : NopViewComponent
     {
         var model = new ProductLinkViewModel("1.0.0", additionalData.Id)
         {
-            Registries = await _registryService.GetCurrentCustomerRegistriesAsync()
+            Registries = await _registryService.GetCurrentCustomerRegistriesAsync(),
+            RequiredAttributes = await _registryService.GetProductAttributesByProductIdAsync(additionalData.Id)
         };
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/ProductLink.cshtml", model);

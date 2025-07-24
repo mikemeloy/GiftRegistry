@@ -129,14 +129,15 @@ public class RegistryRepository : IRegistryRepository
         return (oldConsultant, source.ConsultantId);
     }
 
-    public async Task InsertRegistryItemAsync(int registryId, int productId, int quantity)
+    public async Task InsertRegistryItemAsync(int registryId, int productId, int quantity, string attributeXML)
     {
         var item = new GiftRegistryItem()
         {
             RegistryId = registryId,
             ProductId = productId,
             Quantity = quantity,
-            CreatedDate = DateTime.UtcNow
+            CreatedDate = DateTime.UtcNow,
+            AttributesXml = attributeXML
         };
 
         await _registryItem.InsertAsync(item);

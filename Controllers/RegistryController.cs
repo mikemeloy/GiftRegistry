@@ -86,7 +86,7 @@ public class RegistryController : BasePluginController
             return false;
         }
 
-        return await _registryService.InsertRegistryItemAsync(request.GiftRegistryId, request.ProductId, request.Quantity);
+        return await _registryService.InsertRegistryItemAsync(request.GiftRegistryId, request.ProductId, request.Quantity, request.Attributes);
     }
 
     [HttpPost]

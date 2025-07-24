@@ -9,6 +9,7 @@
     var registries = Model.Registries;
     var multipleRegistries = registries.Count() > 1;
     var firstReg = registries.FirstOrDefault();
+    var attributes = @Html.Raw(Json.Serialize(Model.RequiredAttributes));
 }
 
 @if (firstReg is not null)
@@ -18,7 +19,7 @@
     <script type="module">
         import { init } from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/product.js?v=@version';
 
-        init('@saveRoute', '@productId', '@firstReg.Id');
+        init('@saveRoute', '@productId', '@firstReg.Id', '@attributes');
     </script>
 
     <template data-registry-link-add>
@@ -41,7 +42,6 @@
 
             <main>
                 <form>
-
                     @if (multipleRegistries)
                     {
                         <section data-radio>
@@ -62,6 +62,9 @@
                     <section data-quant>
                         <label>How Many Would You Like to Add?</label>
                         <input min="1" data-quantity type="number" value="1">
+                    </section>
+                    <section data-product-attributes>
+
                     </section>
                 </form>
             </main>

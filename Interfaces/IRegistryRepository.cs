@@ -19,7 +19,7 @@ public interface IRegistryRepository
     public Task<List<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId);
     public Task<List<RegistryOrderViewModel>> GetRegistryOrdersByIdAsync(int registryId);
     public Task<GiftRegistryItem> GetRegistryItemByIdAsync(int registryItemId);
-    public Task InsertRegistryItemAsync(int registryId, int productId, int quantity);
+    public Task InsertRegistryItemAsync(int registryId, int productId, int quantity, string attributeXML);
     public Task UpdateRegistryItemAsync(RegistryItemDTO item);
     public Task DeleteRegistryItemAsync(int registryItemId);
     public Task<(bool IamOwner, string OwnerName)> GetRegistryOwnerAssociationAsync(int registryId);

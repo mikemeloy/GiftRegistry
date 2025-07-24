@@ -6,4 +6,5 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Models;
 public record ProductLinkViewModel(string PluginVersion, int ProductId)
 {
     public IEnumerable<GiftRegistry> Registries { get; set; }
+    public IEnumerable<RegistryProductAttribute> RequiredAttributes { get; set; }
 }

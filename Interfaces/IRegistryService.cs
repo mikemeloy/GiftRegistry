@@ -13,7 +13,7 @@ public interface IRegistryService
     public Task<IEnumerable<GiftRegistry>> GetCurrentCustomerRegistriesAsync();
     public Task<RegistryViewModel> GetCustomerRegistryByIdAsync(int registryId);
     public Task<bool> InsertCustomerRegistryAsync(RegistryDTO registryDTO);
-    public Task<bool> InsertRegistryItemAsync(int registryId, int productId, int quantity);
+    public Task<bool> InsertRegistryItemAsync(int registryId, int productId, int quantity, IEnumerable<RegistryProductAttribute> attributes);
     public Task<RegistryList> Query(string query);
     public Task<bool> DeleteRegistryAsync(int registryId);
     public Task<bool> DeleteRegistryItemAsync(int registryItemId);
@@ -25,4 +25,5 @@ public interface IRegistryService
     public Task<IEnumerable<RegistryListItem>> GetReportDataAsync(string name, DateTime start, DateTime end, bool? status);
     public Task<IEnumerable<RegistryItemViewModel>> GetRegistryItemsByIdAsync(int registryId);
     public Task<IEnumerable<RegistryOrderViewModel>> GetRegistryOrdersByIdAsync(int registryId);
+    public Task<IEnumerable<RegistryProductAttribute>> GetProductAttributesByProductIdAsync(int productId);
 }
