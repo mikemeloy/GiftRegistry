@@ -261,9 +261,10 @@ const
       day = GetInputValue(`select[name=${selector}_day]`),
       month = GetInputValue(`select[name=${selector}_month]`),
       year = GetInputValue(`select[name=${selector}_year]`),
-      value = `${day}/${month}/${year}`;
+      val = `${day}/${month}/${year}`,
+      isDate = val instanceof Date && !isNaN(val);
 
-    return { value };
+    return { value: isDate ? val : undefined };
   }
 
 export {

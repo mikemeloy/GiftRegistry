@@ -1,4 +1,12 @@
-import { QuerySelector, Post, DisplayNotification, LogError, NopDateControlValue } from '../../modules/utils.js';
+import {
+  QuerySelector,
+  Post,
+  DisplayNotification,
+  LogError,
+  NopDateControlValue,
+  AttributeControlType
+} from '../../modules/index.js';
+
 
 let
   _root = '#product-details-form',
@@ -55,10 +63,10 @@ const
   },
   getAttributeControl = ({ AttributeId, ControlTypeId }) => {
     switch (ControlTypeId) {
-      case 2://radio
-      case 3://checkbox
+      case AttributeControlType.Radio:
+      case AttributeControlType.Checkbox:
         return document.querySelector(`input[id^=product_attribute_${AttributeId}]:checked`);
-      case 20://date
+      case AttributeControlType.Date:
         return NopDateControlValue(`product_attribute_${AttributeId}`)
       default:
         return document.querySelector(`#product_attribute_${AttributeId}`);

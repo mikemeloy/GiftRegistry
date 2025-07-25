@@ -11,7 +11,6 @@ const
         '/Scripts/index.js',
         '/Scripts/product.js',
         '/Scripts/display.js',
-        '/Scripts/modules/utils.js',
         '/Styles/index.css',
         '/Styles/product.css',
         '/Styles/display.css',
@@ -26,7 +25,9 @@ const
         '/Views/_Quantity.cshtml',
         '/Views/GiftReceiptLink.cshtml',
 
-        '../modules/utils.js'
+        '../modules/utils.js',
+        '../modules/enums.js',
+        '../modules/index.js'
     ]
 
 files.forEach(file => {
