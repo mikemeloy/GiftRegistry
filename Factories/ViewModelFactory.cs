@@ -27,7 +27,7 @@ public class ViewModelFactory : IViewModelFactory
 
         await Task.WhenAll(registryTypes, shippingOptions);
 
-        return new("1.0.1", customer.FullName(), registryTypes.Result, shippingOptions.Result);
+        return new("1.0.3", customer.FullName(), registryTypes.Result, shippingOptions.Result);
     }
 
     public AdminViewModel GetAdminViewModelAsync()
@@ -80,7 +80,7 @@ public class ViewModelFactory : IViewModelFactory
                 FileName: "gift receipt.pdf",
                 OrderId: id,
                 PluginPath: RegistryDefaults.PluginPath,
-                Version: "1.0.0"
+                Version: "1.0.3"
             );
     }
 }

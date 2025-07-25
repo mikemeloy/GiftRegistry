@@ -255,6 +255,15 @@ const
     a.click();
     a.remove();
     window.URL.revokeObjectURL(url);
+  },
+  NopDateControlValue = (selector) => {
+    const
+      day = GetInputValue(`select[name=${selector}_day]`),
+      month = GetInputValue(`select[name=${selector}_month]`),
+      year = GetInputValue(`select[name=${selector}_year]`),
+      value = `${day}/${month}/${year}`;
+
+    return { value };
   }
 
 export {
@@ -277,5 +286,6 @@ export {
   FadeOut,
   IsEmpty,
   GetFile,
-  SaveAsFile
+  SaveAsFile,
+  NopDateControlValue
 }

@@ -17,7 +17,7 @@ public class ProductAddComponent : NopViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync(string widgetZone, BaseNopEntityModel additionalData)
     {
-        var model = new ProductLinkViewModel("1.0.0", additionalData.Id)
+        var model = new ProductLinkViewModel("1.0.3", additionalData.Id)
         {
             Registries = await _registryService.GetCurrentCustomerRegistriesAsync(),
             RequiredAttributes = await _registryService.GetProductAttributesByProductIdAsync(additionalData.Id)

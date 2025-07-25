@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Extensions;
@@ -62,6 +63,7 @@ internal static class Extensions
     {
         return source.ToString("C", CultureInfo.CurrentCulture);
     }
+    public static AttributeControlType ControlType(this RegistryProductAttribute source) => (AttributeControlType)source.ControlTypeId;
     public static string ToProductAttributeXml(this IEnumerable<RegistryProductAttribute> source)
     {
         if (source.IsNull())
@@ -71,14 +73,29 @@ internal static class Extensions
 
         XDocument xmlPerson = new(
             new XElement("Attributes",
-                source.Select(attr =>
-                    new XElement("ProductAttribute",
-                        new XAttribute("ID", attr.AttributeId),
-                        new XElement("ProductAttributeValue",
-                            new XElement("Value", attr.AttributeValue)
-                        )
-                    )
-                )
+                source
+                .Where(attr => !string.IsNullOrEmpty(attr.AttributeValue))
+                .Select(attr =>
+                {
+                    if (attr.ControlType() == AttributeControlType.Datepicker)
+                    {
+                        var isDate = DateTime.TryParse(attr.AttributeValue, out var date);
+
+                        return new XElement("ProductAttribute",
+                          new XAttribute("ID", attr.AttributeId),
+                          new XElement("ProductAttributeValue",
+                              new XElement("Value", isDate ? date.ToLongDateString() : attr.AttributeValue)
+                          )
+                      );
+                    }
+
+                    return new XElement("ProductAttribute",
+                           new XAttribute("ID", attr.AttributeId),
+                           new XElement("ProductAttributeValue",
+                               new XElement("Value", attr.AttributeValue)
+                           )
+                       );
+                })
             )
         );
 
