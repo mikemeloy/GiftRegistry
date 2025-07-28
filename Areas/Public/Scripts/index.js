@@ -4,7 +4,7 @@ import {
   QuerySelector, SetInputValue,
   DateToInputString, DisplayNotification,
   AddQueryParamToURL, GetQueryParam,
-  ToCurrency, FadeOut, IsEmpty
+  ToCurrency, FadeOut, IsEmpty, GetDataSet
 } from '../../modules/utils.js';
 
 let
@@ -51,6 +51,7 @@ const
       btnClose = querySelector('[data-modal-close]');
 
     form.addEventListener('keyup', events.onSearch_KeyUp);
+    form.addEventListener('submit', events.onSearch_Submit);
 
     btnMine.addEventListener('click', events.onShowUser_Click);
     btnAdd.addEventListener('click', events.onAdd_Click);
@@ -178,10 +179,16 @@ const
         }
       });
     },
-    onAdd_Click: async () => {
+    onAdd_Click: async (e) => {
       const
+        { isRegistered } = GetDataSet(e),
         dialog = prepareModal(),
         onFadeComplete = await FadeOut(dialog);
+
+      if (!isRegistered) {
+        DisplayNotification('Please Log in to use this Feature');
+        return;
+      }
 
       dialog.showModal();
       await onFadeComplete();
@@ -347,6 +354,9 @@ const
 
         DisplayNotification("Changes Save");
       };
+    },
+    onSearch_Submit: (e) => {
+      e.preventDefault()
     }
   };
 

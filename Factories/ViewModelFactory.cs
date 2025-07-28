@@ -1,7 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using Nop.Services.Customers;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Factories;
 
@@ -9,14 +12,18 @@ public class ViewModelFactory : IViewModelFactory
 {
     private readonly IRegistryRepository _registryRepository;
     private readonly IAdminService _adminService;
+    private readonly ICustomerService _customerService;
     private readonly INopServices _nopServices;
-    private readonly string _version = "1.0.2";
+    private readonly ILogger_R _logger_R;
+    private readonly string _version = "1.0.3";
 
-    public ViewModelFactory(IRegistryRepository registryRepository, IAdminService adminService, INopServices nopServices)
+    public ViewModelFactory(IRegistryRepository registryRepository, IAdminService adminService, INopServices nopServices, ILogger_R logger_R, ICustomerService customerService)
     {
         _registryRepository = registryRepository;
+        _customerService = customerService;
         _adminService = adminService;
         _nopServices = nopServices;
+        _logger_R = logger_R;
     }
 
     public async Task<ListViewModel> GetListViewModelAsync()
@@ -24,10 +31,11 @@ public class ViewModelFactory : IViewModelFactory
         var customer = await _nopServices.GetCurrentCustomerAsync();
         var registryTypes = _registryRepository.GetRegistryTypesAsync();
         var shippingOptions = _registryRepository.GetRegistryShippingOptionsAsync();
+        var isRegistered = _customerService.IsRegisteredAsync(customer);
 
-        await Task.WhenAll(registryTypes, shippingOptions);
+        await Task.WhenAll(registryTypes, shippingOptions, isRegistered);
 
-        return new("1.0.3", customer.FullName(), registryTypes.Result, shippingOptions.Result);
+        return new(_version, customer.FullName(), isRegistered.Result, registryTypes.Result, shippingOptions.Result);
     }
 
     public AdminViewModel GetAdminViewModelAsync()
@@ -67,9 +75,22 @@ public class ViewModelFactory : IViewModelFactory
 
     public async Task<RegistryAdminRowViewModel> GetRegistryRowPartialViewModelAsync(string query)
     {
-        var registryItems = await _registryRepository.AdminQueryAsync(query);
+        if (query.IsNull())
+        {
+            return new(Enumerable.Empty<RegistryViewModel>());
+        }
+        try
+        {
+            var registryItems = await _registryRepository.AdminQueryAsync(query);
 
-        return new RegistryAdminRowViewModel(registryItems);
+            return new(registryItems);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(GetRegistryRowPartialViewModelAsync), e);
+        }
+
+        return new(Enumerable.Empty<RegistryViewModel>());
     }
 
     public RegistryGiftReceiptViewModel GetRegistryGiftReceiptViewModel(string orderId)
@@ -80,7 +101,7 @@ public class ViewModelFactory : IViewModelFactory
                 FileName: "gift receipt.pdf",
                 OrderId: id,
                 PluginPath: RegistryDefaults.PluginPath,
-                Version: "1.0.3"
+                Version: _version
             );
     }
 }

@@ -9,6 +9,8 @@
   --loading: #c5c5c573;
   --danger: var(--red, #e75f5f);
   --success: var(--tan, #d1cbc3);
+
+  --grid-header-height: 5rem;
 }
 
 ::backdrop {
@@ -25,6 +27,7 @@ body:has(dialog[open]) {
   border: 1px solid var(--border, #434343);
   margin: 2rem auto;
   user-select: none;
+  overflow: auto;
 
   >header {
     display: flex;
@@ -90,8 +93,14 @@ body:has(dialog[open]) {
       }
 
       &[data-header-row] {
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         font-weight: 600;
+        position: sticky;
+        top: 0;
+        min-height: var(--grid-header-height);
+        background-color: var(--white);
       }
     }
 
@@ -113,6 +122,13 @@ body:has(dialog[open]) {
       grid-column-end: 6;
       margin: 5rem;
       font-size: 3rem;
+    }
+
+    [data-header-line-break] {
+      grid-column: span 5;
+      border-bottom: 1px solid var(--border, gray);
+      position: sticky;
+      top: var(--grid-header-height);
     }
 
     [data-line-break] {

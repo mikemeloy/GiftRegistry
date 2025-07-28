@@ -54,6 +54,7 @@ const
             close = querySelector('[data-dialog-close]');
 
         form.addEventListener('keyup', events.onSearch_KeyUp);
+        form.addEventListener('submit', events.onSearch_Submit);
         save.addEventListener('click', events.onSave_Click);
         close.addEventListener('click', events.onClose_Click);
         report.addEventListener('click', events.onReport_Click);
@@ -283,6 +284,9 @@ const
                     LogError('Failed to Search', error);
                 }
             });
+        },
+        onSearch_Submit: (e) => {
+            e.preventDefault()
         },
         onEdit_Click: async (e) => {
             const

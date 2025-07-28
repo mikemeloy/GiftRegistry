@@ -13,6 +13,7 @@
     var deleteRoute = Url.RouteUrl(RegistryDefaults.Delete);
     var deleteItemRoute = Url.RouteUrl(RegistryDefaults.DeleteItem);
     var getRoute = Url.RouteUrl(RegistryDefaults.Get);
+    bool? isRegistered = Model.IsRegistered ? true : null;
 }
 
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/index.css?v=@version" />
@@ -30,7 +31,7 @@
             <i class="fal fa-search" title="Search by Name, Date, Month or by Person"></i>
             <i data-search-mine class="fal fa-heart" title="View my Registries"></i>
         </form>
-        <button data-add type="button">Create New Registry</button>
+        <button data-add data-is-registered="@isRegistered" type="button">Create New Registry</button>
     </header>
     <section data-result>
         <h2>Perform a Search to See Results...</h2>

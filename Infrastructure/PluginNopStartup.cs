@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Nop.Core.Infrastructure;
 using Nop.Services.Catalog;
+using Nop.Services.Customers;
 using Nop.Services.Orders;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Infrastructure;
@@ -41,5 +42,6 @@ public class PluginNopStartup : INopStartup
         services.TryAddScoped<IProductService, ProductService>();
         services.TryAddScoped<IShoppingCartService, ShoppingCartService>();
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+        services.TryAddScoped<ICustomerService, CustomerService>();
     }
 }

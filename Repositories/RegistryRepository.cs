@@ -189,13 +189,15 @@ public class RegistryRepository : IRegistryRepository
 
     public async Task<IList<RegistryViewModel>> AdminQueryAsync(string q)
     {
+        var queryString = q.Split(' ');
+
         var query = from reg in _registry.Table
                     join cust in _customer.Table on reg.CustomerId equals cust.Id
                     join con in _registryConsultant.Table on reg.ConsultantId equals con.Id into consultantGroup
                     from consultant in consultantGroup.DefaultIfEmpty()
                     join del in _registryShippingOption.Table on reg.ShippingOptionId equals del.Id into shippingOptionGroup
                     from shippingOption in shippingOptionGroup.DefaultIfEmpty()
-                    where reg.Search.Contains(q)
+                    where queryString.Any(s => reg.Search.Contains(s))
                     select new RegistryViewModel
                     {
                         Id = reg.Id,
@@ -214,16 +216,17 @@ public class RegistryRepository : IRegistryRepository
 
     public async Task<IList<RegistryListItem>> QueryAsync(string query)
     {
+        var queryString = query.Split(' ');
         var currentCustomer = await _workContext.GetCurrentCustomerAsync();
 
         return (from reg in _registry.Table
                 join cust in _customer.Table on reg.CustomerId equals cust.Id
-                where reg.Deleted == false && reg.Search.Contains(query)
+                where reg.Deleted == false && queryString.All(s => reg.Search.Contains(s))
                 orderby reg.Name ascending
                 select new RegistryListItem
                 {
                     Id = reg.Id,
-                    Owner = cust.FullName(),
+                    Owner = cust.RegistryOwners(reg.Sponsor),
                     Name = reg.Name,
                     Description = reg.Description,
                     EventDate = reg.EventDate,

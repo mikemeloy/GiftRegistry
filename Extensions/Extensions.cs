@@ -22,6 +22,20 @@ internal static class Extensions
 
         return $"{customer.FirstName} {customer.LastName}";
     }
+    public static string RegistryOwners(this Customer customer, string sponsor)
+    {
+        if (customer.IsNull())
+        {
+            return "";
+        }
+
+        if (string.IsNullOrEmpty(sponsor))
+        {
+            return customer.FullName();
+        }
+
+        return $"{customer.FullName()} & {sponsor}";
+    }
     public static bool IsEqual(this Customer customer, Customer comparer)
     {
         if (customer.IsNull() || comparer.IsNull())
