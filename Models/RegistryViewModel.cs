@@ -10,6 +10,8 @@ public class RegistryOrderViewModel
     public decimal OrderTotal { get; set; }
     public DateTime OrderDate { get; set; }
     public string FullName { get; set; }
+    public bool IsExternal { get; set; }
+    public string Notes { get; set; }
 }
 
 public class RegistryItemViewModel

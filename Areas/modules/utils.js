@@ -262,7 +262,8 @@ const
       month = GetInputValue(`select[name=${selector}_month]`),
       year = GetInputValue(`select[name=${selector}_year]`),
       val = `${day}/${month}/${year}`,
-      isDate = val instanceof Date && !isNaN(val);
+      tryParse = new Date(val),
+      isDate = tryParse instanceof Date && !isNaN(tryParse);
 
     return { value: isDate ? val : undefined };
   }

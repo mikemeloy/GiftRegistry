@@ -245,7 +245,6 @@ body:has(dialog[open]) {
         display: grid;
         grid-template-columns: 30% repeat(3, 1fr) min-content;
         gap: 1rem;
-        margin: 0 auto;
         border: 1px solid var(--border);
         padding: 1rem;
         border-radius: 6px;

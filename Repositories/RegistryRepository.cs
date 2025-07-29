@@ -293,15 +293,19 @@ public class RegistryRepository : IRegistryRepository
     {
         var query = from reg in _registryItem.Table
                     join itemOrder in _registryItemOrder.Table on reg.Id equals itemOrder.RegistryItemId
-                    join order in _order.Table on itemOrder.OrderId equals order.Id
-                    join cust in _customer.Table on order.CustomerId equals cust.Id
-                    where reg.RegistryId == registryId && !reg.Deleted
+                    join o in _order.Table on itemOrder.OrderId equals o.Id into orderGroup
+                    from order in orderGroup.DefaultIfEmpty()
+                    join c in _customer.Table on order.CustomerId equals c.Id into customerGroup
+                    from customer in customerGroup.DefaultIfEmpty()
+                    where reg.RegistryId == registryId && !itemOrder.Deleted
                     select new RegistryOrderViewModel()
                     {
                         RegistryId = reg.Id,
                         OrderId = order.Id,
                         OrderTotal = order.OrderTotal,
-                        FullName = cust.FullName(),
+                        FullName = customer.FullName(),
+                        IsExternal = itemOrder.External,
+                        Notes = itemOrder.Notes,
                         OrderDate = order.CreatedOnUtc
                     };
 
@@ -314,7 +318,9 @@ public class RegistryRepository : IRegistryRepository
         {
             OrderId = orderId,
             RegistryItemId = productId,
-            Quantity = quantity
+            Quantity = quantity,
+            External = false,
+            Notes = "Added"
         });
     }
 
