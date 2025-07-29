@@ -1,9 +1,9 @@
 import {
     AddQueryParamToURL, QuerySelector,
     LogError, GetInputValue, GetDataSet,
-    FadeOut, Post, Get, DateToInputString,
-    SetInputValue, GetQueryParam,
-    DisplayNotification, Delete,
+    FadeOut, Post, Get, Delete,
+    DateToInputString, SetInputValue,
+    GetQueryParam, DisplayNotification,
     IsEmpty, ToCurrency, UseTemplateTag,
     SaveAsFile, GetFile
 } from '../../../modules/utils.js';
@@ -15,16 +15,18 @@ let
     _registryReportUrl,
     _itemReportUrl,
     _orderReportUrl,
+    _externalOrderRoute,
     _debounce;
 
 const
-    init = async (el, url, deleteUrl, registryReportUrl, orderReportUrl, itemReportUrl) => {
+    init = async (el, url, deleteUrl, registryReportUrl, orderReportUrl, itemReportUrl, externalOrder) => {
         _main = el;
         _url = url;
         _deleteUrl = deleteUrl;
         _registryReportUrl = registryReportUrl;
         _itemReportUrl = itemReportUrl;
         _orderReportUrl = orderReportUrl;
+        _externalOrderRoute = externalOrder;
 
         setFormEvents();
         setSearchByUrl();
@@ -99,11 +101,12 @@ const
         setValue('client-notes', ClientNotes);
 
         generateItemRow(RegistryItems, registryId);
-        generateOrderRow(RegistryOrders, registryId);
+        generateItemRow(RegistryItems, registryId);
+        generateOrderRow(RegistryOrders, RegistryItems, registryId);
 
         return true;
     },
-    generateOrderRow = (orders, registryId) => {
+    generateOrderRow = (orders, items, registryId) => {
         const
             container = querySelector('[data-registry-order]');
 
@@ -116,15 +119,19 @@ const
             headerTemplate = querySelector('[data-template-registry-order-header]'),
             headerClone = headerTemplate.content.cloneNode(true),
             rowTemplate = querySelector('[data-template-registry-order-row]'),
-            orderReport = headerClone.querySelector('[data-action-order-report]');
+            externalRowTemplate = querySelector('[data-template-registry-order-row-external]'),
+            orderReport = headerClone.querySelector('[data-action-order-report]'),
+            externalOrder = headerClone.querySelector('[data-action-order-external]');
 
         container.replaceChildren(headerClone);
         orderReport.addEventListener('click', () => events.onOrderReport_Click(registryId));
+        externalOrder.addEventListener('click', () => events.onAddOrder_Click(items));
 
         for (const order of orders) {
             const
-                clone = rowTemplate.content.cloneNode(true),
-                { RegistryId, OrderId, OrderTotal, FullName } = order,
+                { Id, RegistryId, OrderId, OrderTotal, FullName, IsExternal, Notes } = order,
+                clone = IsExternal ? externalRowTemplate.content.cloneNode(true) : rowTemplate.content.cloneNode(true),
+                btnDelete = clone.querySelector('[data-action-delete]'),
                 setValue = (selector, value, fn) => {
                     const el = clone.querySelector(`[data-${selector}]`);
 
@@ -134,6 +141,7 @@ const
 
                     el.dataset.rowId = RegistryId;
                     el.innerHTML = value;
+                    el.title = value;
 
                     if (fn) {
                         el.addEventListener('click', fn);
@@ -145,6 +153,9 @@ const
             setValue('order-id', OrderId, () => window.open(`${location.origin}/Admin/Order/Edit/${OrderId}`, '_blank'));
             setValue('order-total', ToCurrency(OrderTotal));
             setValue('order-customer', FullName);
+            setValue('order-notes', Notes);
+
+            btnDelete?.addEventListener('click', () => events.onOrderDelete_Click(Id));
 
             container.appendChild(clone);
         }
@@ -455,6 +466,54 @@ const
             }
 
             SaveAsFile(data, 'Registry Items.pdf');
+        },
+        onAddOrder_Click: async (items) => {
+            const
+                { component: dialog, onRemove } = UseTemplateTag(
+                    '[data-template-order-external]',
+                    '[data-registry]',
+                    '[data-dialog-order]'
+                );
+
+            if (!dialog) {
+                LogError('unable to find external order dialog!');
+                return;
+            }
+
+            const
+                select = dialog.querySelector(':scope [data-order-external-item-id]'),
+                option = document.createElement('option'),
+                submit = dialog.querySelector(':scope [data-order-external-save]');
+
+            items.forEach(({ Id, Name, Description }) => {
+                const
+                    clone = option.cloneNode(true);
+
+                clone.value = Id;
+                clone.label = Name;
+                clone.title = Description;
+
+                select.add(clone);
+            });
+
+            submit.addEventListener('click', events.onExternalOrder_Submit);
+            dialog.showModal();
+        },
+        onExternalOrder_Submit: async () => {
+            const
+                parentSelector = '[data-dialog-order]',
+                registryItemId = GetInputValue('[data-order-external-item-id]', parentSelector, { isNumeric: true }),
+                quantity = getInputValue('[data-order-external-quantity]', parentSelector, { isNumeric: true }),
+                notes = GetInputValue('[data-order-external-note]', parentSelector);
+
+            await Post(_externalOrderRoute, {
+                notes,
+                quantity,
+                registryItemId
+            });
+        },
+        onOrderDelete_Click: async (orderId) => {
+            await Delete(`${_externalOrderRoute}?orderId=${orderId}`);
         }
     }
 

@@ -176,6 +176,30 @@ public class AdminController : BasePluginController
         await _adminService.UpsertRegistryShippingOptionAsync(registryType);
     }
 
+    [HttpPost("/Admin/Orders")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task<IEnumerable<RegistryOrderViewModel>> OrderAsync(int id)
+    {
+        return await _registryService.GetRegistryOrdersByIdAsync(id);
+    }
+
+    [HttpPost("/Admin/ExternalOrder")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task ExternalOrderAsync([FromBody] RegistryOrderDTO registryOrder)
+    {
+        await _adminService.InsertExternalRegistryOrder(registryOrder);
+    }
+
+    [HttpDelete("/Admin/ExternalOrder")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task ExternalOrderAsync(int orderId)
+    {
+        await _adminService.DeleteExternalRegistryOrder(orderId);
+    }
+
     [HttpDelete("/Admin/Registry")]
     [IgnoreAntiforgeryToken]
     public async Task<bool> DeleteAsync(int? id)

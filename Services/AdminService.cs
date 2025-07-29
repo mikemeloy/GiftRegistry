@@ -246,4 +246,28 @@ public class AdminService : IAdminService
                     consultant: consultantOld
                 );
     }
+
+    public async Task InsertExternalRegistryOrder(RegistryOrderDTO registryOrder)
+    {
+        try
+        {
+            await _registryRepository.InsertExternalRegistryOrderAsync(registryOrder);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(InsertExternalRegistryOrder), e);
+        }
+    }
+
+    public async Task DeleteExternalRegistryOrder(int orderId)
+    {
+        try
+        {
+            await _registryRepository.DeleteExternalRegistryOrderAsync(orderId);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(DeleteExternalRegistryOrder), e);
+        }
+    }
 }

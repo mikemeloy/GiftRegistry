@@ -32,4 +32,5 @@ public static class AdminDefaults
     public static string ConsultantList => "Plugin.Widget.Registry.Admin.consultant.List";
     public static string RegistryTypeList => "Plugin.Widget.Registry.Admin.RegistryType.List";
     public static string RegistryShippingList => "Plugin.Widget.Registry.Admin.RegistryShipping.List";
+    public static string RegistryAdminExternalOrder => "Plugin.Widget.Registry.Admin.Registry.Order.External";
 }

@@ -7,6 +7,7 @@ dialog {
     border-radius: 6px;
     color: var(--grey-black, #2f2f30);
     user-select: none;
+    outline: none;
 
     &[open] {
         display: flex;
@@ -95,6 +96,32 @@ i:hover {
 
 [data-success] {
     color: var(--success, #4db806);
+}
+
+[data-dialog-order] {
+    min-width: 30vw;
+    gap: .5rem;
+
+    header {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    main {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 0 1rem;
+
+        textarea {
+            min-height: 5rem;
+        }
+    }
+
+    footer {
+        display: flex;
+        flex-direction: row-reverse;
+    }
 }
 
 [data-dialog-report] {

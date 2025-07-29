@@ -16,4 +16,6 @@ public interface IAdminService
     public Task UpsertRegistryShippingOptionAsync(RegistryShippingOptionDTO registryType);
     public Task UpdateAdminRegistryFields(RegistryEditAdminModel registry);
     public Task<RegistryEditAdminModel> GetRegistryByIdAsync(int id);
+    public Task InsertExternalRegistryOrder(RegistryOrderDTO registryOrder);
+    public Task DeleteExternalRegistryOrder(int orderId);
 }

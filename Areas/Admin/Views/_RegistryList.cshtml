@@ -130,6 +130,35 @@
         </footer>
     </dialog>
 
+    <template data-template-order-external>
+        <dialog data-dialog-order>
+            <header>Add External Order</header>
+            <main>
+                <section>
+                    <label for="name">
+                        Quantity
+                    </label>
+                    <input data-order-external-quantity type="number" min="1" value="1" class="form-control text-box single-line">
+                </section>
+                <section>
+                    <label for="name">
+                        Item
+                    </label>
+                    <select data-order-external-item-id class="form-control text-box single-line"></select>
+                </section>
+                <section>
+                    <label for="notes">
+                        Notes
+                    </label>
+                    <textarea data-order-external-note autocomplete="off" class="form-control text-box single line" rows="10" multiple></textarea>
+                </section>
+                <footer>
+                    <button type="button" class="btn btn-success" data-order-external-save>Save</button>
+                </footer>
+            </main>
+        </dialog>
+    </template>
+
     <template data-template-report-dialog>
         <dialog data-dialog-report>
             <header>
@@ -198,7 +227,10 @@
     <template data-template-registry-order-header>
         <div data-grid-header>
             <label>Orders</label>
-            <i data-action-order-report class="fa fa-download" title="Generate Report"></i>
+            <span data-header-controls>
+                <i data-action-order-external class="fa fa-plus" title="Add External Order"></i>
+                <i data-action-order-report class="fa fa-download" title="Generate Report"></i>
+            </span>
         </div>
         <div data-line-break></div>
         <div data-header-row class="center">Order Id</div>
@@ -211,6 +243,17 @@
         <div data-order-id class="center nop-link"></div>
         <div data-order-customer class="center"></div>
         <div data-order-total class="right"></div>
+    </template>
+
+    <template data-template-registry-order-row-external>
+        <div class="center">External Purchase</div>
+        <div data-order-notes></div>
+        <div class="right">
+            <span data-external-order-action>
+                N/A
+                <i data-action-delete class="fa fa-trash"></i>
+            </span>
+        </div>
     </template>
 </div>
 

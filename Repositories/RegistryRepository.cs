@@ -300,6 +300,7 @@ public class RegistryRepository : IRegistryRepository
                     where reg.RegistryId == registryId && !itemOrder.Deleted
                     select new RegistryOrderViewModel()
                     {
+                        Id = itemOrder.Id,
                         RegistryId = reg.Id,
                         OrderId = order.Id,
                         OrderTotal = order.OrderTotal,
@@ -320,7 +321,7 @@ public class RegistryRepository : IRegistryRepository
             RegistryItemId = productId,
             Quantity = quantity,
             External = false,
-            Notes = "Added"
+            Notes = "Automatically added during order creation"
         });
     }
 
@@ -465,5 +466,24 @@ public class RegistryRepository : IRegistryRepository
                     select new GiftReceiptOrderItem(oi.Quantity, p.Name, p.Sku);
 
         return await query.ToListAsync();
+    }
+
+    public async Task InsertExternalRegistryOrderAsync(RegistryOrderDTO registryOrder)
+    {
+        await _registryItemOrder.InsertAsync(new GiftRegistryItemOrder()
+        {
+            OrderId = 0,
+            RegistryItemId = registryOrder.RegistryItemId,
+            Quantity = registryOrder.Quantity,
+            External = true,
+            Notes = registryOrder.Notes
+        });
+    }
+
+    public async Task DeleteExternalRegistryOrderAsync(int orderId)
+    {
+        var entity = await _registryItemOrder.GetByIdAsync(orderId);
+        entity.Deleted = !entity.Deleted;
+        await _registryItemOrder.UpdateAsync(entity);
     }
 }

@@ -305,6 +305,12 @@ body:has(dialog[open]) {
                         >i {
                             flex: 1;
                         }
+
+                        [data-header-controls] {
+                            display: flex;
+                            gap: 1rem;
+                            margin-left: auto;
+                        }
                     }
 
                     div {
@@ -345,6 +351,13 @@ body:has(dialog[open]) {
                     .center {
                         text-align: center;
                     }
+                }
+
+                [data-external-order-action] {
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    gap: .5rem;
                 }
             }
         }

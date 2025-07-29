@@ -5,6 +5,7 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Models;
 
 public class RegistryOrderViewModel
 {
+    public int Id { get; set; }
     public int RegistryId { get; set; }
     public int OrderId { get; set; }
     public decimal OrderTotal { get; set; }

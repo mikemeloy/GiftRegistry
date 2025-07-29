@@ -39,4 +39,6 @@ public interface IRegistryRepository
     public Task<GiftRegistryConsultant> GetConsultantByIdAsync(int? consultantId);
     public Task<RegistryEditAdminModel> GetAdminFieldsAsync(int id);
     public Task<List<GiftReceiptOrderItem>> GetGiftReceiptOrderItemsAsync(int orderId);
+    public Task InsertExternalRegistryOrderAsync(RegistryOrderDTO registryOrder);
+    public Task DeleteExternalRegistryOrderAsync(int orderId);
 }
