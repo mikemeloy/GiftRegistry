@@ -132,7 +132,10 @@
 
     <template data-template-order-external>
         <dialog data-dialog-order>
-            <header>Add External Order</header>
+            <header>
+                <h3 data-admin-update-header="">Add External Order</h3>
+                <i class="fa fa-times" data-dialog-close></i>
+            </header>
             <main>
                 <section>
                     <label for="name">
@@ -145,6 +148,12 @@
                         Item
                     </label>
                     <select data-order-external-item-id class="form-control text-box single-line"></select>
+                </section>
+                <section>
+                    <label for="name">
+                        Order Date
+                    </label>
+                    <input data-order-external-date type="date" class="form-control text-box single-line">
                 </section>
                 <section>
                     <label for="notes">
@@ -202,7 +211,7 @@
     <template data-template-registry-item-header>
         <div data-grid-header>
             <label>Items</label>
-            <i data-action-item-report class="fa fa-download" title="Generate Report"></i>
+            <i data-action-item-report class="fa fa-download" title="Export Registry Items"></i>
         </div>
         <div data-line-break></div>
         <div class="center">Name</div>
@@ -229,7 +238,7 @@
             <label>Orders</label>
             <span data-header-controls>
                 <i data-action-order-external class="fa fa-plus" title="Add External Order"></i>
-                <i data-action-order-report class="fa fa-download" title="Generate Report"></i>
+                <i data-action-order-report class="fa fa-download" title="Export Registry Orders"></i>
             </span>
         </div>
         <div data-line-break></div>

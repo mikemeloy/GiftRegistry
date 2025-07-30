@@ -23,6 +23,7 @@ public static class AdminDefaults
     public static string RegistryAdminOrderReport => "Plugin.Widget.Registry.Admin.Registry.Order.Report";
     public static string RegistryAdminItemReport => "Plugin.Widget.Registry.Admin.Registry.Item.Report";
     public static string RegistryItem => "Plugin.Widget.Registry.Admin.Registry.Item";
+    public static string RegistryOrders => "Plugin.Widget.Registry.Admin.Registry.Orders";
     public static string Get => "Plugin.Widget.Registry.Admin.Get";
     public static string Index => "Plugin.Widget.Registry.Admin.Index";
     public static string Registry => "Plugin.Widget.Registry.Admin.Registry.Query";

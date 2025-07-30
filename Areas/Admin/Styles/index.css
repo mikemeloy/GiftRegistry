@@ -98,32 +98,6 @@ i:hover {
     color: var(--success, #4db806);
 }
 
-[data-dialog-order] {
-    min-width: 30vw;
-    gap: .5rem;
-
-    header {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-    }
-
-    main {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-        padding: 0 1rem;
-
-        textarea {
-            min-height: 5rem;
-        }
-    }
-
-    footer {
-        display: flex;
-        flex-direction: row-reverse;
-    }
-}
-
 [data-dialog-report] {
     min-width: 30vw;
     gap: .5rem;

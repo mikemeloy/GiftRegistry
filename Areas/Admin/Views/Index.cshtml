@@ -4,13 +4,14 @@
 @{
     var version = Model.PluginVersion;
     var registryRoute = Url.RouteUrl(AdminDefaults.Registry);
-    var consultantRoute = Url.RouteUrl(AdminDefaults.Consultant);
     var TypeRoute = Url.RouteUrl(AdminDefaults.RegistryType);
-    var shippingRoute = Url.RouteUrl(AdminDefaults.RegistryShipping);
+    var consultantRoute = Url.RouteUrl(AdminDefaults.Consultant);
     var deleteItemRoute = Url.RouteUrl(AdminDefaults.RegistryItem);
+    var shippingRoute = Url.RouteUrl(AdminDefaults.RegistryShipping);
     var reportRoute = Url.RouteUrl(AdminDefaults.RegistryAdminReport);
-    var orderReportRoute = Url.RouteUrl(AdminDefaults.RegistryAdminOrderReport);
+    var registryOrdersRoute = Url.RouteUrl(AdminDefaults.RegistryOrders);
     var itemReportRoute = Url.RouteUrl(AdminDefaults.RegistryAdminItemReport);
+    var orderReportRoute = Url.RouteUrl(AdminDefaults.RegistryAdminOrderReport);
     var externalOrder = Url.RouteUrl(AdminDefaults.RegistryAdminExternalOrder);
 }
 
@@ -19,7 +20,7 @@
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Scripts/index.js?v=@version';
 
-    init('@registryRoute', '@consultantRoute', '@TypeRoute', '@shippingRoute', '@deleteItemRoute', '@reportRoute', '@orderReportRoute', '@itemReportRoute', '@externalOrder');
+    init('@registryRoute', '@consultantRoute', '@TypeRoute', '@shippingRoute', '@deleteItemRoute', '@reportRoute', '@orderReportRoute', '@itemReportRoute', '@externalOrder', '@registryOrdersRoute');
 </!script>
 
 <header data-registry-admin-header>

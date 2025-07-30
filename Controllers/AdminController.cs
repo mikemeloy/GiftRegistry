@@ -176,12 +176,12 @@ public class AdminController : BasePluginController
         await _adminService.UpsertRegistryShippingOptionAsync(registryType);
     }
 
-    [HttpPost("/Admin/Orders")]
+    [HttpGet("Admin/Registry/Orders")]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public async Task<IEnumerable<RegistryOrderViewModel>> OrderAsync(int id)
+    public async Task<IEnumerable<RegistryOrderViewModel>> RegistryOrdersAsync(int registryId)
     {
-        return await _registryService.GetRegistryOrdersByIdAsync(id);
+        return await _registryService.GetRegistryOrdersByIdAsync(registryId);
     }
 
     [HttpPost("/Admin/ExternalOrder")]
