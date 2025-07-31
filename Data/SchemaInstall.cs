@@ -51,6 +51,7 @@ public class SchemaInstall : Migration
     }
     public override void Down()
     {
+#if DEBUG
         if (Schema.Table(_registry).Exists())
         {
             Delete.Table(_registry);
@@ -80,5 +81,6 @@ public class SchemaInstall : Migration
         {
             Delete.Table(_registryShipping);
         }
+#endif
     }
 }

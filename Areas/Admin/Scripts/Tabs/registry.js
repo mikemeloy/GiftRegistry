@@ -485,6 +485,7 @@ const
             }
 
             const
+                close = dialog.querySelector(':scope [data-dialog-order-close]'),
                 select = dialog.querySelector(':scope [data-order-external-item-id]'),
                 option = document.createElement('option'),
                 date = dialog.querySelector(':scope [data-order-external-date]'),
@@ -504,6 +505,7 @@ const
             date.valueAsDate = new Date();
             submit.addEventListener('click', () => events.onExternalOrder_Submit(registryId, onRemove));
             dialog.addEventListener('close', () => onRemove());
+            close.addEventListener('click', () => onRemove());
             dialog.showModal();
         },
         onExternalOrder_Submit: async (registryId, onRemove) => {
