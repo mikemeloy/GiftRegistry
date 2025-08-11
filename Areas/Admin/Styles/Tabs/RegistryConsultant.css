@@ -14,7 +14,8 @@ main {
             margin: 0 1rem;
             padding: 0 1rem;
             display: grid;
-            grid-template-columns: fit-content(250px) repeat(2, 1fr) fit-content(250px);
+            grid-template-columns: fit-content(250px) repeat(3, 1fr) fit-content(250px);
+            align-items: center;
             gap: 1rem 2rem;
             color: #869099;
             border-radius: 6px;
@@ -26,10 +27,14 @@ main {
                 font-size: 1.3rem;
             }
 
+            span {
+                text-align: center;
+            }
+
             header {
-                grid-column: span 4;
+                grid-column: span 5;
                 display: grid;
-                grid-template-columns: fit-content(250px) repeat(2, 1fr) fit-content(250px);
+                grid-template-columns: fit-content(250px) repeat(3, 1fr) fit-content(250px);
                 position: sticky;
                 top: 0;
                 background-color: #ecf0f5c9;
@@ -41,7 +46,7 @@ main {
             }
 
             [data-line-break] {
-                grid-column: span 4;
+                grid-column: span 5;
                 border-bottom: 1px solid;
             }
 

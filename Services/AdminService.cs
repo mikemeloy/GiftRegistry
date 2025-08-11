@@ -38,7 +38,8 @@ public class AdminService : IAdminService
             {
                 await _registryRepository.InsertConsultantAsync(
                     name: consultant.Name,
-                    email: consultant.Email
+                    email: consultant.Email,
+                    sortOrder: consultant.SortOrder
                 );
 
                 return;
@@ -48,6 +49,7 @@ public class AdminService : IAdminService
                 id: consultant.Id,
                 name: consultant.Name,
                 email: consultant.Email,
+                sortOrder: consultant.SortOrder,
                 deleted: consultant.Deleted
             );
         }

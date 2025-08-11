@@ -18,6 +18,7 @@
             <span></span>
             <h4>Name</h4>
             <h4>Email</h4>
+            <h4>Sort Order</h4>
             <span></span>
         </header>
 
@@ -29,9 +30,10 @@
                 <span><input data-type-id="@item.Id" type="checkbox"></span>
                 <span>@item.Name</span>
                 <span>@item.Email</span>
+                <span>@item.SortOrder</span>
                 <span>
-                    <i data-edit-consultant-option data-name="@item.Name" data-Email="@item.Email" data-id="@item.Id" class="fa fa-edit"></i>
-                    <i data-delete-consultant-option data-name="@item.Name" data-Email="@item.Email" data-id="@item.Id" class="fa fa-trash"></i>
+                    <i data-edit-consultant-option data-name="@item.Name" data-Email="@item.Email" data-id="@item.Id" data-order="@item.SortOrder" class="fa fa-edit"></i>
+                    <i data-delete-consultant-option data-name="@item.Name" data-Email="@item.Email" data-id="@item.Id" data-order="@item.SortOrder" class="fa fa-trash"></i>
                 </span>
                 <div data-line-break></div>
             }
@@ -50,6 +52,10 @@
         <section>
             <label for="consultantEmail">Email</label>
             <input type="email" data-registry-consultant-Email class="form-control text-box" name="consultantEmail" rows="3" />
+        </section>
+        <section>
+            <label for="TypeName">Order</label>
+            <input type="number" data-registry-consultant-order class="form-control text-box" name="TypeOrder">
         </section>
         <footer>
             <input type="hidden" data-registry-consultant-id>

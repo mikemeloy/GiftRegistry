@@ -27,8 +27,8 @@ public interface IRegistryRepository
     public Task<(int? OldConsultant, int? NewConsultant)> UpdateRegistryAsync(RegistryEditAdminModel source);
     public Task<IEnumerable<RegistryTypeDTO>> GetRegistryTypesAsync();
     public Task InsertRegistryItemOrderAsync(int orderId, int registryId, int productId, int quantity);
-    public Task InsertConsultantAsync(string name, string email);
-    public Task UpdateConsultantAsync(int? id, string name, string email, bool deleted = false);
+    public Task InsertConsultantAsync(string name, string email, int sortOrder);
+    public Task UpdateConsultantAsync(int? id, string name, string email, int sortOrder, bool deleted = false);
     public Task<IEnumerable<RegistryConsultantDTO>> GetRegistryConsultantsAsync();
     public Task InsertRegistryTypeAsync(string name, string description, int sortOrder);
     public Task UpdateRegistryTypeAsync(int? id, string name, string description, int sortOrder, bool deleted = false);

@@ -325,7 +325,7 @@ public class RegistryRepository : IRegistryRepository
         });
     }
 
-    public async Task UpdateConsultantAsync(int? id, string name, string email, bool deleted = false)
+    public async Task UpdateConsultantAsync(int? id, string name, string email, int sortOrder, bool deleted = false)
     {
         var consultant = await _registryConsultant.GetByIdAsync(id);
 
@@ -336,17 +336,19 @@ public class RegistryRepository : IRegistryRepository
 
         consultant.Name = name;
         consultant.Email = email;
+        consultant.SortOrder = sortOrder;
         consultant.Deleted = deleted;
 
         await _registryConsultant.UpdateAsync(consultant);
     }
 
-    public async Task InsertConsultantAsync(string name, string email)
+    public async Task InsertConsultantAsync(string name, string email, int sortOrder)
     {
         await _registryConsultant.InsertAsync(new GiftRegistryConsultant
         {
             Name = name,
-            Email = email
+            Email = email,
+            SortOrder = sortOrder
         });
     }
 
@@ -420,7 +422,7 @@ public class RegistryRepository : IRegistryRepository
                     where c.Deleted == false
                     orderby c.SortOrder, c.Name
 
-                    select new RegistryConsultantDTO(c.Id, c.Name, c.Email, c.Deleted);
+                    select new RegistryConsultantDTO(c.Id, c.Name, c.Email, c.SortOrder, c.Deleted);
 
         return await query.ToListAsync();
     }

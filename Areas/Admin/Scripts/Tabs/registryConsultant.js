@@ -29,13 +29,14 @@ const
         editBtns.forEach(btn => btn.addEventListener('click', events.onEditRow_Click));
         dltBtns.forEach(btn => btn.addEventListener('click', events.onDeletedRow_Click));
     },
-    showEditDialog = (id = '', name = '', email = '') => {
+    showEditDialog = (id = '', name = '', email = '', order = 0) => {
         const
             dialog = _main.querySelector('dialog');
 
         SetInputValue('[data-registry-consultant-id]', '[data-dialog-edit]', id);
         SetInputValue('[data-registry-consultant-name]', '[data-dialog-edit]', name);
         SetInputValue('[data-registry-consultant-email]', '[data-dialog-edit]', email);
+        SetInputValue('[data-registry-consultant-order]', '[data-dialog-edit]', order);
 
         dialog.showModal();
     },
@@ -57,11 +58,13 @@ const
         },
         onSave_Click: async (e) => {
             const
-                id = GetInputValue('[data-registry-consultant-id]', '[data-dialog-edit]'),
-                name = GetInputValue('[data-registry-consultant-name]', '[data-dialog-edit]'),
-                email = GetInputValue('[data-registry-consultant-email]', '[data-dialog-edit]');
+                parent = '[data-dialog-edit]',
+                id = GetInputValue('[data-registry-consultant-id]', parent),
+                name = GetInputValue('[data-registry-consultant-name]', parent),
+                email = GetInputValue('[data-registry-consultant-email]', parent),
+                sortOrder = GetInputValue('[data-registry-consultant-order]', parent);
 
-            await Post(_url, { id, name, email });
+            await Post(_url, { id, name, email, sortOrder });
             onChangeEvent(e.target, "consultant");
         },
         onDialog_Close: () => {
@@ -71,15 +74,15 @@ const
         },
         onEditRow_Click: (e) => {
             const
-                { id, name, email } = GetDataSet(e);
+                { id, name, email, order } = GetDataSet(e);
 
-            showEditDialog(id, name, email);
+            showEditDialog(id, name, email, order);
         },
         onDeletedRow_Click: async (e) => {
             const
-                { id, name, email } = GetDataSet(e);
+                { id, name, email, order } = GetDataSet(e);
 
-            await Post(_url, { id, name, email, deleted: true });
+            await Post(_url, { id, name, email, sortOrder: order, deleted: true });
             onChangeEvent(e.target, "consultant");
         }
     }
