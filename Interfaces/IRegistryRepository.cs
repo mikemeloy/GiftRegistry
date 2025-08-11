@@ -9,7 +9,6 @@ namespace i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 
 public interface IRegistryRepository
 {
-
     public Task<IList<RegistryViewModel>> AdminQueryAsync(string q);
     public Task<IList<RegistryListItem>> QueryAsync(string query);
     public Task<IList<RegistryListItem>> QueryAsync(string query, DateTime start, DateTime end, bool? status);
@@ -31,8 +30,8 @@ public interface IRegistryRepository
     public Task InsertConsultantAsync(string name, string email);
     public Task UpdateConsultantAsync(int? id, string name, string email, bool deleted = false);
     public Task<IEnumerable<RegistryConsultantDTO>> GetRegistryConsultantsAsync();
-    public Task InsertRegistryTypeAsync(string name, string description);
-    public Task UpdateRegistryTypeAsync(int? id, string name, string description, bool deleted = false);
+    public Task InsertRegistryTypeAsync(string name, string description, int sortOrder);
+    public Task UpdateRegistryTypeAsync(int? id, string name, string description, int sortOrder, bool deleted = false);
     public Task InsertShippingOptionAsync(string name, string description);
     public Task UpdateShippingOptionAsync(int? id, string name, string description, bool deleted);
     public Task<IEnumerable<RegistryShippingOptionDTO>> GetRegistryShippingOptionsAsync();

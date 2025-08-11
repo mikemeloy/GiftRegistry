@@ -350,16 +350,17 @@ public class RegistryRepository : IRegistryRepository
         });
     }
 
-    public async Task InsertRegistryTypeAsync(string name, string description)
+    public async Task InsertRegistryTypeAsync(string name, string description, int sortOrder)
     {
         await _registryType.InsertAsync(new GiftRegistryType
         {
             Name = name,
-            Description = description
+            Description = description,
+            SortOrder = sortOrder
         });
     }
 
-    public async Task UpdateRegistryTypeAsync(int? id, string name, string description, bool deleted = false)
+    public async Task UpdateRegistryTypeAsync(int? id, string name, string description, int sortOrder, bool deleted = false)
     {
         var registryType = await _registryType.GetByIdAsync(id);
 
@@ -370,6 +371,7 @@ public class RegistryRepository : IRegistryRepository
 
         registryType.Name = name;
         registryType.Description = description;
+        registryType.SortOrder = sortOrder;
         registryType.Deleted = deleted;
 
         await _registryType.UpdateAsync(registryType);
@@ -404,8 +406,8 @@ public class RegistryRepository : IRegistryRepository
     {
         var query = from ty in _registryType.Table
                     where ty.Deleted == false
-                    orderby ty.SortOrder descending, ty.Name
-                    select new RegistryTypeDTO(ty.Id, ty.Name, ty.Description, ty.Deleted);
+                    orderby ty.SortOrder, ty.Name
+                    select new RegistryTypeDTO(ty.Id, ty.Name, ty.Description, ty.SortOrder, ty.Deleted);
 
         return await query.ToListAsync();
     }

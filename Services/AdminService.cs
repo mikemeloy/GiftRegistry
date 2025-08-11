@@ -116,7 +116,8 @@ public class AdminService : IAdminService
             {
                 await _registryRepository.InsertRegistryTypeAsync(
                     name: registryType.Name,
-                    description: registryType.Description
+                    description: registryType.Description,
+                    sortOrder: registryType.SortOrder
                 );
 
                 return;
@@ -126,6 +127,7 @@ public class AdminService : IAdminService
                 id: registryType.Id,
                 name: registryType.Name,
                 description: registryType.Description,
+                sortOrder: registryType.SortOrder,
                 deleted: registryType.Deleted
             );
         }

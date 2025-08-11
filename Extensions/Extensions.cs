@@ -96,11 +96,11 @@ internal static class Extensions
                         var isDate = DateTime.TryParse(attr.AttributeValue, out var date);
 
                         return new XElement("ProductAttribute",
-                          new XAttribute("ID", attr.AttributeId),
-                          new XElement("ProductAttributeValue",
-                              new XElement("Value", isDate ? date.ToLongDateString() : attr.AttributeValue)
-                          )
-                      );
+                            new XAttribute("ID", attr.AttributeId),
+                                new XElement("ProductAttributeValue",
+                                    new XElement("Value", isDate ? date.ToLongDateString() : attr.AttributeValue)
+                                )
+                        );
                     }
 
                     return new XElement("ProductAttribute",

@@ -18,7 +18,7 @@
             <span></span>
             <h4>Name</h4>
             <h4>Description</h4>
-            <span></span>
+            <h4>Order</h4>
         </header>
 
         <div data-line-break></div>
@@ -29,9 +29,10 @@
                 <span><input data-type-id="@item.Id" type="checkbox"></span>
                 <span>@item.Name</span>
                 <span>@item.Description</span>
+                <span>@item.SortOrder</span>
                 <span>
-                    <i data-edit-type-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-edit"></i>
-                    <i data-delete-type-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" class="fa fa-trash"></i>
+                    <i data-edit-type-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" data-order="@item.SortOrder" class="fa fa-edit"></i>
+                    <i data-delete-type-option data-name="@item.Name" data-description="@item.Description" data-id="@item.Id" data-order="@item.SortOrder" class="fa fa-trash"></i>
                 </span>
                 <div data-line-break></div>
             }
@@ -50,6 +51,10 @@
         <section>
             <label for="TypeDescription">Description</label>
             <textarea type="text" data-registry-type-description class="form-control text-box" name="TypeDescription" rows="3"></textarea>
+        </section>
+        <section>
+            <label for="TypeName">Order</label>
+            <input type="number" data-registry-type-order class="form-control text-box" name="TypeOrder">
         </section>
         <footer>
             <input type="hidden" data-registry-type-id>
