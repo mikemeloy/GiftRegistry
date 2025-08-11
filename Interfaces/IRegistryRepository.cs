@@ -32,8 +32,8 @@ public interface IRegistryRepository
     public Task<IEnumerable<RegistryConsultantDTO>> GetRegistryConsultantsAsync();
     public Task InsertRegistryTypeAsync(string name, string description, int sortOrder);
     public Task UpdateRegistryTypeAsync(int? id, string name, string description, int sortOrder, bool deleted = false);
-    public Task InsertShippingOptionAsync(string name, string description);
-    public Task UpdateShippingOptionAsync(int? id, string name, string description, bool deleted);
+    public Task InsertShippingOptionAsync(string name, string description, int sortOrder);
+    public Task UpdateShippingOptionAsync(int? id, string name, string description, int sortOrder, bool deleted);
     public Task<IEnumerable<RegistryShippingOptionDTO>> GetRegistryShippingOptionsAsync();
     public Task<GiftRegistryConsultant> GetConsultantByIdAsync(int? consultantId);
     public Task<RegistryEditAdminModel> GetAdminFieldsAsync(int id);

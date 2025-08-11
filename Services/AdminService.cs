@@ -163,7 +163,8 @@ public class AdminService : IAdminService
             {
                 await _registryRepository.InsertShippingOptionAsync(
                     name: registryShippingOption.Name,
-                    description: registryShippingOption.Description
+                    description: registryShippingOption.Description,
+                    sortOrder: registryShippingOption.SortOrder
                 );
 
                 return;
@@ -173,6 +174,7 @@ public class AdminService : IAdminService
                 id: registryShippingOption.Id,
                 name: registryShippingOption.Name,
                 description: registryShippingOption.Description,
+                sortOrder: registryShippingOption.SortOrder,
                 deleted: registryShippingOption.Deleted
             );
         }

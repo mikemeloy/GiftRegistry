@@ -377,16 +377,17 @@ public class RegistryRepository : IRegistryRepository
         await _registryType.UpdateAsync(registryType);
     }
 
-    public async Task InsertShippingOptionAsync(string name, string description)
+    public async Task InsertShippingOptionAsync(string name, string description, int sortOrder)
     {
         await _registryShippingOption.InsertAsync(new GiftRegistryShippingOption
         {
             Name = name,
-            Description = description
+            Description = description,
+            SortOrder = sortOrder
         });
     }
 
-    public async Task UpdateShippingOptionAsync(int? id, string name, string description, bool deleted)
+    public async Task UpdateShippingOptionAsync(int? id, string name, string description, int sortOrder, bool deleted)
     {
         var shippingOption = await _registryShippingOption.GetByIdAsync(id);
 
@@ -397,6 +398,7 @@ public class RegistryRepository : IRegistryRepository
 
         shippingOption.Name = name;
         shippingOption.Description = description;
+        shippingOption.SortOrder = sortOrder;
         shippingOption.Deleted = deleted;
 
         await _registryShippingOption.UpdateAsync(shippingOption);
@@ -416,7 +418,7 @@ public class RegistryRepository : IRegistryRepository
     {
         var query = from c in _registryConsultant.Table
                     where c.Deleted == false
-                    orderby c.SortOrder descending, c.Name
+                    orderby c.SortOrder, c.Name
 
                     select new RegistryConsultantDTO(c.Id, c.Name, c.Email, c.Deleted);
 
@@ -427,8 +429,8 @@ public class RegistryRepository : IRegistryRepository
     {
         var query = from c in _registryShippingOption.Table
                     where c.Deleted == false
-                    orderby c.SortOrder descending, c.Name
-                    select new RegistryShippingOptionDTO(c.Id, c.Name, c.Description, c.Deleted);
+                    orderby c.SortOrder, c.Name
+                    select new RegistryShippingOptionDTO(c.Id, c.Name, c.Description, c.SortOrder, c.Deleted);
 
         return await query.ToListAsync();
     }

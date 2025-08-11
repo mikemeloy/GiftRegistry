@@ -81,7 +81,7 @@ const
             const
                 { id, name, description, order } = GetDataSet(e);
 
-            await Post(_url, { id, name, description, order, deleted: true });
+            await Post(_url, { id, name, description, sortOrder: order, deleted: true });
             onChangeEvent(e.target, "type");
         }
     }
