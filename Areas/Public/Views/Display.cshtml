@@ -14,7 +14,7 @@
 <!link rel="stylesheet" href="/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Styles/display.css?v=@version" />
 
 <!script type="module">
-    import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/display.js?v=@version';
+    import { init } from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Scripts/display.js?v=@version';
 
     init('@deleteRoute', '@addToCartRoute');
 </!script>
@@ -35,7 +35,17 @@
         {
             <form data-owner="@Model.OwnerName" data-quantity="@item.Quantity" data-registry-item-id="@item.Id" data-fulfilled="@item.Fulfilled" data-product-name="@item.Name">
                 <header>
-                    <img src="@item.ImageUrl" alt="@item.Name">
+                    <img src="@item.ImageUrl" alt="@item.Name" data-img-id="@item.Id" onerror="onImageError(`[data-img-id='@item.Id']`)">
+                    <!script>
+                        function onImageError(selector) {
+                            const
+                                placeHolder = document.createElement('div'),
+                                imgTag = document.querySelector(selector);
+
+                            placeHolder.classList.add('placeholder');
+                            imgTag?.replaceWith(placeHolder);
+                        }
+                    </!script>
                 </header>
                 <main>
                     <h3>@item.Name</h3>
@@ -57,11 +67,6 @@
                         Purchased: @item.Purchased of @item.Quantity
                     </section>
                     <footer>
-                        <button data-add type="button">
-                            <i class="fal fa-plus"></i>
-                            Add to Cart
-                        </button>
-
                         @if (Model.IamOwner)
                         {
                             <button data-delete type="button">
@@ -69,9 +74,12 @@
                                 Delete
                             </button>
                         }
+                        <button data-add type="button">
+                            <i class="fal fa-plus"></i>
+                            Add to Cart
+                        </button>
                     </footer>
                 }
-
             </form>
         }
     }

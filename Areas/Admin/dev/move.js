@@ -16,18 +16,21 @@ const
         '/Views/_RegistryRow.cshtml',
         '/Views/_RegistryNotification.cshtml',
         '/Views/_AddDialog.cshtml',
+        '/Views/_Settings.cshtml',
 
         '/Scripts/Tabs/registry.js',
         '/Scripts/Tabs/registryConsultant.js',
         '/Scripts/Tabs/registryType.js',
         '/Scripts/Tabs/registryShippingOption.js',
+        '/Scripts/Tabs/Settings.js',
         '/Scripts/index.js',
 
-        '/Styles/index.css',
         '/Styles/Tabs/registry.css',
         '/Styles/Tabs/registryConsultant.css',
         '/Styles/Tabs/registryType.css',
         '/Styles/Tabs/registryShippingOption.css',
+        '/Styles/Tabs/Settings.css',
+        '/Styles/index.css',
         '../modules/utils.js'
     ]
 

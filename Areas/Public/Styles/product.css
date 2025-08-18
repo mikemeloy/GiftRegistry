@@ -28,7 +28,6 @@ time {
 .btn-register {
   padding: 0.75rem;
   border: none;
-  background-color: transparent;
   color: var(--gray-dark);
 }
 

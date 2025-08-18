@@ -21,7 +21,7 @@ const
     forms.forEach(form => {
       const
         { dataset } = form,
-        [add, remove] = form.querySelectorAll('button');
+        [remove, add] = form.querySelectorAll('button');
 
       add.addEventListener('click', () => events.onAddToCart_Click(dataset));
       remove?.addEventListener('click', () => events.onRemoveItem_Click(dataset));
@@ -43,7 +43,7 @@ const
       input = dialog.querySelector(':scope input'),
       label = dialog.querySelector(':scope label'),
       cancel = dialog.querySelector(':scope [data-cancel]'),
-      submit = dialog.querySelector(':scope [data-submit'),
+      submit = dialog.querySelector(':scope [data-submit]'),
       onFadeComplete = await FadeOut(dialog);
 
     label.innerHTML = `<strong>${owner}</strong> has requested <strong>${requestedQuantity}</strong> of <strong>${productName}</strong>, Would you like to purchase more than one?`;

@@ -1,28 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using i7MEDIA.Plugin.Widgets.Registry.Settings;
 using Microsoft.AspNetCore.Http;
+using Nop.Core;
+using Nop.Services.Common;
+using Nop.Services.Plugins;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Services;
 
 public class AdminService : IAdminService
 {
     private readonly ILogger_R _logger_R;
-    private readonly IRegistryRepository _registryRepository;
+    private readonly IWebHelper _webHelper;
     private readonly INopServices _nopServices;
+    private readonly IPluginService _pluginService;
     private readonly IHttpContextAccessor _httpContext;
+    private readonly IRegistryRepository _registryRepository;
+    private readonly IGenericAttributeService _genericAttributeService;
 
-    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices, IHttpContextAccessor httpContext)
+    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices, IHttpContextAccessor httpContext, IWebHelper webHelper, IGenericAttributeService genericAttributeService, IPluginService pluginService)
     {
-        _registryRepository = registryRepository;
         _logger_R = logger_R;
+        _webHelper = webHelper;
         _nopServices = opServices;
         _httpContext = httpContext;
+        _pluginService = pluginService;
+        _registryRepository = registryRepository;
+        _genericAttributeService = genericAttributeService;
     }
 
     public async Task UpsertConsultantAsync(RegistryConsultantDTO consultant)
@@ -274,6 +285,42 @@ public class AdminService : IAdminService
         catch (Exception e)
         {
             await _logger_R.LogErrorAsync(nameof(DeleteExternalRegistryOrder), e);
+        }
+    }
+
+    public async Task ValidateProductKey(RegistrySettings settings)
+    {
+        var httpClient = new HttpClient();
+        var baseUrl = "https://localhost:7064/";
+        var secondaryIdentifier = _webHelper.GetStoreLocation();
+        var featureId = await GetPluginMajorVersionAsync();
+        var url = $"{baseUrl}License/ValidateLicense/{featureId}?licenseId={settings.ProductKey}&secondaryIdentifier={secondaryIdentifier}";
+        var response = await httpClient.PostAsync(url, null);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var data = await response.Content.ReadAsStringAsync();
+            Console.WriteLine(data);
+        }
+        else
+        {
+            Console.WriteLine(response.StatusCode.ToString());
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+        }
+    }
+
+    public async Task<string> GetPluginMajorVersionAsync()
+    {
+        try
+        {
+            var pluginDescriptor = await _pluginService.GetPluginDescriptorBySystemNameAsync<IPlugin>("i7MEDIA.Registry", LoadPluginsMode.InstalledOnly);
+
+            return pluginDescriptor?.Version.Split('.').FirstOrDefault() ?? "1";
+
+        }
+        catch
+        {
+            return "1";
         }
     }
 }

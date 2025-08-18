@@ -4,6 +4,7 @@ using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using i7MEDIA.Plugin.Widgets.Registry.Services;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
@@ -17,13 +18,15 @@ public class AdminController : BasePluginController
     private readonly IAdminService _adminService;
     private readonly IRegistryService _registryService;
     private readonly IRegistryPdfService _registryPdfService;
+    private readonly ISettingsService_R _settingsService_R;
 
-    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService, IRegistryService registryService, IRegistryPdfService registryPdfService)
+    public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService, IRegistryService registryService, IRegistryPdfService registryPdfService, ISettingsService_R settingsService_R)
     {
         _viewModelFactory = viewModelFactory;
         _adminService = adminService;
         _registryService = registryService;
         _registryPdfService = registryPdfService;
+        _settingsService_R = settingsService_R;
     }
 
     [HttpGet]
@@ -98,6 +101,16 @@ public class AdminController : BasePluginController
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_RegistryShippingOption.cshtml", model);
     }
 
+    [HttpGet(template: "Admin/Settings")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task<IActionResult> RegistrySettingsAsync()
+    {
+        var model = await _viewModelFactory.GetRegistryShippingOptionViewModelAsync();
+
+        return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_Settings.cshtml", model);
+    }
+
     [HttpGet]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
@@ -128,6 +141,17 @@ public class AdminController : BasePluginController
     public async Task<IEnumerable<RegistryShippingOptionDTO>> ShippingOptionAsync()
     {
         return await _adminService.GetShippingOptionsAsync();
+    }
+
+    [HttpPost("Admin/Settings")]
+    [AuthorizeAdmin]
+    [Area(AreaNames.Admin)]
+    public async Task SettingsAsync([FromBody] RegistrySettingsModel clientSettings)
+    {
+        var settings = clientSettings.ToSettings();
+
+        await _settingsService_R.SaveSettingsAsync(settings);
+        await _adminService.ValidateProductKey(settings);
     }
 
     [HttpPost]

@@ -34,4 +34,5 @@ public static class AdminDefaults
     public static string RegistryTypeList => "Plugin.Widget.Registry.Admin.RegistryType.List";
     public static string RegistryShippingList => "Plugin.Widget.Registry.Admin.RegistryShipping.List";
     public static string RegistryAdminExternalOrder => "Plugin.Widget.Registry.Admin.Registry.Order.External";
+    public static string Settings => "Plugin.Widget.Registry.Admin.Registry.Settings";
 }

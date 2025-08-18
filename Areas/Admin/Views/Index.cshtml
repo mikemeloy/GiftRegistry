@@ -3,6 +3,7 @@
 
 @{
     var version = Model.PluginVersion;
+    var settingsRoute = Url.RouteUrl(AdminDefaults.Settings);
     var registryRoute = Url.RouteUrl(AdminDefaults.Registry);
     var TypeRoute = Url.RouteUrl(AdminDefaults.RegistryType);
     var consultantRoute = Url.RouteUrl(AdminDefaults.Consultant);
@@ -20,7 +21,7 @@
 <!script type="module">
     import {init} from '/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Scripts/index.js?v=@version';
 
-    init('@registryRoute', '@consultantRoute', '@TypeRoute', '@shippingRoute', '@deleteItemRoute', '@reportRoute', '@orderReportRoute', '@itemReportRoute', '@externalOrder', '@registryOrdersRoute');
+    init('@registryRoute', '@consultantRoute', '@TypeRoute', '@shippingRoute', '@deleteItemRoute', '@reportRoute', '@orderReportRoute', '@itemReportRoute', '@externalOrder', '@registryOrdersRoute', '@settingsRoute');
 </!script>
 
 <header data-registry-admin-header>
@@ -29,6 +30,7 @@
         <button type="button">Consultants</button>
         <button type="button">Types</button>
         <button type="button" data-nav-shipping>Collection Method</button>
+        <button type="button">Settings</button>
     </nav>
 </header>
 <main data-registry-admin-main>

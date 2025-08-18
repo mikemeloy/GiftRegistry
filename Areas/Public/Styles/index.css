@@ -5,9 +5,9 @@
   --border: #ddd;
   --gray-dark: #434343;
   --gray-light: #c5c5c5;
-  --blue-link: blue;
+  --blue-link: #4ab2f1;
   --loading: #c5c5c573;
-  --danger: var(--red, #e75f5f);
+  --primary: var(--red, #e75f5f);
   --success: var(--tan, #d1cbc3);
 
   --grid-header-height: 5rem;
@@ -43,11 +43,10 @@ body:has(dialog[open]) {
     margin: 1rem auto;
   }
 
-  button,
-  a {
+  button {
     outline: none;
     border: none;
-    background-color: var(--danger);
+    background-color: var(--primary);
     border-radius: 6px;
     color: var(--white);
     padding: .7rem 1rem;
@@ -109,10 +108,10 @@ body:has(dialog[open]) {
       justify-content: flex-end;
       gap: 1rem;
 
-      a[data-invert] {
-        color: var(--danger);
-        border: 1px solid var(--danger);
-        background-color: transparent;
+      a {
+        color: var(--blue-link);
+        text-decoration: underline solid Currentcolor;
+        text-underline-offset: .2rem;
       }
     }
 
@@ -156,9 +155,15 @@ body:has(dialog[open]) {
     }
 
     [data-search-mine] {
-      color: var(--danger);
+      color: var(--primary);
       transition: transform 700ms;
       padding-right: 1rem;
+      font-style: normal;
+      font-size: 1.3rem;
+
+      &::after {
+        content: '\002764';
+      }
     }
 
     [data-search-mine]:hover {
@@ -173,6 +178,7 @@ body:has(dialog[open]) {
     box-shadow: 3px 3px 15px var(--gray-dark);
     overflow: hidden;
     padding: 0;
+    margin: auto;
 
     >header {
       display: flex;
@@ -181,10 +187,11 @@ body:has(dialog[open]) {
       position: sticky;
       top: 0;
       padding: 1rem;
-      background-color: var(--red);
+      background-color: var(--primary);
       color: var(--white);
 
       >h4 {
+        font-size: 2rem;
         color: revert;
         flex: 1;
         text-align: center;
@@ -194,7 +201,12 @@ body:has(dialog[open]) {
       >i {
         margin-left: auto;
         cursor: pointer;
-        font-size: 3rem;
+        font-size: 2rem;
+
+        &::after {
+          content: "\002715";
+          font-style: normal;
+        }
       }
     }
 
@@ -236,7 +248,7 @@ body:has(dialog[open]) {
           outline: none;
 
           &:focus {
-            border: 1px solid var(--red);
+            border: 1px solid var(--primary);
           }
         }
       }
@@ -244,6 +256,7 @@ body:has(dialog[open]) {
       [data-registry-item]:has(div) {
         display: grid;
         grid-template-columns: 30% repeat(3, 1fr) min-content;
+        align-items: center;
         gap: 1rem;
         border: 1px solid var(--border);
         padding: 1rem;
@@ -263,21 +276,22 @@ body:has(dialog[open]) {
 
         [data-actions] {
           display: flex;
-          gap: 2rem;
+          gap: 1.5rem;
           align-items: center;
 
-          i {
-            cursor: pointer;
-
-            &:hover {
-              ::after {
-                content: '';
-                height: 50px;
-                width: 50px;
-                background-color: #4343439f;
-              }
-            }
+          [data-action-edit]::after {
+            content: '\01F58A';
           }
+
+          [data-action-delete]::after {
+            content: '\01F5D1';
+          }
+        }
+
+        i {
+          font-style: normal;
+          font-size: 1.5rem;
+          cursor: pointer;
         }
 
         .right {
@@ -300,30 +314,6 @@ body:has(dialog[open]) {
       bottom: 0;
       flex-direction: row-reverse;
       padding: 1rem;
-    }
-
-    [data-registry-add-legend] {
-      position: fixed;
-      top: 50%;
-      right: 0;
-      display: inline-flex;
-      flex-direction: column;
-      background-color: var(--red);
-      color: var(--white);
-      gap: 1rem;
-      padding: 1rem;
-      border-radius: 8px 0 0 8px;
-      box-shadow: 3px 3px 15px var(--gray-dark);
-
-      i {
-        display: flex;
-        align-items: center;
-        cursor: help;
-      }
-
-      i::before {
-        margin: 1rem;
-      }
     }
   }
 

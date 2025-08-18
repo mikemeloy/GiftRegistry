@@ -10,10 +10,11 @@ let
     _orderReportRoute,
     _itemReportRoute,
     _externalOrderRoute,
-    _registryOrdersRoute;
+    _registryOrdersRoute,
+    _settingsRoute;
 
 const
-    init = (registryRoute, consultantRoute, registryTypeRoute, registryShippingRoute, deleteItemRoute, reportGenerationRoute, orderReportRoute, itemReportRoute, externalOrderRoute, registryOrdersRoute) => {
+    init = (registryRoute, consultantRoute, registryTypeRoute, registryShippingRoute, deleteItemRoute, reportGenerationRoute, orderReportRoute, itemReportRoute, externalOrderRoute, registryOrdersRoute, settingsRoute) => {
         _consultantRoute = consultantRoute;
         _registryRoute = registryRoute;
         _registryTypeRoute = registryTypeRoute;
@@ -24,6 +25,7 @@ const
         _itemReportRoute = itemReportRoute;
         _externalOrderRoute = externalOrderRoute;
         _registryOrdersRoute = registryOrdersRoute;
+        _settingsRoute = settingsRoute;
 
         setupFormEvents();
         initTab();
@@ -32,7 +34,8 @@ const
         const
             [
                 registry, consultants,
-                registryType, shipping
+                registryType, shipping,
+                settings
             ] = document.querySelectorAll('[data-registry-admin-header] nav button'),
             container = document.querySelector('main[data-registry-admin-main]');
 
@@ -41,6 +44,7 @@ const
         registryType.addEventListener('click', events.onRegistryType_Click);
         shipping.addEventListener('click', events.onShippingType_Click);
         container.addEventListener('refresh', events.onRefresh_Click);
+        settings.addEventListener('click', events.OnSettings_Click)
     },
     appendPartial = async (partial) => {
         const
@@ -104,6 +108,14 @@ const
             }[detail];
 
             fn?.();
+        },
+        OnSettings_Click: async () => {
+            const { data } = await Get(`${_settingsRoute}`),
+                el = await appendPartial(data),
+                { init } = await import('./Tabs/settings.js');
+
+            init?.(el, _settingsRoute);
+            setTabQuery('home');
         }
     }
 

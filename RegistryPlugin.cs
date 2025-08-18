@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Components;
 using Microsoft.AspNetCore.Routing;
+using Nop.Core;
 using Nop.Services.Cms;
 using Nop.Services.Localization;
 using Nop.Services.Plugins;
@@ -17,9 +18,18 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
 {
     public bool HideInWidgetList => false;
     private readonly ILocalizationService _localizationService;
-    public RegistryPlugin(ILocalizationService localizationService)
+    protected readonly IWebHelper _webHelper;
+
+    public RegistryPlugin(ILocalizationService localizationService, IWebHelper webHelper)
     {
         _localizationService = localizationService;
+        _webHelper = webHelper;
+    }
+
+    public override string GetConfigurationPageUrl()
+    {
+        var path = $"{_webHelper.GetStoreLocation()}Admin/RegistryPlugin/Configure";
+        return path;
     }
 
     public Type GetWidgetViewComponent(string widgetZone)

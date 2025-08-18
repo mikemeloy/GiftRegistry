@@ -157,5 +157,11 @@ internal class RouteProvider : IRouteProvider
             pattern: "Admin/ExternalOrder",
             defaults: new { controller = "Admin", action = "ExternalOrder" }
         );
+
+        endpointRouteBuilder.MapControllerRoute(
+            name: AdminDefaults.Settings,
+            pattern: "Admin/Settings",
+            defaults: new { controller = "Admin", action = "Settings" }
+        );
     }
 }

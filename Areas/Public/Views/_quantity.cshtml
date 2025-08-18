@@ -2,8 +2,9 @@
     <style>
         [data-dialog-quantity] {
             border: none;
-            border-radius: 1rem;
-            color: var(--grey-black, #2f2f30);
+            padding: 1rem;
+            border-radius: 6px;
+            color: var(--gray-dark);
             user-select: none;
             box-shadow: 2px 2px 20px var(--grey);
             width: clamp(300px, 50vw, 600px);
@@ -11,10 +12,13 @@
             &[open] {
                 display: flex;
                 flex-direction: column;
+                margin: auto;
             }
 
             label {
                 all: revert;
+                line-height: 1.7;
+                font-size: 1.2rem;
                 margin-bottom: 3rem;
 
                 strong {
@@ -41,14 +45,14 @@
                 button {
                     outline: none;
                     border: none;
-                    border: 1px solid var(--red);
+                    border: 1px solid var(--primary);
                     color: var(--red);
                     padding: .7rem 1rem;
                     text-transform: uppercase;
                     background-color: transparent;
 
                     &[data-submit] {
-                        background-color: var(--red);
+                        background-color: var(--primary);
                         color: var(--white);
                     }
                 }
