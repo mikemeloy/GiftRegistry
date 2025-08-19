@@ -1,4 +1,5 @@
 ﻿using i7MEDIA.Plugin.Widgets.Registry.Factories;
+using i7MEDIA.Plugin.Widgets.Registry.Infrastructure.Middleware;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Repositories;
 using i7MEDIA.Plugin.Widgets.Registry.Services;
@@ -18,7 +19,14 @@ public class PluginNopStartup : INopStartup
 {
     public int Order => 99;
 
-    public void Configure(IApplicationBuilder application) { }
+    public void Configure(IApplicationBuilder application)
+    {
+        application.UseWhen(context => context.Request.Path.StartsWithSegments("/Registry"),
+            appBuilder =>
+            {
+                appBuilder.UseMiddleware<ProductKeyMiddleware>();
+            });
+    }
 
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
@@ -36,6 +44,8 @@ public class PluginNopStartup : INopStartup
         services.AddScoped<IAdminService, AdminService>();
         services.AddScoped<IRegistryPdfService, PdfService>();
         services.AddScoped<ISettingsService_R, SettingsService>();
+        //middleware
+        services.AddTransient<ProductKeyMiddleware>();
     }
 
     private static void AddNopServices(IServiceCollection services)

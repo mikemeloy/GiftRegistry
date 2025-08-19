@@ -15,6 +15,7 @@ public static class RegistryDefaults
     public static string GiftRegistryAttribute => "Plugin.Widget.Registry.item.ids";
     public static string PrintGiftReceipt => "Plugin.Widget.Registry.Print.Gift.Receipt";
     public static string PluginPath => "/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/";
+    public static string ProductKeyValidAttribute => "Plugin.Widget.Registry.Product.Key";
 }
 
 public static class AdminDefaults

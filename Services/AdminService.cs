@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
@@ -20,12 +22,13 @@ public class AdminService : IAdminService
     private readonly ILogger_R _logger_R;
     private readonly IWebHelper _webHelper;
     private readonly INopServices _nopServices;
+    private readonly IStoreContext _storeContext;
     private readonly IPluginService _pluginService;
     private readonly IHttpContextAccessor _httpContext;
     private readonly IRegistryRepository _registryRepository;
     private readonly IGenericAttributeService _genericAttributeService;
 
-    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices, IHttpContextAccessor httpContext, IWebHelper webHelper, IGenericAttributeService genericAttributeService, IPluginService pluginService)
+    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices, IHttpContextAccessor httpContext, IWebHelper webHelper, IGenericAttributeService genericAttributeService, IPluginService pluginService, IStoreContext storeContext)
     {
         _logger_R = logger_R;
         _webHelper = webHelper;
@@ -34,6 +37,7 @@ public class AdminService : IAdminService
         _pluginService = pluginService;
         _registryRepository = registryRepository;
         _genericAttributeService = genericAttributeService;
+        _storeContext = storeContext;
     }
 
     public async Task UpsertConsultantAsync(RegistryConsultantDTO consultant)
@@ -288,25 +292,32 @@ public class AdminService : IAdminService
         }
     }
 
-    public async Task ValidateProductKey(RegistrySettings settings)
+    public async Task<ValidationResponse> ProductKeyValidateAsync(RegistrySettings settings, bool isNewProductKey = false)
     {
+        var store = await _storeContext.GetCurrentStoreAsync();
+        var existingProductKeyValidation = await _genericAttributeService.GetAttributeAsync<bool?>(store, RegistryDefaults.ProductKeyValidAttribute, store.Id, null);
+
+        if (existingProductKeyValidation.NotNull() && !isNewProductKey)
+        {
+            return new() { IsValid = existingProductKeyValidation.Value };
+        }
+
         var httpClient = new HttpClient();
-        var baseUrl = "https://localhost:7064/";
+        var baseUrl = "https://localhost:7064/"; // <= hard coded
         var secondaryIdentifier = _webHelper.GetStoreLocation();
         var featureId = await GetPluginMajorVersionAsync();
         var url = $"{baseUrl}License/ValidateLicense/{featureId}?licenseId={settings.ProductKey}&secondaryIdentifier={secondaryIdentifier}";
-        var response = await httpClient.PostAsync(url, null);
+        var validationEndpointResponse = await httpClient.PostAsync(url, null);
 
-        if (response.IsSuccessStatusCode)
+        if (!validationEndpointResponse.IsSuccessStatusCode)
         {
-            var data = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(data);
+            return new() { IsValid = false, Errors = new() { new() { Message = "Unable to Contact Product Key Server" } } };
         }
-        else
-        {
-            Console.WriteLine(response.StatusCode.ToString());
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-        }
+
+        var response = await JsonSerializer.DeserializeAsync<ValidationResponse>(validationEndpointResponse.Content.ReadAsStream());
+
+        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyValidAttribute, response.IsValid, store.Id);
+        return response;
     }
 
     public async Task<string> GetPluginMajorVersionAsync()
@@ -323,4 +334,20 @@ public class AdminService : IAdminService
             return "1";
         }
     }
+}
+
+public class ValidationError
+{
+    [JsonPropertyName("message")]
+    public string Message { get; set; }
+    [JsonPropertyName("howToResolve")]
+    public string HowToResolve { get; set; }
+}
+
+public class ValidationResponse
+{
+    [JsonPropertyName("errors")]
+    public List<ValidationError> Errors { get; set; }
+    [JsonPropertyName("isValid")]
+    public bool IsValid { get; set; }
 }

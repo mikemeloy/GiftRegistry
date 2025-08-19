@@ -146,12 +146,12 @@ public class AdminController : BasePluginController
     [HttpPost("Admin/Settings")]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public async Task SettingsAsync([FromBody] RegistrySettingsModel clientSettings)
+    public async Task<ValidationResponse> SettingsAsync([FromBody] RegistrySettingsModel clientSettings)
     {
         var settings = clientSettings.ToSettings();
 
         await _settingsService_R.SaveSettingsAsync(settings);
-        await _adminService.ValidateProductKey(settings);
+        return await _adminService.ProductKeyValidateAsync(settings, isNewProductKey: true);
     }
 
     [HttpPost]
