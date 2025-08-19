@@ -4,6 +4,7 @@ using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using i7MEDIA.Plugin.Widgets.Registry.Models.Validation;
 using i7MEDIA.Plugin.Widgets.Registry.Services;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Framework;
@@ -106,7 +107,7 @@ public class AdminController : BasePluginController
     [Area(AreaNames.Admin)]
     public async Task<IActionResult> RegistrySettingsAsync()
     {
-        var model = await _viewModelFactory.GetRegistryShippingOptionViewModelAsync();
+        var model = await _viewModelFactory.GetRegistrySettingsViewModel();
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Admin/Views/_Settings.cshtml", model);
     }

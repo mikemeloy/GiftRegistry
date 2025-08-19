@@ -10,14 +10,14 @@ main {
 
         [data-table] {
             all: revert;
-            border: 1px solid #869099;
+            border: 1px solid var(--registry-gray);
             margin: 0 1rem;
             padding: 0 1rem;
             display: grid;
             grid-template-columns: fit-content(250px) repeat(3, 1fr) fit-content(250px);
             align-items: center;
             gap: 1rem 2rem;
-            color: #869099;
+            color: var(--registry-gray);
             border-radius: 6px;
             max-height: 70vh;
             overflow-y: auto;

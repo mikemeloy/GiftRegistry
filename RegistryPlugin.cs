@@ -26,12 +26,6 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
         _webHelper = webHelper;
     }
 
-    public override string GetConfigurationPageUrl()
-    {
-        var path = $"{_webHelper.GetStoreLocation()}Admin/RegistryPlugin/Configure";
-        return path;
-    }
-
     public Type GetWidgetViewComponent(string widgetZone)
     {
         if (widgetZone == PublicWidgetZones.ProductPriceTop)

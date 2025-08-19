@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Extensions;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
+using i7MEDIA.Plugin.Widgets.Registry.Models.Validation;
 using i7MEDIA.Plugin.Widgets.Registry.Settings;
 using Microsoft.AspNetCore.Http;
 using Nop.Core;
@@ -295,18 +295,21 @@ public class AdminService : IAdminService
     public async Task<ValidationResponse> ProductKeyValidateAsync(RegistrySettings settings, bool isNewProductKey = false)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
-        var existingProductKeyValidation = await _genericAttributeService.GetAttributeAsync<bool?>(store, RegistryDefaults.ProductKeyValidAttribute, store.Id, null);
 
-        if (existingProductKeyValidation.NotNull() && !isNewProductKey)
+        var today = DateTime.UtcNow;
+        var isValid = await _genericAttributeService.GetAttributeAsync<bool?>(store, RegistryDefaults.ProductKeyValidAttribute, store.Id, null);
+        var expiryDate = await _genericAttributeService.GetAttributeAsync(store, RegistryDefaults.ProductKeyExpireAttribute, store.Id, today);
+
+        if (isValid.NotNull() && !isNewProductKey && (expiryDate < today))
         {
-            return new() { IsValid = existingProductKeyValidation.Value };
+            return new() { IsValid = isValid.Value };
         }
 
         var httpClient = new HttpClient();
-        var baseUrl = "https://localhost:7064/"; // <= hard coded
         var secondaryIdentifier = _webHelper.GetStoreLocation();
         var featureId = await GetPluginMajorVersionAsync();
-        var url = $"{baseUrl}License/ValidateLicense/{featureId}?licenseId={settings.ProductKey}&secondaryIdentifier={secondaryIdentifier}";
+        var productKey = await _genericAttributeService.GetAttributeAsync(store, RegistryDefaults.ProductKeyAttribute, store.Id, today);
+        var url = $"{settings.ProductKeyServerUrl}License/ValidateLicense/{featureId}?licenseId={productKey}&secondaryIdentifier={secondaryIdentifier}";
         var validationEndpointResponse = await httpClient.PostAsync(url, null);
 
         if (!validationEndpointResponse.IsSuccessStatusCode)
@@ -317,6 +320,9 @@ public class AdminService : IAdminService
         var response = await JsonSerializer.DeserializeAsync<ValidationResponse>(validationEndpointResponse.Content.ReadAsStream());
 
         await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyValidAttribute, response.IsValid, store.Id);
+        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyAttribute, settings.ProductKey, store.Id);
+        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyExpireAttribute, today.AddDays(14), store.Id);
+
         return response;
     }
 
@@ -334,20 +340,4 @@ public class AdminService : IAdminService
             return "1";
         }
     }
-}
-
-public class ValidationError
-{
-    [JsonPropertyName("message")]
-    public string Message { get; set; }
-    [JsonPropertyName("howToResolve")]
-    public string HowToResolve { get; set; }
-}
-
-public class ValidationResponse
-{
-    [JsonPropertyName("errors")]
-    public List<ValidationError> Errors { get; set; }
-    [JsonPropertyName("isValid")]
-    public bool IsValid { get; set; }
 }

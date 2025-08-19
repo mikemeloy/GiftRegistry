@@ -1,5 +1,6 @@
 @using i7MEDIA.Plugin.Widgets.Registry
-@model i7MEDIA.Plugin.Widgets.Registry.Models.RegistryPartialViewModel
+@using i7MEDIA.Plugin.Widgets.Registry.Models.ViewModels
+@model RegistryPartialViewModel
 
 @{
     Layout = "";
@@ -265,5 +266,3 @@
         </div>
     </template>
 </div>
-
-@await Html.PartialAsync("_RegistryNotification.cshtml")

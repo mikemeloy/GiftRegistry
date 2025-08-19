@@ -1,8 +1,19 @@
-﻿@{
+﻿@using i7MEDIA.Plugin.Widgets.Registry.Models.ViewModels
+@model RegistrySettingsViewModel
+
+@{
     Layout = "";
 }
 
-<div>
-    <input data-settings-product-key type="text" placeholder="Product Key" />
-    <input data-settings-submit type="button" value="Submit" />
-</div>
+<!link rel="stylesheet" href="..\..\..\Plugins\i7MEDIA.Plugin.Widgets.Registry\Areas\Admin\Styles\Tabs\settings.css" />
+<!form>
+    <main>
+        <section>
+            <label>Product Key</label>
+            <input data-settings-product-key type="text" placeholder="Enter Product Key..." value="@Model.ProductKey" class="form-control text-box single-line" />
+        </section>
+    </main>
+    <footer>
+        <input data-settings-submit type="button" value="Save" class="btn btn-success" />
+    </footer>
+</!form>

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
-using i7MEDIA.Plugin.Widgets.Registry.Models;
+using i7MEDIA.Plugin.Widgets.Registry.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Framework.Components;
 using Nop.Web.Framework.Models;

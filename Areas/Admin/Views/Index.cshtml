@@ -1,5 +1,6 @@
 ﻿@using i7MEDIA.Plugin.Widgets.Registry
-@model i7MEDIA.Plugin.Widgets.Registry.Models.AdminViewModel
+@using i7MEDIA.Plugin.Widgets.Registry.Models.ViewModels
+@model AdminViewModel
 
 @{
     var version = Model.PluginVersion;
@@ -40,3 +41,5 @@
     <button class="btn btn-success" type="button">Save</button>
     <button class="btn btn-danger" type="button">Cancel</button>
 </footer>
+
+@await Html.PartialAsync("_RegistryNotification.cshtml")

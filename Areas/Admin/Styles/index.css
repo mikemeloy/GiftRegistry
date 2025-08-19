@@ -61,6 +61,8 @@ i:hover {
 }
 
 [data-registry-admin-main] {
+    --registry-gray: #869099;
+
     max-width: 70rem;
     margin: 1rem auto;
     user-select: none;

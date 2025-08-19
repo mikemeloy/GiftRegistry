@@ -190,10 +190,10 @@ const
     main.innerText = val;
 
     await FadeIn(notification);
-    // await Delay(2000);
-    // await FadeOut(notification);
+    await Delay(2000);
+    await FadeOut(notification);
 
-    //notification.remove();
+    notification.remove();
   },
   AddQueryParamToURL = (arr) => {
 

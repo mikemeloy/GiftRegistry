@@ -1,12 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace i7MEDIA.Plugin.Widgets.Registry.Areas.Admin.Styles.Tabs
-{
-    class Settings
-    {
+﻿[data-registry-admin-main] {
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: clamp(250px, 75%, 800px);
+        margin: 0 auto;
+        height: clamp(250px, 50vh, 750px);
+        border: 1px solid var(--registry-gray);
+        border-radius: 6px;
+        padding: 1rem;
     }
+
+    main {
+        display: flex;
+        flex-direction: column;
+
+        section {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    footer {
+        display: flex;
+        flex-direction: row-reverse;
+        gap: 1rem;
+        margin-top: auto;
+        border-bottom: 1px solid var(--);
+        padding-top: 1rem;
+    }   
 }

@@ -123,8 +123,11 @@ internal static class Extensions
             return new();
         }
 
-        var productKey = new Guid(source.ProductKey);
+        _ = Guid.TryParse(source.ProductKey, out var productKey);
 
-        return new RegistrySettings() { ProductKey = productKey };
+        return new RegistrySettings()
+        {
+            ProductKey = productKey
+        };
     }
 }

@@ -104,7 +104,8 @@ const
                 home: events.onRegistry_Click,
                 ship: events.onShippingType_Click,
                 consultant: events.onConsultant_Click,
-                type: events.onRegistryType_Click
+                type: events.onRegistryType_Click,
+                setting: events.OnSettings_Click
             }[detail];
 
             fn?.();
@@ -115,7 +116,7 @@ const
                 { init } = await import('./Tabs/settings.js');
 
             init?.(el, _settingsRoute);
-            setTabQuery('home');
+            setTabQuery('setting');
         }
     }
 

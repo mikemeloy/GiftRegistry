@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
-using i7MEDIA.Plugin.Widgets.Registry.Services;
+using i7MEDIA.Plugin.Widgets.Registry.Models.Validation;
 using i7MEDIA.Plugin.Widgets.Registry.Settings;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Interfaces;

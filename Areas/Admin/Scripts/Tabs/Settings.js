@@ -1,4 +1,4 @@
-﻿import { Post, GetDataSet, SetInputValue, GetInputValue } from '../../../modules/utils.js';
+﻿import { Post, DisplayNotification, GetInputValue } from '../../../modules/utils.js';
 
 let
     _main,
@@ -23,7 +23,12 @@ const events = {
         const
             productKey = GetInputValue('[data-settings-product-key]', '[data-registry-admin-main]');
 
-        await Post(_url, { productKey });
+        const { success, data } = await Post(_url, { productKey }),
+            { IsValid, Errors } = data ?? { IsValid: false, Errors: [{Message : 'Invalid Key'}] },
+            [error] = Errors,
+            notification = success && IsValid ? "Product Key Registered" : error?.Message ?? "An UnKnown Error has Occurred!";
+
+        DisplayNotification(notification);
     }
 };
 
