@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Xml.Linq;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
-using i7MEDIA.Plugin.Widgets.Registry.Settings;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Customers;
 
@@ -116,7 +115,7 @@ internal static class Extensions
 
         return xmlPerson.ToString();
     }
-    public static RegistrySettings ToSettings(this RegistrySettingsModel source)
+    public static Guid ToSafeGuid(this RegistrySettingsModel source)
     {
         if (source.IsNull())
         {
@@ -125,9 +124,6 @@ internal static class Extensions
 
         _ = Guid.TryParse(source.ProductKey, out var productKey);
 
-        return new RegistrySettings()
-        {
-            ProductKey = productKey
-        };
+        return productKey;
     }
 }

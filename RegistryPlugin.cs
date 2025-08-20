@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.Components;
+using i7MEDIA.Plugin.Widgets.Registry.Services;
+using i7MEDIA.Plugin.Widgets.Registry.Settings;
 using Microsoft.AspNetCore.Routing;
 using Nop.Core;
 using Nop.Services.Cms;
@@ -17,12 +19,14 @@ namespace i7MEDIA.Plugin.Widgets.Registry;
 public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
 {
     public bool HideInWidgetList => false;
+    private readonly ISettingsService_R _settingsService_R;
     private readonly ILocalizationService _localizationService;
     protected readonly IWebHelper _webHelper;
 
-    public RegistryPlugin(ILocalizationService localizationService, IWebHelper webHelper)
+    public RegistryPlugin(ILocalizationService localizationService, IWebHelper webHelper, ISettingsService_R settingsService_R)
     {
         _localizationService = localizationService;
+        _settingsService_R = settingsService_R;
         _webHelper = webHelper;
     }
 
@@ -63,6 +67,7 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
 
     public override async Task InstallAsync()
     {
+        await AddSettingsAsync();
         await _localizationService.AddOrUpdateLocaleResourceAsync(new Dictionary<string, string>
         {
             ["Registry.Link"] = "Registry",
@@ -70,6 +75,13 @@ public class RegistryPlugin : BasePlugin, IWidgetPlugin, IAdminMenuPlugin
         });
 
         await base.InstallAsync();
+    }
+
+    public async Task AddSettingsAsync()
+    {
+        var settings = new RegistrySettings() { ProductKeyServerUrl = "https://localhost:7064" };
+
+        await _settingsService_R.SaveSettingsAsync(settings);
     }
 
     public async Task ManageSiteMapAsync(SiteMapNode rootNode)

@@ -20,7 +20,7 @@ internal class ProductKeyMiddleware : IMiddleware
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
         var settings = await _settingsService_R.GetSettingsAsync<RegistrySettings>();
-        var validation = await _adminService.ProductKeyValidateAsync(settings);
+        var validation = await _adminService.ValidateProductKeyAsync();
 
         if (!validation.IsValid)
         {

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using i7MEDIA.Plugin.Widgets.Registry.DTOs;
 using i7MEDIA.Plugin.Widgets.Registry.Models;
 using i7MEDIA.Plugin.Widgets.Registry.Models.Validation;
-using i7MEDIA.Plugin.Widgets.Registry.Settings;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 
@@ -20,5 +20,6 @@ public interface IAdminService
     public Task<RegistryEditAdminModel> GetRegistryByIdAsync(int id);
     public Task InsertExternalRegistryOrder(RegistryOrderDTO registryOrder);
     public Task DeleteExternalRegistryOrder(int orderId);
-    public Task<ValidationResponse> ProductKeyValidateAsync(RegistrySettings settings, bool isNewProductKey = false);
+    public Task<ValidationResponse> AddProductKeyAsync(Guid productKey);
+    public Task<ValidationResponse> ValidateProductKeyAsync(bool isNewProductKey = false, Guid? newProductKey = null);
 }

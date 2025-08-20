@@ -12,6 +12,7 @@ using i7MEDIA.Plugin.Widgets.Registry.Models.Validation;
 using i7MEDIA.Plugin.Widgets.Registry.Settings;
 using Microsoft.AspNetCore.Http;
 using Nop.Core;
+using Nop.Core.Domain.Stores;
 using Nop.Services.Common;
 using Nop.Services.Plugins;
 
@@ -25,19 +26,21 @@ public class AdminService : IAdminService
     private readonly IStoreContext _storeContext;
     private readonly IPluginService _pluginService;
     private readonly IHttpContextAccessor _httpContext;
+    private readonly ISettingsService_R _settingsService_R;
     private readonly IRegistryRepository _registryRepository;
     private readonly IGenericAttributeService _genericAttributeService;
 
-    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices, IHttpContextAccessor httpContext, IWebHelper webHelper, IGenericAttributeService genericAttributeService, IPluginService pluginService, IStoreContext storeContext)
+    public AdminService(IRegistryRepository registryRepository, ILogger_R logger_R, INopServices opServices, IHttpContextAccessor httpContext, IWebHelper webHelper, IGenericAttributeService genericAttributeService, IPluginService pluginService, IStoreContext storeContext, ISettingsService_R settingsService_R)
     {
         _logger_R = logger_R;
         _webHelper = webHelper;
         _nopServices = opServices;
         _httpContext = httpContext;
+        _storeContext = storeContext;
         _pluginService = pluginService;
+        _settingsService_R = settingsService_R;
         _registryRepository = registryRepository;
         _genericAttributeService = genericAttributeService;
-        _storeContext = storeContext;
     }
 
     public async Task UpsertConsultantAsync(RegistryConsultantDTO consultant)
@@ -292,41 +295,81 @@ public class AdminService : IAdminService
         }
     }
 
-    public async Task<ValidationResponse> ProductKeyValidateAsync(RegistrySettings settings, bool isNewProductKey = false)
+    public async Task<ValidationResponse> AddProductKeyAsync(Guid productKey)
+    {
+        return await ValidateProductKeyAsync(isNewProductKey: true, productKey);
+    }
+
+    public async Task<ValidationResponse> ValidateProductKeyAsync(bool isNewProductKey = false, Guid? newProductKey = null)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
+        var (isValid, expireDate, todayUTC) = await GetRegistryAttributesAsync(store);
 
-        var today = DateTime.UtcNow;
-        var isValid = await _genericAttributeService.GetAttributeAsync<bool?>(store, RegistryDefaults.ProductKeyValidAttribute, store.Id, null);
-        var expiryDate = await _genericAttributeService.GetAttributeAsync(store, RegistryDefaults.ProductKeyExpireAttribute, store.Id, today);
-
-        if (isValid.NotNull() && !isNewProductKey && (expiryDate < today))
+        if (!isNewProductKey && isValid.NotNull() && (expireDate > todayUTC))
         {
-            return new() { IsValid = isValid.Value };
+            return GetResponse(
+                isValid: isValid.Value
+            );
         }
 
-        var httpClient = new HttpClient();
-        var secondaryIdentifier = _webHelper.GetStoreLocation();
-        var featureId = await GetPluginMajorVersionAsync();
-        var productKey = await _genericAttributeService.GetAttributeAsync(store, RegistryDefaults.ProductKeyAttribute, store.Id, today);
-        var url = $"{settings.ProductKeyServerUrl}License/ValidateLicense/{featureId}?licenseId={productKey}&secondaryIdentifier={secondaryIdentifier}";
-        var validationEndpointResponse = await httpClient.PostAsync(url, null);
+        var validationResponse = await CallProductKeyValidationServerAsync(newProductKey);
 
-        if (!validationEndpointResponse.IsSuccessStatusCode)
+        if (!validationResponse.IsSuccessStatusCode)
         {
-            return new() { IsValid = false, Errors = new() { new() { Message = "Unable to Contact Product Key Server" } } };
+            return GetResponse(
+                isValid: false,
+                error: "Unable to Contact Product Key Server"
+            );
         }
 
-        var response = await JsonSerializer.DeserializeAsync<ValidationResponse>(validationEndpointResponse.Content.ReadAsStream());
+        var response = await ConvertResponseAsync(validationResponse);
 
-        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyValidAttribute, response.IsValid, store.Id);
-        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyAttribute, settings.ProductKey, store.Id);
-        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyExpireAttribute, today.AddDays(14), store.Id);
+        await SaveAttributesAsync(store, response.IsValid, newProductKey, todayUTC.AddDays(14));
 
         return response;
     }
 
-    public async Task<string> GetPluginMajorVersionAsync()
+    private static async Task<ValidationResponse> ConvertResponseAsync(HttpResponseMessage validationResponse)
+    {
+        return await JsonSerializer.DeserializeAsync<ValidationResponse>(validationResponse.Content.ReadAsStream());
+    }
+
+    private async Task<HttpResponseMessage> CallProductKeyValidationServerAsync(Guid? productKey)
+    {
+        var settings = await _settingsService_R.GetSettingsAsync<RegistrySettings>();
+        var httpClient = new HttpClient();
+        var secondaryIdentifier = _webHelper.GetStoreLocation();
+        var featureId = await GetPluginMajorVersionAsync();
+        var url = $"{settings.ProductKeyServerUrl}/License/ValidateLicense/{featureId}?licenseId={productKey}&secondaryIdentifier={secondaryIdentifier}";
+        return await httpClient.PostAsync(url, null);
+    }
+
+    private static ValidationResponse GetResponse(bool isValid, string error = null)
+    {
+        return new ValidationResponse()
+        {
+            IsValid = isValid,
+            Errors = error.IsNull() ? null : new() { new() { Message = error } }
+        };
+    }
+
+    private async Task<(bool? IsValid, DateTime ExpireDate, DateTime TodayUTC)> GetRegistryAttributesAsync(Store store)
+    {
+        var todayUTC = DateTime.UtcNow;
+        var isValid = await _genericAttributeService.GetAttributeAsync<bool?>(store, RegistryDefaults.ProductKeyValidAttribute, store.Id, null);
+        var expiryDate = await _genericAttributeService.GetAttributeAsync(store, RegistryDefaults.ProductKeyExpireAttribute, store.Id, todayUTC);
+
+        return (IsValid: isValid, ExpireDate: expiryDate, TodayUTC: todayUTC);
+    }
+
+    private async Task SaveAttributesAsync(Store store, bool isValid, Guid? productKey, DateTime expire)
+    {
+        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyValidAttribute, isValid, store.Id);
+        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyAttribute, productKey, store.Id);
+        await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyExpireAttribute, expire, store.Id);
+    }
+
+    private async Task<string> GetPluginMajorVersionAsync()
     {
         try
         {

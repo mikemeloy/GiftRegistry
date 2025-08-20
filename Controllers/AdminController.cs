@@ -19,7 +19,6 @@ public class AdminController : BasePluginController
     private readonly IAdminService _adminService;
     private readonly IRegistryService _registryService;
     private readonly IRegistryPdfService _registryPdfService;
-    private readonly ISettingsService_R _settingsService_R;
 
     public AdminController(IViewModelFactory viewModelFactory, IAdminService adminService, IRegistryService registryService, IRegistryPdfService registryPdfService, ISettingsService_R settingsService_R)
     {
@@ -27,7 +26,6 @@ public class AdminController : BasePluginController
         _adminService = adminService;
         _registryService = registryService;
         _registryPdfService = registryPdfService;
-        _settingsService_R = settingsService_R;
     }
 
     [HttpGet]
@@ -147,12 +145,11 @@ public class AdminController : BasePluginController
     [HttpPost("Admin/Settings")]
     [AuthorizeAdmin]
     [Area(AreaNames.Admin)]
-    public async Task<ValidationResponse> SettingsAsync([FromBody] RegistrySettingsModel clientSettings)
+    public async Task<ValidationResponse> SettingsAsync([FromBody] RegistrySettingsModel model)
     {
-        var settings = clientSettings.ToSettings();
+        var productKey = model.ToSafeGuid();
 
-        await _settingsService_R.SaveSettingsAsync(settings);
-        return await _adminService.ProductKeyValidateAsync(settings, isNewProductKey: true);
+        return await _adminService.AddProductKeyAsync(productKey);
     }
 
     [HttpPost]
