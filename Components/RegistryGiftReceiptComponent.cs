@@ -1,4 +1,5 @@
-﻿using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
+﻿using System.Threading.Tasks;
+using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Framework.Components;
 
@@ -18,9 +19,9 @@ public class RegistryGiftReceiptComponent : NopViewComponent
         _viewModelFactory = viewModelFactory;
     }
 
-    public IViewComponentResult Invoke(string widgetZone, dynamic additionalData)
+    public async Task<IViewComponentResult> InvokeAsync(string widgetZone, dynamic additionalData)
     {
-        var model = _viewModelFactory.GetRegistryGiftReceiptViewModel(additionalData.CustomOrderNumber);
+        var model = await _viewModelFactory.GetRegistryGiftReceiptViewModelAsync(additionalData.CustomOrderNumber);
 
         return View("~/Plugins/i7MEDIA.Plugin.Widgets.Registry/Areas/Public/Views/GiftReceiptLink.cshtml", model);
     }

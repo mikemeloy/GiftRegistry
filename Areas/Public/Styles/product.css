@@ -5,6 +5,7 @@
   --gray-light: #c5c5c5;
   --blue-link: blue;
   --loading: #c5c5c573;
+  --primary: var(--red, #e75f5f);
 }
 
 ::backdrop {
@@ -52,6 +53,7 @@ time {
 }
 
 [data-registry-select] {
+  all: revert;
   font-size: 14px;
   position: fixed;
   outline: none;
@@ -90,7 +92,7 @@ time {
 
           &:has(input:checked) {
             color: var(--white);
-            background-color: var(--red, --gray-light);
+            background-color: var(--primary);
           }
         }
 
@@ -125,14 +127,14 @@ time {
   button {
     outline: none;
     border: none;
-    border: 1px solid var(--red);
-    color: var(--red);
+    border: 1px solid var(--primary);
+    color: var(--primary);
     padding: .7rem 1rem;
     text-transform: uppercase;
     background-color: transparent;
 
     &[data-submit] {
-      background-color: var(--red);
+      background-color: var(--primary);
       color: var(--white);
     }
   }

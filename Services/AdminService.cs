@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -303,7 +304,7 @@ public class AdminService : IAdminService
     public async Task<ValidationResponse> ValidateProductKeyAsync(bool isNewProductKey = false, Guid? newProductKey = null)
     {
         var store = await _storeContext.GetCurrentStoreAsync();
-        var (isValid, expireDate, todayUTC) = await GetRegistryAttributesAsync(store);
+        var (isValid, expireDate, todayUTC, currentProductKey) = await GetRegistryAttributesAsync(store);
 
         if (!isNewProductKey && isValid.NotNull() && (expireDate > todayUTC))
         {
@@ -312,7 +313,8 @@ public class AdminService : IAdminService
             );
         }
 
-        var validationResponse = await CallProductKeyValidationServerAsync(newProductKey);
+        var productKey = isNewProductKey ? newProductKey : currentProductKey;
+        var validationResponse = await CallProductKeyValidationServerAsync(productKey);
 
         if (!validationResponse.IsSuccessStatusCode)
         {
@@ -324,7 +326,7 @@ public class AdminService : IAdminService
 
         var response = await ConvertResponseAsync(validationResponse);
 
-        await SaveAttributesAsync(store, response.IsValid, newProductKey, todayUTC.AddDays(14));
+        await SaveAttributesAsync(store, response.IsValid, productKey, todayUTC.AddDays(14));
 
         return response;
     }
@@ -341,7 +343,17 @@ public class AdminService : IAdminService
         var secondaryIdentifier = _webHelper.GetStoreLocation();
         var featureId = await GetPluginMajorVersionAsync();
         var url = $"{settings.ProductKeyServerUrl}/License/ValidateLicense/{featureId}?licenseId={productKey}&secondaryIdentifier={secondaryIdentifier}";
-        return await httpClient.PostAsync(url, null);
+
+        try
+        {
+            return await httpClient.PostAsync(url, null);
+        }
+        catch (Exception e)
+        {
+            await _logger_R.LogErrorAsync(nameof(CallProductKeyValidationServerAsync), e);
+        }
+
+        return new() { StatusCode = HttpStatusCode.NotFound };
     }
 
     private static ValidationResponse GetResponse(bool isValid, string error = null)
@@ -353,16 +365,17 @@ public class AdminService : IAdminService
         };
     }
 
-    private async Task<(bool? IsValid, DateTime ExpireDate, DateTime TodayUTC)> GetRegistryAttributesAsync(Store store)
+    private async Task<(bool? IsValid, DateTime ExpireDate, DateTime TodayUTC, Guid? ProductKey)> GetRegistryAttributesAsync(Store store)
     {
         var todayUTC = DateTime.UtcNow;
         var isValid = await _genericAttributeService.GetAttributeAsync<bool?>(store, RegistryDefaults.ProductKeyValidAttribute, store.Id, null);
         var expiryDate = await _genericAttributeService.GetAttributeAsync(store, RegistryDefaults.ProductKeyExpireAttribute, store.Id, todayUTC);
+        var productKey = await _genericAttributeService.GetAttributeAsync<Guid?>(store, RegistryDefaults.ProductKeyAttribute, store.Id, null);
 
-        return (IsValid: isValid, ExpireDate: expiryDate, TodayUTC: todayUTC);
+        return (IsValid: isValid, ExpireDate: expiryDate, TodayUTC: todayUTC, ProductKey: productKey);
     }
 
-    private async Task SaveAttributesAsync(Store store, bool isValid, Guid? productKey, DateTime expire)
+    private async Task SaveAttributesAsync(Store store, bool? isValid, Guid? productKey, DateTime expire)
     {
         await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyValidAttribute, isValid, store.Id);
         await _genericAttributeService.SaveAttributeAsync(store, RegistryDefaults.ProductKeyAttribute, productKey, store.Id);

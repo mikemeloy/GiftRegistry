@@ -3,7 +3,9 @@ using i7MEDIA.Plugin.Widgets.Registry.Infrastructure.Middleware;
 using i7MEDIA.Plugin.Widgets.Registry.Interfaces;
 using i7MEDIA.Plugin.Widgets.Registry.Repositories;
 using i7MEDIA.Plugin.Widgets.Registry.Services;
+using i7MEDIA.Plugin.Widgets.Registry.Utils;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,8 +46,10 @@ public class PluginNopStartup : INopStartup
         services.AddScoped<IAdminService, AdminService>();
         services.AddScoped<IRegistryPdfService, PdfService>();
         services.AddScoped<ISettingsService_R, SettingsService>();
+        services.AddSingleton<IUtils, Utility>();
         //middleware
         services.AddTransient<ProductKeyMiddleware>();
+        services.AddTransient<IStartupFilter, StartupMiddleware>();
     }
 
     private static void AddNopServices(IServiceCollection services)

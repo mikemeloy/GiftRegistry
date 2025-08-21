@@ -8,6 +8,7 @@ using i7MEDIA.Plugin.Widgets.Registry.Models.ViewModels;
 using Nop.Core;
 using Nop.Services.Common;
 using Nop.Services.Customers;
+using Nop.Services.Plugins;
 
 namespace i7MEDIA.Plugin.Widgets.Registry.Factories;
 
@@ -16,19 +17,20 @@ public class ViewModelFactory : IViewModelFactory
     private readonly IGenericAttributeService _genericAttributeService;
     private readonly IRegistryRepository _registryRepository;
     private readonly ICustomerService _customerService;
+    private readonly IPluginService _pluginService;
     private readonly IAdminService _adminService;
     private readonly INopServices _nopServices;
     private readonly ILogger_R _logger_R;
-    private readonly string _version = "1.0.4";
     private readonly IStoreContext _storeContext;
 
+    private string _version = null;
 
-
-    public ViewModelFactory(IRegistryRepository registryRepository, IAdminService adminService, INopServices nopServices, ILogger_R logger_R, ICustomerService customerService, IGenericAttributeService genericAttributeService, IStoreContext storeContext)
+    public ViewModelFactory(IRegistryRepository registryRepository, IAdminService adminService, INopServices nopServices, ILogger_R logger_R, ICustomerService customerService, IGenericAttributeService genericAttributeService, IStoreContext storeContext, IPluginService pluginService)
     {
         _genericAttributeService = genericAttributeService;
         _registryRepository = registryRepository;
         _customerService = customerService;
+        _pluginService = pluginService;
         _adminService = adminService;
         _storeContext = storeContext;
         _nopServices = nopServices;
@@ -41,15 +43,17 @@ public class ViewModelFactory : IViewModelFactory
         var registryTypes = _registryRepository.GetRegistryTypesAsync();
         var shippingOptions = _registryRepository.GetRegistryShippingOptionsAsync();
         var isRegistered = _customerService.IsRegisteredAsync(customer);
+        var version = await GetPluginVersionAsync();
 
         await Task.WhenAll(registryTypes, shippingOptions, isRegistered);
 
-        return new(_version, customer.FullName(), isRegistered.Result, registryTypes.Result, shippingOptions.Result);
+        return new(version, customer.FullName(), isRegistered.Result, registryTypes.Result, shippingOptions.Result);
     }
 
-    public AdminViewModel GetAdminViewModelAsync()
+    public async Task<AdminViewModel> GetAdminViewModelAsync()
     {
-        return new(_version);
+        var version = await GetPluginVersionAsync();
+        return new(version);
     }
 
     public async Task<RegistryPartialViewModel> GetRegistryPartialViewModelAsync()
@@ -57,8 +61,9 @@ public class ViewModelFactory : IViewModelFactory
         var consultants = await _adminService.GetConsultantsAsync();
         var registryTypes = await _adminService.GetRegistryTypesAsync();
         var shippingOptions = await _adminService.GetShippingOptionsAsync();
+        var version = await GetPluginVersionAsync();
 
-        return new RegistryPartialViewModel(_version, consultants, registryTypes, shippingOptions);
+        return new RegistryPartialViewModel(version, consultants, registryTypes, shippingOptions);
     }
 
     public async Task<ConsultantPartialViewModel> GetConsultantPartialViewModelAsync()
@@ -102,15 +107,16 @@ public class ViewModelFactory : IViewModelFactory
         return new(Enumerable.Empty<RegistryViewModel>());
     }
 
-    public RegistryGiftReceiptViewModel GetRegistryGiftReceiptViewModel(string orderId)
+    public async Task<RegistryGiftReceiptViewModel> GetRegistryGiftReceiptViewModelAsync(string orderId)
     {
+        var version = await GetPluginVersionAsync();
         _ = int.TryParse(orderId, out var id);
 
         return new RegistryGiftReceiptViewModel(
                 FileName: "gift receipt.pdf",
                 OrderId: id,
                 PluginPath: RegistryDefaults.PluginPath,
-                Version: _version
+                Version: version
             );
     }
 
@@ -120,5 +126,19 @@ public class ViewModelFactory : IViewModelFactory
         var productKey = await _genericAttributeService.GetAttributeAsync<Guid?>(store, RegistryDefaults.ProductKeyAttribute, store.Id, null);
 
         return new(productKey);
+    }
+
+    private async Task<string> GetPluginVersionAsync()
+    {
+        if (_version.NotNull())
+        {
+            return _version;
+        }
+
+        var pluginDescriptor = await _pluginService.GetPluginDescriptorBySystemNameAsync<IPlugin>("i7MEDIA.Registry", LoadPluginsMode.InstalledOnly);
+
+        _version = pluginDescriptor.Version;
+
+        return _version;
     }
 }

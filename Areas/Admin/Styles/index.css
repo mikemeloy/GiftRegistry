@@ -2,12 +2,20 @@
     backdrop-filter: blur(2px);
 }
 
+dialog,
+input,
+select,
+button,
+form,
+textarea {
+    outline: none;
+}
+
 dialog {
     border: none;
     border-radius: 6px;
     color: var(--grey-black, #2f2f30);
     user-select: none;
-    outline: none;
 
     &[open] {
         display: flex;
@@ -19,7 +27,6 @@ dialog {
 }
 
 input {
-    outline: none;
     border-radius: 4px;
     border: 1px solid var(--grey-black, #2f2f30);
     padding: 1rem;
